@@ -21,7 +21,7 @@ import androidx.fragment.app.Fragment;
 
 import com.ice.stickershock_shockvx.bluetooth.BluetoothLeService;
 
-import static com.ice.stickershock_shockvx.bluetooth.BluetoothLeService.*;
+import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 
 
 public class SettingsFragment extends Fragment {
@@ -232,12 +232,12 @@ public class SettingsFragment extends Fragment {
                 //      mMeas15Button.setChecked(false);
             }
         });
-
-        mIndicate.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                requestLed();
-            }
-        });
+/*
+//        mIndicate.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                requestLed();
+//            }
+//        });
 
         mName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -250,8 +250,8 @@ public class SettingsFragment extends Fragment {
                 return false;
             }
         });
-
-        readRssi();
+*/
+//        readRssi();
 
         return v;
     }
@@ -317,11 +317,11 @@ public class SettingsFragment extends Fragment {
 
          if ( ACTION_BATTERY_LEVEL_AVAILABLE.equals(action) ) {
 
-                int intData = intent.getIntExtra(BluetoothLeService.INT_DATA, 0);
+                int intData = intent.getIntExtra( INT_DATA, 0);
  //               mBattery.setText(String.valueOf(intData + "%"));
             }
          if ( ACTION_RSSI_DATA_AVAILABLE.equals(action) ) {
-                int rssiData = intent.getIntExtra(BluetoothLeService.INT_DATA,0);
+                int rssiData = intent.getIntExtra( INT_DATA,0);
 //                mRssi.setText(String.valueOf(rssiData + " dB"));
                 readBattery();
             }

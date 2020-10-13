@@ -58,8 +58,10 @@ public class         BluetoothScanActivity extends ListActivity {
     private static final long SCAN_PERIOD = 3000;
     String mUnit = "";
     String mControl = "";
+    String mPrimary = "";
     private final String EXTRAS_UNIT    = "unit";
     private final String EXTRAS_CONTROL = "control";
+    private final String EXTRAS_PRIMARY = "control";
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -73,6 +75,7 @@ public class         BluetoothScanActivity extends ListActivity {
 
         final Intent intent = getIntent();
         mUnit = intent.getStringExtra ( EXTRAS_UNIT );
+        mPrimary = intent.getStringExtra ( EXTRAS_PRIMARY );
         mControl = intent.getStringExtra ( EXTRAS_CONTROL );
         if (mUnit == null)
             mUnit = "";
@@ -177,6 +180,11 @@ public class         BluetoothScanActivity extends ListActivity {
         final BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
         if (device == null) return;
 
+        connectDevice( device );
+    }
+
+
+    protected void connectDevice(BluetoothDevice device) {
         final Intent intent = new Intent(this, BluetoothControlActivity.class);
         String deviceName = device.getName();
         if (deviceName == null)
@@ -189,8 +197,6 @@ public class         BluetoothScanActivity extends ListActivity {
         }
         startActivity(intent);
     }
-
-
 
 
     // Adapter for holding devices found through scanning.
@@ -207,6 +213,7 @@ public class         BluetoothScanActivity extends ListActivity {
         public void addDevice(BluetoothDevice device) {
             if(!mLeDevices.contains(device)) {
                 mLeDevices.add(device);
+                connectDevice (device);
             }
         }
 

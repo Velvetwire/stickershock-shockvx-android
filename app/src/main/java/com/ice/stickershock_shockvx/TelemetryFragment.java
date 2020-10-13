@@ -1,3 +1,13 @@
+//=============================================================================
+// project: ShockVx
+//  module: Stickershock Android App for cold chain tracking.
+//  author: Velvetwire, llc
+//    file: TelemetryFragment.java
+//
+// Read Telemetry from connected sticker
+//
+// (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+//=============================================================================
 package com.ice.stickershock_shockvx;
 
 
@@ -17,12 +27,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.ice.stickershock_shockvx.bluetooth.BluetoothLeService;
-
-import static com.ice.stickershock_shockvx.bluetooth.BluetoothLeService.ACTION_BATTERY_LEVEL;
-import static com.ice.stickershock_shockvx.bluetooth.BluetoothLeService.ACTION_BATTERY_LEVEL_AVAILABLE;
-import static com.ice.stickershock_shockvx.bluetooth.BluetoothLeService.ACTION_READ_RSSI;
-import static com.ice.stickershock_shockvx.bluetooth.BluetoothLeService.ACTION_RSSI_DATA_AVAILABLE;
-
+import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 
 
 public class TelemetryFragment extends Fragment {
@@ -93,25 +98,36 @@ public class TelemetryFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-/*
-            if ( ACTION_TELEMETRY_AVAILABLE.equals(action)) {
-                String value = intent.getStringExtra( EXTRA_DATA) + DEGREES_C;
+
+            if ( ACTION_AMBIENT_AVAILABLE.equals(action)) {
+                String value = intent.getStringExtra( EXTRA_DATA);
                 mAirTemp.setText( value );
-                mSurfTemp.setText( value );
-                mPressure.setText( value );
                 mHumidity.setText( value );
             }
-*/
+
+            if ( ACTION_SURFACE_AVAILABLE.equals(action)) {
+                float fValue = intent.getFloatExtra( FLOAT_DATA, 0.0f );
+                String value = Float.toString(fValue);
+                mSurfTemp.setText( value );
+                mPressure.setText( value );
+            }
+
+            if ( ACTION_HANDLING_AVAILABLE.equals(action)) {
+                String value = intent.getStringExtra( EXTRA_DATA) + DEGREES;
+                mFaceup.setText( value );
+                mForces.setText( value );
+            }
+
             if ( ACTION_BATTERY_LEVEL_AVAILABLE.equals(action)) {
 
-                int intData = intent.getIntExtra(BluetoothLeService.INT_DATA, 0);
-                mBattery.setText(String.valueOf(intData + "%"));
+                int intData = intent.getIntExtra( INT_DATA, 0);
+    //            mBattery.setText(String.valueOf(intData + "%"));
             }
             if ( ACTION_RSSI_DATA_AVAILABLE.equals(action)) {
 
-                int rssiData = intent.getIntExtra(BluetoothLeService.INT_DATA,0);
+                int rssiData = intent.getIntExtra( INT_DATA,0);
                 Log.d("RECVD", "RSSI " + rssiData);
-                mRssiValue.setText(String.valueOf(rssiData + " dB"));
+       //         mRssiValue.setText(String.valueOf(rssiData + " dB"));
                 readBattery();
             }
         }
@@ -120,9 +136,11 @@ public class TelemetryFragment extends Fragment {
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
 
- //       intentFilter.addAction( ACTION_TELEMETRY_AVAILABLE );
- //       intentFilter.addAction( ACTION_BATTERY_LEVEL_AVAILABLE );
- //       intentFilter.addAction( ACTION_RSSI_DATA_AVAILABLE );
+        intentFilter.addAction( ACTION_AMBIENT_AVAILABLE );
+        intentFilter.addAction( ACTION_HANDLING_AVAILABLE );
+        intentFilter.addAction( ACTION_SURFACE_AVAILABLE );
+        intentFilter.addAction( ACTION_BATTERY_LEVEL_AVAILABLE );
+        intentFilter.addAction( ACTION_RSSI_DATA_AVAILABLE );
         return intentFilter;
     }
 

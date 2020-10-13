@@ -102,9 +102,9 @@ public class ReadStickerNfc extends Activity {
                     if (ndefMessage != null) {
                         String message = new String(ndefMessage.getRecords()[0].getPayload());
 
-                        unit = extractUnitFromXML(message);
-                        primary = extractPrimaryFromXML(message);
-                        control = extractControlFromXML(message);
+                        unit = extractFieldFromXML(message, "unit");
+                        primary = extractFieldFromXML(message, "primary");
+                        control = extractFieldFromXML(message, "control");
                         mTagFound = true;
 
                     } else {
@@ -124,7 +124,11 @@ public class ReadStickerNfc extends Activity {
                 Log.d(TAG, "UNIT: " + unit);
                 Log.d(TAG,  "PRIMARY: " + primary );
                 Log.d(TAG,  "CONTROL: " + control );
-                scanForAdvertisement( unit, control );
+                Intent i = new Intent(ReadStickerNfc.this, BluetoothScanActivity.class);
+                i.putExtra("unit", unit);
+                i.putExtra("primary", primary);
+                i.putExtra("control", control);
+                startActivity(i);
             }
         }
     }
@@ -162,37 +166,15 @@ public class ReadStickerNfc extends Activity {
     }
 
 
-    private void scanForAdvertisement(String unit, String control) {
 
-        Intent i = new Intent(ReadStickerNfc.this, BluetoothScanActivity.class);
-        i.putExtra("unit", unit);
-        i.putExtra("control", control);
-        startActivity(i);
-    }
-
-    private String extractUnitFromXML(String message) {
-        String startTag = "<unit>";
-        String endTag = "</unit>";
+    private String extractFieldFromXML(String message, String tag ) {
+        String startTag = "<" + tag + ">";
+        String endTag = "</" + tag + ">";
 
         String substr = message.substring(message.indexOf(startTag) + startTag.length(), message.indexOf(endTag));
         return substr;
     }
 
-    private String extractControlFromXML(String message) {
-        String startTag = "<control>";
-        String endTag = "</control>";
-
-        String substr = message.substring(message.indexOf(startTag) + startTag.length(), message.indexOf(endTag));
-        return substr;
-    }
-
-    private String extractPrimaryFromXML(String message) {
-        String startTag = "<primary>";
-        String endTag = "</primary>";
-
-        String substr = message.substring(message.indexOf(startTag) + startTag.length(), message.indexOf(endTag));
-        return substr;
-    }
 
     // Vibrate for 150 milliseconds
     private void vibratePhone(int milliseconds) {

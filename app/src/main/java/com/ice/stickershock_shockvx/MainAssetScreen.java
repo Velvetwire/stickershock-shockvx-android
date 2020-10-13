@@ -1,3 +1,14 @@
+//=============================================================================
+// project: ShockVx
+//  module: Stickershock Android App for cold chain tracking.
+//  author: Velvetwire, llc
+//    file: MainAssetScreen.java
+//
+// Start screen for android shockVx app
+// Lists all Stickershock beacons with telemetry
+//
+// (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+//=============================================================================
 package com.ice.stickershock_shockvx;
 
 
@@ -8,9 +19,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -19,13 +28,11 @@ import com.ice.stickershock_shockvx.bluetooth.BluetoothLeService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ice.stickershock_shockvx.bluetooth.BluetoothLeService.ACTION_BATTERY_LEVEL;
-import static com.ice.stickershock_shockvx.bluetooth.BluetoothLeService.ACTION_BATTERY_LEVEL_AVAILABLE;
-import static com.ice.stickershock_shockvx.bluetooth.BluetoothLeService.ACTION_READ_RSSI;
-import static com.ice.stickershock_shockvx.bluetooth.BluetoothLeService.ACTION_RSSI_DATA_AVAILABLE;
+import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 
 
-public class TopScreen extends ListActivity {
+
+public class MainAssetScreen extends ListActivity {
 
     Button mNewAsset;
     TextView mAirTemp;
@@ -63,7 +70,7 @@ public class TopScreen extends ListActivity {
 
         mNewAsset.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(TopScreen.this, ReadStickerNfc.class);
+                Intent intent = new Intent(MainAssetScreen.this, ReadStickerNfc.class);
                 startActivity(intent);
             }
         });
@@ -100,12 +107,12 @@ public class TopScreen extends ListActivity {
 */
             if ( ACTION_BATTERY_LEVEL_AVAILABLE.equals(action)) {
 
-                int intData = intent.getIntExtra(BluetoothLeService.INT_DATA, 0);
+                int intData = intent.getIntExtra( INT_DATA, 0);
                 mBattery.setText(String.valueOf(intData + "%"));
             }
             if ( ACTION_RSSI_DATA_AVAILABLE.equals(action)) {
 
-                int rssiData = intent.getIntExtra(BluetoothLeService.INT_DATA,0);
+                int rssiData = intent.getIntExtra( INT_DATA,0);
                 Log.d("RECVD", "RSSI " + rssiData);
                 mRssiValue.setText(String.valueOf(rssiData + " dB"));
                 readBattery();

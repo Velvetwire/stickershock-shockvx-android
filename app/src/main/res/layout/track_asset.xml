@@ -5,21 +5,15 @@
     android:layout_height="wrap_content"
     android:foregroundTint="#FAF8F8"
     android:orientation="vertical"
-    android:paddingTop="50dp"
+    android:paddingTop="10dp"
     android:paddingBottom="20dp"
     android:id="@+id/mainLayout">
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:src="@drawable/trends" />
 
     <ImageView
-        android:id="@+id/sticker1"
+        android:id="@+id/stickerImage"
         android:layout_width="160dp"
-        android:layout_height="129dp"
+        android:layout_height="100dp"
         android:layout_weight="1"
         android:tint="#914FBF"
         android:src="@drawable/stickershock" />
@@ -85,7 +79,7 @@
 
         <Button
             android:id="@+id/trackButton"
-            android:layout_width="100dp"
+            android:layout_width="70dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:background="@drawable/rounded_rect_shape"

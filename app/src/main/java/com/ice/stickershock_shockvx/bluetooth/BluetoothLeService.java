@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.ice.stickershock_shockvx.bluetooth.GattAttributes.*;
-
+import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
  * given Bluetooth LE device.
@@ -42,60 +42,6 @@ public class BluetoothLeService extends Service {
     private static final int STATE_CONNECTING   = 1;
     private static final int STATE_CONNECTED    = 2;
 
-    /* BROADCAST RESPONSES
-     *
-     */
-    public final static String ACTION_GATT_CONNECTED =  "ACTION_GATT_CONNECTED";
-    public final static String ACTION_GATT_DISCONNECTED = "ACTION_GATT_DISCONNECTED";
-    public final static String ACTION_GATT_SERVICES_DISCOVERED = "ACTION_GATT_SERVICES_DISCOVERED";
-    public final static String ACTION_DATA_AVAILABLE = "ACTION_DATA_AVAILABLE";
-    public final static String ACTION_SENSOR_DATA_AVAILABLE = "ACTION_SENSOR_DATA_AVAILABLE";
-    public final static String ACTION_READ_DATA_AVAILABLE = "ACTION_READ_DATA_AVAILABLE";
-    public final static String ACTION_WRITE_DATA_AVAILABLE = "ACTION_WRITE_DATA_AVAILABLE";
-    public final static String ACTION_RSSI_DATA_AVAILABLE = "ACTION_RSSI_DATA_AVAILABLE";
-    public final static String ACTION_BATTERY_LEVEL_AVAILABLE = "ACTION_BATTERY_LEVEL_AVAILABLE";
-    public final static String ACTION_BATTERY_STATE_AVAILABLE = "ACTION_BATTERY_STATE_AVAILABLE";
-
-    public final static String ACTION_MANUFACTURER_AVAILABLE = "ACTION_MANUFACTURER_AVAILABLE";
-    public final static String ACTION_MODEL_AVAILABLE        = "ACTION_MODEL_AVAILABLE";
-    public final static String ACTION_FIRMWARE_AVAILABLE     = "ACTION_FIRMWARE_AVAILABLE";
-    public final static String ACTION_HARDWARE_AVAILABLE     = "ACTION_HARDWARE_AVAILABLE";
-    public final static String ACTION_SERIAL_AVAILABLE       = "ACTION_SERIAL_AVAILABLE";
-
-    public final static String ACTION_TELEMETRY_AVAILABLE     = "ACTION_TELEMTRY _AVAILABLE";
-    public final static String ACTION_HUMIDITY_AVAILABLE     = "ACTION_HUMIDITY_AVAILABLE";
-    public final static String ACTION_PRESSURE_AVAILABLE     = "ACTION_PRESSURE_AVAILABLE";
-    public final static String ACTION_AIRTEMP_AVAILABLE      = "ACTION_AIRTEMP_AVAILABLE";
-    public final static String ACTION_SURFTEMP_AVAILABLE     = "ACTION_SURFTEMP_AVAILABLE";
-
-
-    // Broadcast Data Types
-    public final static String EXTRA_DATA          = "EXTRA_DATA";
-    public final static String INT_DATA            = "INT_DATA";
-    public final static String STRING_DATA         = "STRING_DATA";
-
-    public final static String ACTION_DISCONNECT   = "ACTION_DISCONNECT";
-    // Broadcast Requests
-    public final static String ACTION_LED_INCOMING  = "ACTION_LED_INCOMING";
-    public final static String ACTION_SET_INTERVAL  = "ACTION_SET_INTERVAL";
-    public final static String ACTION_READ_RSSI     = "ACTION_READ_RSSI";
-    public final static String ACTION_BATTERY_LEVEL = "ACTION_BATTERY_LEVEL";
-    public final static String ACTION_BATTERY_STATE = "ACTION_BATTERY_STATE";
-
-    public final static String ACTION_GET_MANUFACTURER = "ACTION_GET_MANUFACTURER";
-    public final static String ACTION_GET_MODEL        = "ACTION_GET_MODEL";
-    public final static String ACTION_GET_FIRMWARE     = "ACTION_GET_FIRMWARE";
-    public final static String ACTION_GET_HARDWARE_REV = "ACTION_GET_HARDWARE_REV";
-    public final static String ACTION_GET_SERIAL       = "ACTION_GET_SERIAL";
-
-    // Broadcast Notification Requests
-    public final static String ACTION_SET_NOTIFICATION = "ACTION_SET_NOTIFICATION";
-
-//    public final static UUID UUID_AIR_TEMP      = UUID.fromString( SENSOR_AIR_TEMP_CHAR);
-//    public final static UUID UUID_PRESSURE      = UUID.fromString( SENSOR_PRESSURE_CHAR);
-//    public final static UUID UUID_HUMIDITY      = UUID.fromString( SENSOR_HUMIDITY_CHAR);
-//    public final static UUID UUID_SURFACE_TEMP  = UUID.fromString( SENSOR_SURFACE_TEMP_CHAR);
-
     public final static UUID UUID_MANUFACTURER  = UUID.fromString( MANUFACTURER_NAME );
     public final static UUID UUID_BATTERY_LEVEL = UUID.fromString( BATTERY_LEVEL );
     public final static UUID UUID_BATTERY_STATE = UUID.fromString( BATTERY_STATE );
@@ -103,8 +49,6 @@ public class BluetoothLeService extends Service {
     public final static UUID UUID_SERIAL        = UUID.fromString( SERIAL_NUMBER );
     public final static UUID UUID_HARDWARE_REV  = UUID.fromString( HARDWARE_REV );
     public final static UUID UUID_FIRMWARE      = UUID.fromString( FIRMWARE );
-
-
 
 
     // Implements callback methods for GATT events that the app cares about.  For example,
@@ -120,8 +64,7 @@ public class BluetoothLeService extends Service {
                 broadcastUpdate(intentAction);
                 Log.i(TAG, "Connected to GATT server.");
                 // Attempts to discover services after successful connection.
-                Log.i(TAG, "Attempting to start service discovery:" +
-                        mBluetoothGatt.discoverServices());
+                mBluetoothGatt.discoverServices();
 
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 intentAction = ACTION_GATT_DISCONNECTED;
@@ -165,9 +108,9 @@ public class BluetoothLeService extends Service {
         public void onCharacteristicWrite(BluetoothGatt gatt,
                                           BluetoothGattCharacteristic characteristic, int status) {
             Log.d(TAG, " CALLBACK WRITE " + characteristic.toString());
-            if (status == BluetoothGatt.GATT_SUCCESS) {
-                broadcastUpdate(ACTION_WRITE_DATA_AVAILABLE, characteristic);
-            }
+     //       if (status == BluetoothGatt.GATT_SUCCESS) {
+      //          broadcastUpdate(ACTION_WRITE_DATA_AVAILABLE, characteristic);
+      //      }
         }
 
         /* Callback for read requests
@@ -181,10 +124,22 @@ public class BluetoothLeService extends Service {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
-            Log.d(TAG, "CALLBACK CHANGED " + characteristic.getUuid().toString());
-            broadcastUpdate(ACTION_SENSOR_DATA_AVAILABLE, characteristic);
+
+            broadcastCharacteristicUpdate( characteristic );
         }
 
+        @Override
+        public void onDescriptorRead(BluetoothGatt gatt,
+                                            BluetoothGattDescriptor descriptor, int status) {
+            Log.d(TAG, "ON DESCRIPTOR READ " + descriptor.getUuid().toString() + " " + status);
+        }
+
+        @Override
+        public void onDescriptorWrite(BluetoothGatt gatt,
+                                      BluetoothGattDescriptor descriptor, int status) {
+            Log.d(TAG, "ON DESCRIPTOR WRITE " + descriptor.getUuid().toString() + " " + status);
+            broadcastUpdate(ACTION_NOTIFY_SUCCESS);
+        }
 
         /*
           Callback for RSSI request
@@ -196,7 +151,6 @@ public class BluetoothLeService extends Service {
             }
         }
     };
-
 
 // receives broadcast messages and performs action
 
@@ -241,16 +195,17 @@ public class BluetoothLeService extends Service {
             if ( ACTION_GET_SERIAL.equals(action)) {
                 getSerial();
             }
-
             if ( ACTION_SET_NOTIFICATION.equals(action)) {
                 String service = intent.getStringExtra("SERVICE");
                 String characteristic = intent.getStringExtra("CHARACTERISTIC");
                 setNotification(service, characteristic);
             }
+            if ( ACTION_NOTIFY_DONE.equals(action)) {
+
+            }
 
         }
     };
-
 
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
@@ -258,7 +213,7 @@ public class BluetoothLeService extends Service {
     }
 
     private void broadcastIntUpdate(final String action, int value) {
-        final Intent intent = new Intent(action);
+        Intent intent = new Intent(action);
         intent.putExtra(INT_DATA, value);
         sendBroadcast(intent);
     }
@@ -269,62 +224,65 @@ public class BluetoothLeService extends Service {
         sendBroadcast(intent);
     }
 
-    //
-    private void broadcastUpdate(final String action,
-                                 final BluetoothGattCharacteristic characteristic) {
+    private void broadcastCharacteristicUpdate( BluetoothGattCharacteristic characteristic) {
 
-        final Intent intent = new Intent(action);
-
-
-        if (action.equals(ACTION_SENSOR_DATA_AVAILABLE)) {
-            final byte[] data = characteristic.getValue();
-            float outData = byteArrayToFloat(reverseArray(data));
-
-
+        Intent intent = new Intent();
+        String cString = characteristic.getUuid().toString();
+        final byte[] data = characteristic.getValue();
+        Log.d("BYTES", "DATA" + data);
+        float outData = byteArrayToFloat(reverseArray(data));
+        int value = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+        Log.d("INTEG", "VALUE" + value);
+        if ( cString.equals ( SENSOR_HANDLING_VALUE )) {
+            intent.setAction( ACTION_HANDLING_AVAILABLE );
+            intent.putExtra(EXTRA_DATA, data);
         }
-        if (action.equals(ACTION_WRITE_DATA_AVAILABLE)) {
-            intent.putExtra(EXTRA_DATA, "1");
+        if ( cString.equals ( SENSOR_SURFACE_VALUE))    {
+            intent.setAction( ACTION_SURFACE_AVAILABLE );
+            intent.putExtra(FLOAT_DATA, outData );
+        }
+        if ( cString.equals ( SENSOR_ATMOSPHERE_VALUE) ) {
+            intent.setAction( ACTION_AMBIENT_AVAILABLE );
+            intent.putExtra(EXTRA_DATA, value );
         }
 
         sendBroadcast(intent);
     }
-
     // Data comes from sensor in low to high order byte [00 01 02 03]
     // so we need to reverse array
-
     private void processReadData(BluetoothGattCharacteristic characteristic) {
         UUID uuid = characteristic.getUuid();
 
-        if (uuid.equals(UUID_BATTERY_LEVEL)) {
+        if ( uuid.equals( UUID_BATTERY_LEVEL )) {
             int value = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
             broadcastIntUpdate(ACTION_BATTERY_LEVEL_AVAILABLE, value);
         }else
-        if (uuid.equals(UUID_BATTERY_STATE)) {
+        if ( uuid.equals( UUID_BATTERY_STATE )) {
             int value = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
             broadcastIntUpdate(ACTION_BATTERY_STATE_AVAILABLE, value);
         }
-        if (uuid.equals(UUID_MANUFACTURER)) {
+        if ( uuid.equals( UUID_MANUFACTURER )) {
             String svalue = characteristic.getStringValue(0);
             broadcastStringUpdate(ACTION_MANUFACTURER_AVAILABLE, svalue);
         }
-        if (uuid.equals(UUID_MODEL)) {
+        if ( uuid.equals( UUID_MODEL )) {
             String svalue = characteristic.getStringValue(0);
             broadcastStringUpdate(ACTION_MODEL_AVAILABLE, svalue);
         }
-        if (uuid.equals(UUID_FIRMWARE)) {
+        if ( uuid.equals( UUID_FIRMWARE )) {
             String svalue = characteristic.getStringValue(0);
             broadcastStringUpdate(ACTION_FIRMWARE_AVAILABLE, svalue);
         }
-        if (uuid.equals(UUID_HARDWARE_REV)) {
+        if ( uuid.equals( UUID_HARDWARE_REV )) {
             String svalue = characteristic.getStringValue(0);
             broadcastStringUpdate(ACTION_HARDWARE_AVAILABLE, svalue);
         }
-        if (uuid.equals(UUID_SERIAL)) {
+        if ( uuid.equals( UUID_SERIAL )) {
             String svalue = characteristic.getStringValue(0);
             broadcastStringUpdate(ACTION_SERIAL_AVAILABLE, svalue);
         }
-        else
-            broadcastUpdate(ACTION_READ_DATA_AVAILABLE, characteristic);
+ //       else
+ //           broadcastUpdate(ACTION_READ_DATA_AVAILABLE, characteristic);
     }
 
     private byte[] reverseArray(byte[] array)  {
@@ -379,20 +337,20 @@ public class BluetoothLeService extends Service {
     public boolean initialize() {
         // For API level 18 and above, get a reference to BluetoothAdapter through BluetoothManager.
 
-        if (mBluetoothManager == null) {
+        if ( mBluetoothManager == null) {
             mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-            if (mBluetoothManager == null) {
+            if ( mBluetoothManager == null) {
                 Log.e(TAG, "Cannot initialize BluetoothManager.");
                 return false;
             }
         }
 
         mBluetoothAdapter = mBluetoothManager.getAdapter();
-        if (mBluetoothAdapter == null) {
+        if ( mBluetoothAdapter == null) {
             Log.e(TAG, "Cannot obtain a BluetoothAdapter.");
             return false;
         }
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        registerReceiver( mGattUpdateReceiver, makeGattUpdateIntentFilter());
         return true;
     }
 
@@ -529,7 +487,6 @@ public class BluetoothLeService extends Service {
         return mBluetoothGatt.getServices();
     }
 
-
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction( ACTION_DISCONNECT );
@@ -544,9 +501,9 @@ public class BluetoothLeService extends Service {
         intentFilter.addAction( ACTION_GET_HARDWARE_REV );
         intentFilter.addAction( ACTION_GET_SERIAL );
         intentFilter.addAction( ACTION_SET_NOTIFICATION );
+        intentFilter.addAction( ACTION_NOTIFY_SUCCESS );
         return intentFilter;
     }
-
 
     /*
      * Bluetooth read and write calls
@@ -580,7 +537,7 @@ public class BluetoothLeService extends Service {
         writeCharacteristic(mIntervalChar, dataArray);
     }
 
-     public void setInterval(float interval)   {
+    public void setInterval(float interval)   {
         byte[] dataArray = reverseArray(floatToByteArray(interval));
         Log.d("INTERVAL", dataArray[0] + " " +  dataArray[1] + " " + dataArray[2] + " " + dataArray[3]);
 
@@ -694,8 +651,6 @@ public class BluetoothLeService extends Service {
         BluetoothGattCharacteristic mIntervalChar = mService.getCharacteristic(UUID.fromString(SENSOR_SURFACE_UPPER));
         writeCharacteristic(mIntervalChar, dataArray);
     }
-
-
 
 }
 

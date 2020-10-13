@@ -18,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +29,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import static com.ice.stickershock_shockvx.bluetooth.BluetoothLeService.*;
+import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 
 
 public class TabbedActivity extends AppCompatActivity {
@@ -62,17 +63,18 @@ public class TabbedActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.mypager);
         pagerAdapter = new MyPagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
+        Log.d("Tabbed", "inside");
 
         //inflating tab layout
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-
+        tabLayout.setBackgroundColor(0xffffff);
 
         //displaying tabs
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 tab.setText(tabTitles[position]);
-                //              tab.setIcon(tabIcons[position]);
+                tab.setIcon(tabIcons[position]);
             }
         }).attach();
 
@@ -94,7 +96,7 @@ public class TabbedActivity extends AppCompatActivity {
         public Fragment createFragment(int pos) {
             switch (pos) {
                 case 0: {
-                    return TelemetryFragment.newInstance("");
+                    return TrackAssetFragment.newInstance("");
                 }
                 case 1: {
                     return TelemetryFragment.newInstance("");

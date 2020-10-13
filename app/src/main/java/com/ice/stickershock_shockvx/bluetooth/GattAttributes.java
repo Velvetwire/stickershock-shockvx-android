@@ -41,7 +41,7 @@ public class GattAttributes {
 
     // Atmospheric Service
     public static String SENSOR_ATMOSPHERE_SERVICE    = "41740000-5657-5353-2020-56454c564554";
-    public static String SENSOR_ATMOSPHERE_VALUE      = "41744c76-5657-5353-2020-56454c564554";   // read notify
+    public static String SENSOR_ATMOSPHERE_VALUE      = "41744d76-5657-5353-2020-56454c564554";   // read notify
     public static String SENSOR_ATMOSPHERE_LOWER      = "41744c6c-5657-5353-2020-56454c564554";   // read write
     public static String SENSOR_ATMOSPHERE_UPPER      = "4174556c-5657-5353-2020-56454c564554";   // read write
 
@@ -118,6 +118,7 @@ public class GattAttributes {
 
         // Stickershock Characteristics=
         attributes.put(SENSOR_CONTROL_IDENTIFY,   "Sensor Control Identify");
+        attributes.put(SENSOR_HANDLING_VALUE,     "Sensor Handling Value");
         attributes.put(SENSOR_SURFACE_VALUE,      "Sensor Surface Value");
         attributes.put(SENSOR_ATMOSPHERE_VALUE,   "Sensor Atmosphere Value");
         attributes.put(SENSOR_TELEMETRY_ARCHIVAL, "Sensor Telemetry Archival");

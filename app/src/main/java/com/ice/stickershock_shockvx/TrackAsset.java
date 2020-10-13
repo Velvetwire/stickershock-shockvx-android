@@ -24,7 +24,7 @@ public class TrackAsset extends Activity {
 
                         openSticker();
                         saveStickerInfo();
-                        Intent intent = new Intent(TrackAsset.this, TopScreen.class);
+                        Intent intent = new Intent(TrackAsset.this, MainAssetScreen.class);
                         startActivity(intent);
 
 

@@ -38,8 +38,7 @@ import java.util.List;
 
 import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_NOTIFY;
 import static com.ice.stickershock_shockvx.bluetooth.BluetoothLeService.*;
-
-
+import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
  * and display GATT services and characteristics supported by the device.
@@ -47,20 +46,14 @@ import static com.ice.stickershock_shockvx.bluetooth.BluetoothLeService.*;
  * interacts with the Bluetooth LE API.
  **/
 
+
 public class BluetoothControlActivity extends Activity {
     private final static String TAG = BluetoothControlActivity.class.getSimpleName();
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
 
-//    private TextView mConnectionState;
-//    private TextView mManufacturer;
-//    private TextView mMake;
-//    private TextView mModel;
     private TextView mSerial;
-//    private TextView mHardware;
-//    private TextView mFirmware;
-
     private Sticker mSticker;
 
     private String mDeviceName = null;
@@ -78,11 +71,20 @@ public class BluetoothControlActivity extends Activity {
     private final String DEGREES = "\u00B0";
     private final String MILLIBAR = " mB";
 
-    public final float INTERVAL_ACQUIRE = 0.5f;
-    public final float INTERVAL_FAST = 1.0f;
-    public final float INTERVAL_MEDIUM = 5.0f;
-    public final float INTERVAL_SLOW = 15.0f;
     // Using BluetoothLeService to handle bluetooth connection
+
+    private class Notification {
+         String service;
+         String characteristic;
+
+        public Notification(String service_uuid, String characteristic_uuid) {
+            this.service        = service_uuid;
+            this.characteristic = characteristic_uuid;
+        }
+    }
+
+    public List<Notification> notifyList = new ArrayList<Notification>();
+
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -129,16 +131,18 @@ public class BluetoothControlActivity extends Activity {
 
             }
             else if (ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                Log.d("ACTION", "GATT SERVICES");
-                // Show all the supported services and characteristics on the user interface.
                 displayGattServices(mBluetoothLeService.getSupportedGattServices());
-                Log.d("DISCOVERED", "Gatt services");
+                enableAllNotifications();
 
                 // here is where available data is found
                 // as far as notification there seems to be a timing problem where one
                 // can only set one notification at a time.
 
             }
+            else if (ACTION_NOTIFY_SUCCESS.equals(action)) {
+                enableAllNotifications();
+            }
+
             else if (ACTION_READ_DATA_AVAILABLE.equals(action)) {
                 String extraData = intent.getStringExtra ( STRING_DATA );
                 Log.d("DISCOVERED", "READ DATA AVAILABLE" + extraData);
@@ -172,26 +176,44 @@ public class BluetoothControlActivity extends Activity {
                 Log.d("Serial", extraData);
 
             }
-            else if (ACTION_WRITE_DATA_AVAILABLE.equals(action)) {
-                String  extraData = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
+            else if ( ACTION_WRITE_DATA_AVAILABLE.equals(action)) {
+                String  extraData = intent.getStringExtra(EXTRA_DATA);
                 Log.d("ACTION", "WRITE DATA SUCCESS " + extraData);
-            //    mBluetoothLeService.setInterval(INTERVAL_ACQUIRE);
-                enableDiscovered(   );
             }
-
-            else if (ACTION_TELEMETRY_AVAILABLE.equals(action)) {
-                String extraData = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
-                Log.d("ACTION", "SURFTEMP " + extraData);
-                // mSticker.notifySurfaceTemp = true;
-                // mSticker.notifyAirTemp = true;
-                //  mSticker.notifyHumidity = true;
-                //  mSticker.notifyPressure = true;
-                //  enableDiscovered( );
+            else if ( ACTION_SENSOR_DATA_AVAILABLE.equals(action)) {
+                String extraData = intent.getStringExtra( EXTRA_DATA );
+                Log.d("SENSOR_DATA", "available " + extraData);
 
             }
-        }
+         }
     };
 
+    public void goToTabbedActivity()
+    {
+        Log.d("NOTIFY DONE", "GO TO TABBEDACTIVITY");
+        Intent i = new Intent(BluetoothControlActivity.this, TabbedActivity.class);
+        startActivity(i);
+    }
+
+    // Enable all notifications that are in notifyList. Wait for callback to
+    // set next notify
+    public void enableAllNotifications()
+    {
+        Notification n;
+        final Intent intent;
+
+        if (notifyList.size() > 0) {                          // notifications in list
+            n = notifyList.remove(0);                  // select next notification
+            intent = new Intent(ACTION_SET_NOTIFICATION);
+            intent.putExtra("SERVICE", n.service);
+            intent.putExtra("CHARACTERISTIC", n.characteristic);
+            sendBroadcast(intent);
+        // all notifications processed, so go to telemetry page
+        } else {
+            goToTabbedActivity();
+        }
+
+    }
 
 
     @Override
@@ -206,24 +228,11 @@ public class BluetoothControlActivity extends Activity {
         // Sets up UI references.
         mSerial       = (TextView) findViewById(R.id.serial);
 
-        //((TextView) findViewById(R.id.battery)).setText(mDeviceAddress);
-        //mConnectionState = (TextView) findViewById(R.id.connection_state);
-        //mManufacturer = (TextView) findViewById(R.id.manufacturer);
-        //mMake         = (TextView) findViewById(R.id.make);
-        //mModel        = (TextView) findViewById(R.id.model);
-        //mHardware     = (TextView) findViewById(R.id.hardware);
-        //mFirmware     = (TextView) findViewById(R.id.firmware);
-
         mSticker = new Sticker();
         mSticker.setAddress(mDeviceAddress);
 
-        getActionBar().setTitle("Stickershock");
+        getActionBar().setTitle("Connect to Stickershock" + mDeviceAddress);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // Bind to BluetoothLeService to handle Le communication
-    //    Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
-     //   final boolean b = bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-
 
     }
 
@@ -303,12 +312,6 @@ public class BluetoothControlActivity extends Activity {
         });
     }
 
-    // data is sent to routine as tag and data with colon separator
-    // Looks like AIR:29.427
-    //            HUM:61.52
-    //            PRE:1016.88
-    //            SUR:21.125
-
 
     private byte[] reverseArray(byte[] array)  {
         for(int i=0; i<array.length/2; i++) {
@@ -334,15 +337,6 @@ public class BluetoothControlActivity extends Activity {
     }
 
 
-    // turn on notifications after callback
-    private boolean enableDiscovered(  ) {
-/*
-        if ( mSticker.notifyHumidity == false) {
-            transmitBroadcast( ACTION_NOTIFY_TELEMETRY );
-        }
-*/
-    return true;
-    }
 
     // Retrieve read fields from sticker. Since this activity is attached to service, these bluetooth
     // services can be called directly, but can also be called using broadcast messages
@@ -372,6 +366,8 @@ public class BluetoothControlActivity extends Activity {
 
     private void displayGattServices(List<BluetoothGattService> gattServices) {
         if (gattServices == null) return;
+
+        int i = 0;
         String service_uuid = null;
         String characteristic_uuid = null;
         String unknownServiceString = getResources().getString(R.string.unknown_service);
@@ -405,10 +401,7 @@ public class BluetoothControlActivity extends Activity {
 
                 // if characteristic can be set to notify, do it
                 if ((permissions & PROPERTY_NOTIFY) > 0) {
-                    final Intent intent = new Intent( ACTION_SET_NOTIFICATION );
-                    intent.putExtra("SERVICE", service_uuid);
-                    intent.putExtra("CHARACTERISTIC", characteristic_uuid);
-                    sendBroadcast(intent);
+                        notifyList.add (new Notification(service_uuid, characteristic_uuid));
                 }
 
                 currentCharaData.put(
@@ -440,6 +433,8 @@ public class BluetoothControlActivity extends Activity {
         intentFilter.addAction( ACTION_FIRMWARE_AVAILABLE );
         intentFilter.addAction( ACTION_HARDWARE_AVAILABLE );
         intentFilter.addAction( ACTION_SERIAL_AVAILABLE );
+        intentFilter.addAction( ACTION_NOTIFY_SUCCESS );
+        intentFilter.addAction( ACTION_NOTIFY_DONE );
         return intentFilter;
     }
 
