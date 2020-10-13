@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#b3e5fc</color>
+    <color name="colorPrimaryDark">#82b3c9</color>
+    <color name="colorPrimaryLight">#e6fffff9</color>
+    <color name="colorAccent">#93737E</color>
+    <color name="frg1Color">#FEBE29</color>
+    <color name="frg2Color">#3395FF</color>
+    <color name="frg3Color">#F6437B</color>
+    <color name="txtBGColor">#9FA8DA</color>
+    <color name="white">#FFFFFF</color>
+</resources>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:foregroundTint="#FAF8F8"
+    android:orientation="vertical"
+    android:paddingTop="50dp"
+    android:paddingBottom="20dp"
+    android:id="@+id/mainLayout">
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:src="@drawable/trends" />
+
+    <ImageView
+        android:id="@+id/sticker1"
+        android:layout_width="160dp"
+        android:layout_height="129dp"
+        android:layout_weight="1"
+        android:tint="#914FBF"
+        android:src="@drawable/stickershock" />
+    <Space
+        android:layout_width="1dp"
+        android:layout_height="30dp"/>
+    <LinearLayout
+        android:id="@+id/formLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_rect_shape"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/stickerid"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="#914FBF"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:text="70D2-50B3-5346-1A9F" />
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="30dp"/>
+        <EditText
+            android:id="@+id/assetName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_rect_shape_2"
+            android:backgroundTint="#F1E4FF"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="30dp"/>
+        <EditText
+            android:id="@+id/assetLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_rect_shape_2"
+            android:backgroundTint="#F1E4FF"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Location" />
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="30dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:orientation="vertical"
+        android:paddingTop="30dp">
+
+        <Button
+            android:id="@+id/trackButton"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/rounded_rect_shape"
+            android:text="TRACK" />
+
+    </LinearLayout>
+</LinearLayout>
