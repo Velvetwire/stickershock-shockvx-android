@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Switch;
@@ -19,14 +20,12 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.ice.stickershock_shockvx.bluetooth.BluetoothLeService;
 
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 
 
 public class SettingsFragment extends Fragment {
-    private BluetoothLeService mBluetoothLeService;
-    EditText mName;
+
     Button mMeas15Button;
     Button mMeas60Button;
     Button mRec15Button;
@@ -48,8 +47,7 @@ public class SettingsFragment extends Fragment {
     Button mAmbientMaxMinusButton;
     Button mAmbientMaxPlusButton;
 
-
-    Button mNone ;
+    Button mNone;
     Button mCareful;
     Button mFragile;
 
@@ -105,37 +103,44 @@ public class SettingsFragment extends Fragment {
         //   Measurement row
         mMeas15Button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // set measurement button to ic
-            //    mMeas60Button.setChecked(false);
+                transmitBroadcast( ACTION_MEASUREMENT_INTERVAL_15 );
             }
         });
         mMeas60Button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // set measurement button to ic
-          //      mMeas15Button.setChecked(false);
+                transmitBroadcast( ACTION_MEASUREMENT_INTERVAL_60 );
             }
         });
 
         //   Records
         mRec15Button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // set records button to ic
-                //    mMeas60Button.setChecked(false);
+                transmitBroadcast( ACTION_RECORDS_INTERVAL_15 );
             }
         });
         mRec60Button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // set measurement button to ic
-                //      mMeas15Button.setChecked(false);
+                transmitBroadcast( ACTION_RECORDS_INTERVAL_60 );
             }
         });
-
+// -----------------------------------------------------------------------
+        mSurfSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()  {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+               if ( isChecked ) {
+                   ;
+               } else {
+                   ;
+               }
+            }
+        });
         //   Surface Temp Alarm
         mSurfMinMinusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setInterval( 15 );
             }
         });
+
         mSurfMinPlusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 SensorState.captureRate = 15;
@@ -157,6 +162,18 @@ public class SettingsFragment extends Fragment {
 
             }
         });
+
+
+        mAmbientSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()  {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if ( isChecked ) {
+                    ;
+                } else {
+                    ;
+                }
+            }
+    });
 
         //   Ambient Temp Alarm
         mAmbientMinMinusButton.setOnClickListener(new View.OnClickListener() {
@@ -189,34 +206,39 @@ public class SettingsFragment extends Fragment {
         //   Handling row
         mNone.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // set measurement button to ic
-                //    mMeas60Button.setChecked(false);
+                transmitBroadcast( ACTION_HANDLING_NONE );
             }
         });
         mCareful.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // set measurement button to ic
-                //      mMeas15Button.setChecked(false);
+                transmitBroadcast( ACTION_HANDLING_CAREFUL );
             }
         });
         mFragile.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // set measurement button to ic
-                //      mMeas15Button.setChecked(false);
+                transmitBroadcast( ACTION_HANDLING_FRAGILE );
             }
         });
 
+        mTipSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()  {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if ( isChecked ) {
+                    ;
+                } else {
+                    ;
+                }
+            }
+        });
         //   Tipping row
         mFlat.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // set measurement button to ic
-                //    mMeas60Button.setChecked(false);
+                transmitBroadcast( ACTION_ORIENTATION_FLAT );
             }
         });
         mUpright.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // set measurement button to ic
-                //      mMeas15Button.setChecked(false);
+                transmitBroadcast( ACTION_ORIENTATION_UPRIGHT );
             }
         });
 

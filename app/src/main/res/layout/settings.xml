@@ -50,28 +50,36 @@
               android:layout_height="0dp"
               android:layout_weight="1"
               />
+          <LinearLayout
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:paddingRight="10dp">
+          <com.google.android.material.button.MaterialButtonToggleGroup
+              android:id="@+id/measureGroup"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              app:checkedButton="@id/meas15button"
+              app:singleSelection="true">
+              <Button
+                  style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                  android:id="@+id/meas15button"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:text="15 sec" />
 
-        <Button
-            android:id="@+id/meas15button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="right"
-            style="?attr/materialButtonOutlinedStyle"
-            android:text="15 sec" />
+              <Button
+                  style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                  android:id="@+id/meas60button"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:text="60 sec" />
+          </com.google.android.material.button.MaterialButtonToggleGroup>
+          </LinearLayout>
 
-        <Button
-            android:id="@+id/meas60button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="right"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/button"
-            style="?attr/materialButtonOutlinedStyle"
-            android:text="60 sec" />
-
-    </LinearLayout>
+      </LinearLayout>
     <LinearLayout
         android:id="@+id/row2"
         android:layout_width="413dp"
@@ -99,25 +107,30 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingRight="10dp">
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggleGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:checkedButton="@id/rec15button"
+                app:singleSelection="true">
         <Button
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:id="@+id/rec15button"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="right"
-            style="?attr/materialButtonOutlinedStyle"
-            android:text="15 sec" />
-
-        <Button
-            android:id="@+id/rec60button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_gravity="right"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_marginRight="15dp"
-            android:text="60 sec" />
+            android:text="15 sec" />
+
+                <Button
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:id="@+id/rec60button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="60 sec" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
         </LinearLayout>
 
     </LinearLayout>
@@ -211,23 +224,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingEnd="20dp">
-            <Button
-                android:id="@+id/surfminminus"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                style="?attr/materialButtonOutlinedStyle"
-                android:text="-" />
+                android:paddingRight="10dp">
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/surfaceMinGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:checkedButton="@id/surfminminus"
+                    app:singleSelection="true">
+                    <Button
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:id="@+id/surfminminus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="-" />
 
-            <Button
-                android:id="@+id/surfminplus"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="?attr/materialButtonOutlinedStyle"
-                android:text="+" />
+                    <Button
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:id="@+id/surfminplus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="+" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
             </LinearLayout>
 
         </LinearLayout>
@@ -267,23 +286,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingEnd="20dp">
-            <Button
-                android:id="@+id/surfmaxminus"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                style="?attr/materialButtonOutlinedStyle"
-                android:text="-" />
+                android:paddingRight="10dp">
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/surfaceMaxGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:checkedButton="@id/surfmaxminus"
+                    app:singleSelection="true">
+                    <Button
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:id="@+id/surfmaxminus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="-" />
 
-            <Button
-                android:id="@+id/surfmaxplus"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="?attr/materialButtonOutlinedStyle"
-                android:text="+" />
+                    <Button
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:id="@+id/surfmaxplus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="+" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
             </LinearLayout>
 
         </LinearLayout>
@@ -497,32 +522,37 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-            <Button
-                android:id="@+id/noneButton"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginEnd="10dp"
-                style="?attr/materialButtonOutlinedStyle"
-                android:text="None" />
+                android:orientation="horizontal"
+                android:paddingRight="10dp">
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/handlingGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:checkedButton="@id/noneButton"
+                    app:singleSelection="true">
+                    <Button
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:id="@+id/noneButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="None" />
 
-            <Button
-                android:id="@+id/carefulButton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginEnd="10dp"
-                style="?attr/materialButtonOutlinedStyle"
-                android:text="Careful" />
-
-            <Button
-                android:id="@+id/fragileButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="?attr/materialButtonOutlinedStyle"
-                android:text="Fragile" />
+                    <Button
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:id="@+id/carefulButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Careful" />
+                    <Button
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:id="@+id/fragileButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Fragile" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
             </LinearLayout>
 
         </LinearLayout>
@@ -553,24 +583,31 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-            <Button
-                android:id="@+id/flatButton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginEnd="10dp"
-                style="?attr/materialButtonOutlinedStyle"
-                android:text="Flat" />
+                android:orientation="horizontal"
+                android:paddingRight="10dp">
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/orientationGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:checkedButton="@id/flatButton"
+                    app:singleSelection="true">
+                    <Button
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:id="@+id/flatButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Flat" />
 
-            <Button
-                android:id="@+id/uprightButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="10dp"
-                style="?attr/materialButtonOutlinedStyle"
-                android:text="Upright" />
+                    <Button
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:id="@+id/uprightButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Upright" />
+
+                </com.google.android.material.button.MaterialButtonToggleGroup>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

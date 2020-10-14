@@ -45,7 +45,6 @@
 
         <!-- Enable local bluetooth service handler BluetoothLeService. -->
         <service android:name=".bluetooth.BluetoothLeService" android:enabled="true"/>
-        <!-- Enable local datalogging Service -->
 
     </application>
 

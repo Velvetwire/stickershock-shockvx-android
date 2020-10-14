@@ -38,7 +38,7 @@ public class ReadStickerNfc extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
-        Log.d("READ", "HERE");
+
         // Get NFC Adapter
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         mNfcMessage = (TextView) findViewById(R.id.nfc_message);

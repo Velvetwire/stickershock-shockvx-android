@@ -1,17 +1,20 @@
+//=============================================================================
+// project: ShockVx
+//  module: Stickershock Android App for cold chain tracking.
+//  author: Velvetwire, llc
+//    file: TabbedActivity.java
+//
+//   Main routine for newly tagged sticker
+//   TabbedActivity handles the Tab interface and the individual
+//   fragments that each tab navigates to
+//       1. Tracking Fragment
+//       2. Telemetry Fragment
+//       3. SettingsFragment
+//
+// (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+//=============================================================================
+
 package com.ice.stickershock_shockvx;
-
-/*
- * ReadSensorView.java
- *    Main routine for handling sensor data once BLE connection is made
- *    ReadSensorView handles the Tab interface and the individual
- *    fragments that each tab navigates to
- *       1. Telemetry Fragment
- *       2. DatalogFragment
- *       3. SettingsFragment
- *       4. Trends Fragment
- *       5. File Fragment
- */
-
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,11 +40,6 @@ public class TabbedActivity extends AppCompatActivity {
     public static ViewPager2 viewPager;
     private FragmentStateAdapter pagerAdapter;
 
-    // in seconds
-    public static int captureRate = 15;
-    public static int sampleRate = 1;
-    public static int ratio      = 1;
-
     int[] tabIcons = {
             R.drawable.tracking,
             R.drawable.telemetry,
@@ -59,15 +57,15 @@ public class TabbedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.frag_activity_main);
         viewPager = findViewById(R.id.mypager);
+
         pagerAdapter = new MyPagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
-        Log.d("Tabbed", "inside");
 
         //inflating tab layout
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.setBackgroundColor(0xffffff);
 
         //displaying tabs
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -77,9 +75,6 @@ public class TabbedActivity extends AppCompatActivity {
                 tab.setIcon(tabIcons[position]);
             }
         }).attach();
-
-
-//        retrieveStickerProperties();
 
     }
 
@@ -106,7 +101,7 @@ public class TabbedActivity extends AppCompatActivity {
 
                 }
                 default:
-                    return TelemetryFragment.newInstance("fragment 1, Default");
+                    return TelemetryFragment.newInstance("");
             }
         }
 
@@ -128,7 +123,7 @@ public class TabbedActivity extends AppCompatActivity {
             getSupportFragmentManager().popBackStack();
         }
         transmitBroadcast( ACTION_DISCONNECT );
-        Intent intent = new Intent(TabbedActivity.this, WelcomeScreen.class);
+        Intent intent = new Intent(TabbedActivity.this, MainAssetScreen.class);
         startActivity(intent);
         finish();
     }

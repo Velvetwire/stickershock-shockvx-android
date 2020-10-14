@@ -97,12 +97,23 @@ public class MainAssetScreen extends ListActivity {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
 /*
-            if ( ACTION_TELEMETRY_AVAILABLE.equals(action)) {
-                String value = intent.getStringExtra( EXTRA_DATA) + DEGREES_C;
+            if ( ACTION_AMBIENT_AVAILABLE.equals(action)) {
+                String value = intent.getStringExtra( EXTRA_DATA);
                 mAirTemp.setText( value );
+                mHumidity.setText( value );
+            }
+
+            if ( ACTION_SURFACE_AVAILABLE.equals(action)) {
+                float fValue = intent.getFloatExtra( FLOAT_DATA, 0.0f );
+                String value = Float.toString(fValue);
                 mSurfTemp.setText( value );
                 mPressure.setText( value );
-                mHumidity.setText( value );
+            }
+
+            if ( ACTION_HANDLING_AVAILABLE.equals(action)) {
+                String value = intent.getStringExtra( EXTRA_DATA) + DEGREES;
+                mFaceup.setText( value );
+                mForces.setText( value );
             }
 */
             if ( ACTION_BATTERY_LEVEL_AVAILABLE.equals(action)) {
@@ -123,9 +134,11 @@ public class MainAssetScreen extends ListActivity {
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
 
- //       intentFilter.addAction( ACTION_TELEMETRY_AVAILABLE );
- //       intentFilter.addAction( ACTION_BATTERY_LEVEL_AVAILABLE );
- //       intentFilter.addAction( ACTION_RSSI_DATA_AVAILABLE );
+        intentFilter.addAction( ACTION_AMBIENT_AVAILABLE );
+        intentFilter.addAction( ACTION_SURFACE_AVAILABLE );
+        intentFilter.addAction( ACTION_HANDLING_AVAILABLE );
+        intentFilter.addAction( ACTION_BATTERY_LEVEL_AVAILABLE );
+        intentFilter.addAction( ACTION_RSSI_DATA_AVAILABLE );
         return intentFilter;
     }
 

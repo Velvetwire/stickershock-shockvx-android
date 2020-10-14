@@ -1,3 +1,16 @@
+//=============================================================================
+// project: ShockVx
+//  module: Stickershock Android App for cold chain tracking.
+//  author: Velvetwire, llc
+//    file: BluetoothLeService.java
+//
+// Service class for bluetooth connections
+// Rest of app communicates with service through broadcast messages
+// Service class is declared in AndroidManifest
+//
+// (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+//=============================================================================
+
 package com.ice.stickershock_shockvx.bluetooth;
 
 
@@ -34,10 +47,11 @@ public class BluetoothLeService extends Service {
 
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
-    private String mBluetoothDeviceAddress;
-    private BluetoothGatt mBluetoothGatt;
-    private int mConnectionState = STATE_DISCONNECTED;
+    private String           mBluetoothDeviceAddress;
+    private BluetoothGatt    mBluetoothGatt;
 
+
+    private int mConnectionState = STATE_DISCONNECTED;
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTING   = 1;
     private static final int STATE_CONNECTED    = 2;
@@ -84,16 +98,7 @@ public class BluetoothLeService extends Service {
             }
         }
 
-        /* Callback for read requests
-            Presently handles
-            BATTERY_LEVEL
-            BATTERY_STATE
-            MANUFACTURER
-            MODEL
-            FIRMWARE
-            HARDWARE
-            SERIAL
-         */
+
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic,
@@ -113,14 +118,6 @@ public class BluetoothLeService extends Service {
       //      }
         }
 
-        /* Callback for read requests
-              Presently handles
-              Notification requests for
-              SENSORS
-
-             data notifies from
-             SENSORS
-             */
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
@@ -152,7 +149,7 @@ public class BluetoothLeService extends Service {
         }
     };
 
-// receives broadcast messages and performs action
+// receives broadcast messages and performs appropriate action
 
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -200,8 +197,12 @@ public class BluetoothLeService extends Service {
                 String characteristic = intent.getStringExtra("CHARACTERISTIC");
                 setNotification(service, characteristic);
             }
-            if ( ACTION_NOTIFY_DONE.equals(action)) {
-
+            if ( ACTION_NOTIFY_DONE.equals(action)) { }
+            if ( ACTION_OPEN_STICKER.equals(action)) {
+                openSticker();
+            }
+            if ( ACTION_CLOSE_STICKER.equals(action)) {
+                closeSticker();
             }
 
         }
@@ -233,6 +234,7 @@ public class BluetoothLeService extends Service {
         float outData = byteArrayToFloat(reverseArray(data));
         int value = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
         Log.d("INTEG", "VALUE" + value);
+
         if ( cString.equals ( SENSOR_HANDLING_VALUE )) {
             intent.setAction( ACTION_HANDLING_AVAILABLE );
             intent.putExtra(EXTRA_DATA, data);
@@ -502,6 +504,17 @@ public class BluetoothLeService extends Service {
         intentFilter.addAction( ACTION_GET_SERIAL );
         intentFilter.addAction( ACTION_SET_NOTIFICATION );
         intentFilter.addAction( ACTION_NOTIFY_SUCCESS );
+        intentFilter.addAction( ACTION_OPEN_STICKER );
+        intentFilter.addAction( ACTION_CLOSE_STICKER );
+        intentFilter.addAction( ACTION_MEASUREMENT_INTERVAL_15 );
+        intentFilter.addAction( ACTION_MEASUREMENT_INTERVAL_60 );
+        intentFilter.addAction( ACTION_RECORDS_INTERVAL_15 );
+        intentFilter.addAction( ACTION_RECORDS_INTERVAL_60 );
+        intentFilter.addAction( ACTION_HANDLING_NONE );
+        intentFilter.addAction( ACTION_HANDLING_CAREFUL );
+        intentFilter.addAction( ACTION_HANDLING_FRAGILE );
+        intentFilter.addAction( ACTION_ORIENTATION_FLAT );
+        intentFilter.addAction( ACTION_ORIENTATION_UPRIGHT );
         return intentFilter;
     }
 
@@ -519,7 +532,8 @@ public class BluetoothLeService extends Service {
        ACTION_SAMPLE_15SEC
      */
 
-    public void openSensor( String stickerId  ) {
+    public void openSticker(  ) {
+        String stickerId = "TESTID";
         byte[] dataArray = stickerId.getBytes();
         Log.d("OPEN SENSOR", dataArray[0] + " " +  dataArray[1] + " " + dataArray[2] + " " + dataArray[3]);
 
@@ -528,9 +542,8 @@ public class BluetoothLeService extends Service {
         writeCharacteristic(mIntervalChar, dataArray);
     }
 
-    public void closeSensor( String stickerId  ) {
-        byte[] dataArray = stickerId.getBytes();
-        Log.d("OPEN SENSOR", dataArray[0] + " " +  dataArray[1] + " " + dataArray[2] + " " + dataArray[3]);
+    public void closeSticker(  ) {
+        byte[] dataArray = {0x01, 0x01, 0x01, 0x01};
 
         BluetoothGattService mService = mBluetoothGatt.getService(UUID.fromString(GattAttributes.SENSOR_CONTROL_SERVICE));
         BluetoothGattCharacteristic mIntervalChar = mService.getCharacteristic(UUID.fromString(SENSOR_CONTROL_CLOSED));
