@@ -113,9 +113,11 @@ public class BluetoothLeService extends Service {
         public void onCharacteristicWrite(BluetoothGatt gatt,
                                           BluetoothGattCharacteristic characteristic, int status) {
             Log.d(TAG, " CALLBACK WRITE " + characteristic.toString());
-     //       if (status == BluetoothGatt.GATT_SUCCESS) {
-      //          broadcastUpdate(ACTION_WRITE_DATA_AVAILABLE, characteristic);
-      //      }
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+               if (characteristic.getUuid().toString().equals (SENSOR_CONTROL_OPENED )) {
+                   disconnect();
+               }
+            }
         }
 
         @Override
@@ -159,7 +161,7 @@ public class BluetoothLeService extends Service {
             Log.d("ACTION", action);
             if ( ACTION_DISCONNECT.equals(action)) {
                 disconnect();
-                close();
+                //  close();
             }
             if ( ACTION_LED_INCOMING.equals(action)) {
                 turnOnLed();
@@ -229,23 +231,33 @@ public class BluetoothLeService extends Service {
 
         Intent intent = new Intent();
         String cString = characteristic.getUuid().toString();
-        final byte[] data = characteristic.getValue();
-        Log.d("BYTES", "DATA" + data);
-        float outData = byteArrayToFloat(reverseArray(data));
-        int value = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
-        Log.d("INTEG", "VALUE" + value);
+        Log.d("BCHAR", cString);
+        final byte[] data = reverseArray ( characteristic.getValue() );
+        ByteBuffer buffer = ByteBuffer.wrap(data);
+        Log.d("BYTES", " LOBYTES " + data[0] + " " + data[1] + " " + data[2] + " " + data[3]);
+        float outData = buffer.getFloat();
 
-        if ( cString.equals ( SENSOR_HANDLING_VALUE )) {
+        if ( cString.equals ( SENSOR_HANDLING_VALUE )) {     // 48614d76
             intent.setAction( ACTION_HANDLING_AVAILABLE );
-            intent.putExtra(EXTRA_DATA, data);
+            float outData2 = buffer.getFloat();
+            intent.putExtra( FACEUP_DATA, outData2 );
+            float outData3 = buffer.getFloat();
+            intent.putExtra( FORCES_DATA, outData3 );
+            Log.d("BYTES", " HANDLING " + outData + " " + outData2 + " " + outData3);
         }
-        if ( cString.equals ( SENSOR_SURFACE_VALUE))    {
+        if ( cString.equals ( SENSOR_SURFACE_VALUE))    {     // 53744d76
             intent.setAction( ACTION_SURFACE_AVAILABLE );
-            intent.putExtra(FLOAT_DATA, outData );
+            intent.putExtra( FLOAT_DATA, outData );
+            Log.d("BYTES", " F DATA " + outData);
         }
-        if ( cString.equals ( SENSOR_ATMOSPHERE_VALUE) ) {
+        if ( cString.equals ( SENSOR_ATMOSPHERE_VALUE) ) {     //  41740000
             intent.setAction( ACTION_AMBIENT_AVAILABLE );
-            intent.putExtra(EXTRA_DATA, value );
+            intent.putExtra( PRESSURE_DATA, outData );
+            float outData2 = buffer.getFloat();
+            intent.putExtra( HUMIDITY_DATA, outData2 );
+            float outData3 = buffer.getFloat();
+            intent.putExtra( AMBIENT_DATA, outData3 );
+            Log.d("BYTES", " ATMOS " + outData + " " + outData2 + " " + outData3);
         }
 
         sendBroadcast(intent);

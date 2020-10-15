@@ -72,6 +72,7 @@
                 android:layout_height="102dp"
                 android:layout_weight="1"
                 android:paddingBottom="14dp"
+                android:paddingRight="20dp"
                 android:tint="#1B71DE"
                 android:src="@drawable/stickershock_2x" />
 
@@ -83,28 +84,29 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingBottom="20dp">
 
                     <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:src="@drawable/temperature" />
 
                     <TextView
                         android:id="@+id/surftemp"
-                        android:layout_width="66dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="32dp"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="22.60 C"
-                        android:textSize="16sp"
-                        android:textColor="#914FBF"/>
+                        android:textColor="#914FBF"
+                        android:textSize="16sp" />
 
 
                     <ImageView
                         android:id="@+id/ambtemp"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:src="@drawable/ambient" />
 
                     <TextView
@@ -124,8 +126,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:src="@drawable/moisture_3x" />
 
                     <TextView
@@ -139,9 +141,9 @@
                         android:textSize="16sp" />
 
                     <ImageView
-                        android:id="@+id/temperature2"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:id="@+id/pressureImage"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:src="@drawable/pressure_3x" />
 
                     <TextView
@@ -168,7 +170,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="-66 dB   (unknown location)"
+            android:text="-66 dB"
             android:textColor="#914FBF"
             android:textSize="18sp" />
     </LinearLayout>

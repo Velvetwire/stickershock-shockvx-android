@@ -29,7 +29,6 @@ import android.widget.TextView;
 import com.ice.stickershock_shockvx.R;
 import com.ice.stickershock_shockvx.Sticker;
 import com.ice.stickershock_shockvx.TabbedActivity;
-import com.ice.stickershock_shockvx.TrackAsset;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -37,7 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_NOTIFY;
-import static com.ice.stickershock_shockvx.bluetooth.BluetoothLeService.*;
+import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ;
+import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE;
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
@@ -332,8 +332,6 @@ public class BluetoothControlActivity extends Activity {
     }
 
     public void switchToTelemetry() {
-        Intent intent=new Intent(BluetoothControlActivity.this, TrackAsset.class);
-       startActivity(intent);
     }
 
 
@@ -397,13 +395,20 @@ public class BluetoothControlActivity extends Activity {
                 int permissions = gattCharacteristic.getProperties();
                 HashMap<String, String> currentCharaData = new HashMap<String, String>();
                 characteristic_uuid = gattCharacteristic.getUuid().toString();
-                Log.d("    CHAR", characteristic_uuid);
 
                 // if characteristic can be set to notify, do it
+                String properties = "";
+                if ((permissions & PROPERTY_READ) > 0) {
+                    properties = "R ";
+                }
+                if ((permissions & PROPERTY_WRITE) > 0) {
+                    properties += "W ";
+                }
                 if ((permissions & PROPERTY_NOTIFY) > 0) {
                         notifyList.add (new Notification(service_uuid, characteristic_uuid));
+                        properties += "N ";
                 }
-
+                    Log.d("    CHAR", characteristic_uuid + " " + properties);
                 currentCharaData.put(
                         LIST_NAME, GattAttributes.lookup(characteristic_uuid, unknownCharaString));
                 currentCharaData.put(LIST_UUID, characteristic_uuid);

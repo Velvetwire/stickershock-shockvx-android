@@ -49,11 +49,15 @@
             android:background="@drawable/rounded_rect_shape_2"
             android:backgroundTint="#F1E4FF"
             android:ems="10"
+            android:inputType="textPersonName"/>
+        <TextView
+            android:id="@+id/textName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="18sp"
             android:inputType="textPersonName"
             android:text="Name" />
-        <Space
-            android:layout_width="1dp"
-            android:layout_height="30dp"/>
         <EditText
             android:id="@+id/assetLocation"
             android:layout_width="match_parent"
@@ -62,11 +66,15 @@
             android:background="@drawable/rounded_rect_shape_2"
             android:backgroundTint="#F1E4FF"
             android:ems="10"
+            android:inputType="textPersonName" />
+        <TextView
+            android:id="@+id/textLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="18sp"
             android:inputType="textPersonName"
             android:text="Location" />
-        <Space
-            android:layout_width="1dp"
-            android:layout_height="30dp"/>
 
     </LinearLayout>
 
@@ -75,7 +83,7 @@
         android:layout_width="fill_parent"
         android:layout_height="80dp"
         android:orientation="vertical"
-        android:paddingTop="30dp">
+        android:paddingTop="20dp">
 
         <Button
             android:id="@+id/trackButton"

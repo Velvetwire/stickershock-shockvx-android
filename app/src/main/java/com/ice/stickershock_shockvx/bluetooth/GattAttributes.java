@@ -18,7 +18,7 @@ public class GattAttributes {
     public static String SENSOR_ACCESS_SERVICE        = "00004143-5657-5353-2020-56454c564554";
     public static String SENSOR_ACCESS_TIME           = "00005554-5657-5353-2020-56454C564554";  // write
     public static String SENSOR_ACCESS_CONTROL        = "00004357-5657-5353-2020-56454C564554";  // read write notify
-    public static String SENSOR_ACCESS_PASSKEY        = "0000504B-5657-5353-2020-56454C564554";  // read write
+    public static String SENSOR_ACCESS_PASSKEY        = "0000504b-5657-5353-2020-56454C564554";  // read write
 
     // Control Service
     public static String SENSOR_CONTROL_SERVICE       = "56780000-5657-5353-2020-56454c564554";

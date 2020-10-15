@@ -44,6 +44,7 @@ public class TelemetryFragment extends Fragment {
     private final String DEGREES_F = "\u2109";
     private final String DEGREES = "\u00B0";
     private final String MILLIBAR = " mB";
+    private final String BAR      = " bar";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,22 +101,39 @@ public class TelemetryFragment extends Fragment {
             final String action = intent.getAction();
 
             if ( ACTION_AMBIENT_AVAILABLE.equals(action)) {
-                String value = intent.getStringExtra( EXTRA_DATA);
-                mAirTemp.setText( value );
-                mHumidity.setText( value );
+                float fValue = intent.getFloatExtra( PRESSURE_DATA, 0.0f );
+                String value = String.format("%.3f", fValue);
+                String pressValue = value + BAR;
+                mPressure.setText( pressValue );
+
+                fValue = intent.getFloatExtra( HUMIDITY_DATA, 0.0f )  * 100.0f;
+                value = String.format("%.2f", fValue);
+                String humidityValue = value + "%";
+                mHumidity.setText( humidityValue );
+
+                fValue = intent.getFloatExtra( AMBIENT_DATA, 0.0f );
+                value = String.format("%.2f", fValue);
+                String ambientValue = value + DEGREES_C;
+                mAirTemp.setText( ambientValue );
             }
 
             if ( ACTION_SURFACE_AVAILABLE.equals(action)) {
                 float fValue = intent.getFloatExtra( FLOAT_DATA, 0.0f );
-                String value = Float.toString(fValue);
+                String value = String.format("%.2f", fValue);
+                value = value + DEGREES_C;
                 mSurfTemp.setText( value );
-                mPressure.setText( value );
             }
 
             if ( ACTION_HANDLING_AVAILABLE.equals(action)) {
-                String value = intent.getStringExtra( EXTRA_DATA) + DEGREES;
-                mFaceup.setText( value );
-                mForces.setText( value );
+                float fValue = intent.getFloatExtra( FACEUP_DATA, 0.0f );
+                String value = String.format("%.2f", fValue);
+                String faceValue = value + DEGREES;
+                mFaceup.setText( faceValue );
+
+                fValue = intent.getFloatExtra( FORCES_DATA, 0.0f );
+                value = String.format("%.2f", fValue);
+                String forcesValue = value + " g";
+                mForces.setText( forcesValue );
             }
 
             if ( ACTION_BATTERY_LEVEL_AVAILABLE.equals(action)) {

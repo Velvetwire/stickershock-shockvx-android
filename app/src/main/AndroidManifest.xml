@@ -36,7 +36,6 @@
 
         <activity android:name="ReadStickerNfc" />
         <activity android:name=".WelcomeScreen" />
-        <activity android:name=".TrackAsset" />
         <activity android:name=".TabbedActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"/>
         <activity android:name=".bluetooth.BluetoothScanActivity" />
