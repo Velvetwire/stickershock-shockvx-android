@@ -1,3 +1,14 @@
+//=============================================================================
+// project: ShockVx
+//  module: Stickershock Android App for cold chain tracking.
+//  author: Velvetwire, llc
+//    file: ReadStickerNfc.java
+//
+// Read Nfc Tag for android shockVx app
+//
+//
+// (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+//=============================================================================
 package com.ice.stickershock_shockvx;
 
 import android.app.Activity;
@@ -29,7 +40,7 @@ public class ReadStickerNfc extends Activity {
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
     public static final int REQUEST_ENABLE_BT = 1;
     public static final int VIBRATE_150_MS = 150;
-    private NfcAdapter mNfcAdapter;
+    private NfcAdapter mNfcAdapter; 
     String mUnit = "";
     String mPrimary = "";
     String mControl = "";

@@ -8,12 +8,14 @@ import java.util.HashMap;
  */
 public class GattAttributes {
     private static HashMap<String, String> attributes = new HashMap();
+    // Standard bluetooth services
     public static String GENERIC_ACCESS_SERVICE       = "00001800-0000-1000-8000-00805f9b34fb";
     public static String GENERIC_ATTRIBUTE_SERVICE    = "00001801-0000-1000-8000-00805f9b34fb";
     public static String DEVICE_INFORMATION_SERVICE   = "0000180a-0000-1000-8000-00805f9b34fb";
     public static String BATTERY_SERVICE              = "0000180f-0000-1000-8000-00805f9b34fb";
     public static String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
 
+    // ShockVX services
     // Access Service  -- Future use
     public static String SENSOR_ACCESS_SERVICE        = "00004143-5657-5353-2020-56454c564554";
     public static String SENSOR_ACCESS_TIME           = "00005554-5657-5353-2020-56454C564554";  // write
@@ -44,12 +46,16 @@ public class GattAttributes {
     public static String SENSOR_ATMOSPHERE_VALUE      = "41744d76-5657-5353-2020-56454c564554";   // read notify
     public static String SENSOR_ATMOSPHERE_LOWER      = "41744c6c-5657-5353-2020-56454c564554";   // read write
     public static String SENSOR_ATMOSPHERE_UPPER      = "4174556c-5657-5353-2020-56454c564554";   // read write
+    public static String SENSOR_ATMOSPHERE_EVENT      = "41745265-5657-5353-2020-56454c564554";
+    public static String SENSOR_ATMOSPHERE_COUNT      = "41745263-5657-5353-2020-56454c564554";
 
     // Surface Service
     public static String SENSOR_SURFACE_SERVICE       = "53740000-5657-5353-2020-56454c564554";
     public static String SENSOR_SURFACE_VALUE         = "53744d76-5657-5353-2020-56454c564554";   // read notify
     public static String SENSOR_SURFACE_LOWER         = "53744c6c-5657-5353-2020-56454c564554";   // read write
     public static String SENSOR_SURFACE_UPPER         = "5374556c-5657-5353-2020-56454c564554";   // read write
+    public static String SENSOR_SURFACE_EVENT         = "53745265-5657-5353-2020-56454c564554";
+    public static String SENSOR_SURFACE_COUNT         = "53745263-5657-5353-2020-56454c564554";
 
     // Records Service
    public static String SENSOR_RECORDS_SERVICE       = "54720000-5657-5353-2020-56454c564554";
@@ -85,15 +91,15 @@ public class GattAttributes {
 
     static {
         // Standard Services.
-        attributes.put(GENERIC_ACCESS_SERVICE,     "Generic Access");
-        attributes.put(GENERIC_ATTRIBUTE_SERVICE, "Generic Attribute");
-        attributes.put(DEVICE_INFORMATION_SERVICE, "Device Information Service");
-        attributes.put(BATTERY_SERVICE, "Battery Service");
+        attributes.put( GENERIC_ACCESS_SERVICE,     "Generic Access");
+        attributes.put( GENERIC_ATTRIBUTE_SERVICE, "Generic Attribute");
+        attributes.put( DEVICE_INFORMATION_SERVICE, "Device Information Service");
+        attributes.put( BATTERY_SERVICE, "Battery Service");
 
 
         // Standard Characteristics.
-        attributes.put(DEVICE_NAME, "Device Name");
-        attributes.put("00002a01-0000-1000-8000-00805f9b34fb", "Appearance");
+        attributes.put( DEVICE_NAME, "Device Name");
+        attributes.put( "00002a01-0000-1000-8000-00805f9b34fb", "Appearance");
         attributes.put("00002a04-0000-1000-8000-00805f9b34fb", "Preferred Connections");
         attributes.put("00002a05-0000-1000-8000-00805f9b34fb", "Service Changed");
         attributes.put("00002aa6-0000-1000-8000-00805f9b34fb", "Address Resolution");

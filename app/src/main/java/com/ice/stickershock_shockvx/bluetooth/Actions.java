@@ -48,6 +48,7 @@ public class Actions {
     // Broadcast Requests
     public final static String ACTION_LED_INCOMING     = "ACTION_LED_INCOMING";
     public final static String ACTION_SET_INTERVAL     = "ACTION_SET_INTERVAL";
+    public final static String ACTION_SET_INTERVAL_OK  = "ACTION_SET_INTERVAL_OK";
     public final static String ACTION_READ_RSSI        = "ACTION_READ_RSSI";
     public final static String ACTION_BATTERY_LEVEL    = "ACTION_BATTERY_LEVEL";
     public final static String ACTION_BATTERY_STATE    = "ACTION_BATTERY_STATE";
@@ -65,6 +66,12 @@ public class Actions {
 
     public final static String ACTION_OPEN_STICKER = "ACTION_OPEN_STICKER";
     public final static String ACTION_CLOSE_STICKER = "ACTION_CLOSE_STICKER";
+    public final static String ACTION_READ_OPEN_STICKER = "ACTION_READ_OPEN_STICKER";
+    public final static String ACTION_READ_CLOSE_STICKER = "ACTION_READ_CLOSE_STICKER";
+
+    public final static String ACTION_STICKER_OPENED = "ACTION_STICKER_OPENED";
+    public final static String ACTION_STICKER_CLOSED = "ACTION_STICKER_CLOSED";
+    public final static String ACTION_STICKER_READ = "ACTION_STICKER_READ";
 
     public final static String ACTION_MEASUREMENT_INTERVAL_15 = "ACTION_MEASUREMENT_INTERVAL_15";
     public final static String ACTION_MEASUREMENT_INTERVAL_60 = "ACTION_MEASUREMENT_INTERVAL_60";

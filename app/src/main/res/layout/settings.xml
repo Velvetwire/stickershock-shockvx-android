@@ -225,28 +225,28 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingRight="10dp">
-                <com.google.android.material.button.MaterialButtonToggleGroup
-                    android:id="@+id/surfaceMinGroup"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:checkedButton="@id/surfminminus"
-                    app:singleSelection="true">
+                    android:orientation="horizontal">
                     <Button
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:id="@+id/surfminminus"
-                        android:layout_width="0dp"
+                        android:layout_width="1dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="-" />
+                        android:layout_marginEnd="10dp"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:text="@string/minus" />
 
                     <Button
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:id="@+id/surfminplus"
+                        style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
                         android:layout_weight="1"
-                        android:text="+" />
-                </com.google.android.material.button.MaterialButtonToggleGroup>
+                        android:text="@string/plus" />
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -287,28 +287,28 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingRight="10dp">
-                <com.google.android.material.button.MaterialButtonToggleGroup
-                    android:id="@+id/surfaceMaxGroup"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:checkedButton="@id/surfmaxminus"
-                    app:singleSelection="true">
+                    android:orientation="horizontal">
                     <Button
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:id="@+id/surfmaxminus"
-                        android:layout_width="0dp"
+                        android:layout_width="1dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="-" />
+                        android:layout_marginEnd="10dp"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:text="@string/minus" />
 
                     <Button
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:id="@+id/surfmaxplus"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="+" />
-                </com.google.android.material.button.MaterialButtonToggleGroup>
+                        android:layout_marginEnd="20dp"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:text="@string/plus" />
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -408,7 +408,7 @@
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
                     style="?attr/materialButtonOutlinedStyle"
-                    android:text="-" />
+                    android:text="@string/minus" />
 
                 <Button
                     android:id="@+id/ambminplus"
@@ -416,7 +416,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     style="?attr/materialButtonOutlinedStyle"
-                    android:text="+" />
+                    android:text="@string/plus" />
+
             </LinearLayout>
 
         </LinearLayout>
@@ -463,7 +464,7 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="10dp"
                 style="?attr/materialButtonOutlinedStyle"
-                android:text="-" />
+                android:text="@string/minus" />
 
             <Button
                 android:id="@+id/ambmaxplus"
@@ -472,7 +473,8 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="20dp"
                 style="?attr/materialButtonOutlinedStyle"
-                android:text="+" />
+                android:text="@string/plus" />
+
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -33,12 +33,14 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
+import static com.ice.stickershock_shockvx.bluetooth.BluetoothControlActivity.EXTRAS_DEVICE_UNIT;
 
 
 public class TabbedActivity extends AppCompatActivity {
     private static final int NUM_PAGES = 3;
     public static ViewPager2 viewPager;
     private FragmentStateAdapter pagerAdapter;
+    String mDeviceUnit;
 
     int[] tabIcons = {
             R.drawable.tracking,
@@ -57,7 +59,8 @@ public class TabbedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        final Intent intent = getIntent();
+        mDeviceUnit    = intent.getStringExtra( EXTRAS_DEVICE_UNIT );
         setContentView(R.layout.frag_activity_main);
         viewPager = findViewById(R.id.mypager);
 

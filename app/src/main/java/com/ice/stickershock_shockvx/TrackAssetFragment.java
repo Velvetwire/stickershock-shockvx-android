@@ -1,7 +1,10 @@
 package com.ice.stickershock_shockvx;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,16 +12,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import static com.ice.stickershock_shockvx.bluetooth.Actions.ACTION_DISCONNECT;
-import static com.ice.stickershock_shockvx.bluetooth.Actions.ACTION_OPEN_STICKER;
+import com.ice.stickershock_shockvx.bluetooth.BluetoothLeService;
+
+import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
+import static com.ice.stickershock_shockvx.bluetooth.BluetoothLeService.*;
 
 public class TrackAssetFragment extends Fragment {
     Button mTrackButton;
     EditText mName, mLocation;
+    TextView mStickerId;
+
+    // sticker state
+    // 1 unopened
+    // 2 opened
+    // 3
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +46,9 @@ public class TrackAssetFragment extends Fragment {
         mTrackButton = (Button)   v.findViewById(R.id.trackButton);
         mName        = (EditText) v.findViewById(R.id.assetName);
         mLocation    = (EditText) v.findViewById(R.id.assetLocation);
+        mStickerId   = (TextView) v.findViewById(R.id.stickerid);
+        setInterval ( );
+
 
         mTrackButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -41,17 +57,23 @@ public class TrackAssetFragment extends Fragment {
                        // createId();
                         Log.d("TRACK", "CREATE NEW STICKER RECORD");
                         openSticker();
-                        saveStickerInfo();
-                        Intent intent = new Intent(getActivity(), MainAssetScreen.class);
-                        startActivity(intent);
-
-
                     }
                 }
         );
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        requireActivity().registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        requireActivity().unregisterReceiver(mGattUpdateReceiver);
+    }
 
     public static TrackAssetFragment newInstance(String text) {
 
@@ -63,8 +85,18 @@ public class TrackAssetFragment extends Fragment {
 
         return f;
     }
+
+    private void setInterval() {
+        final Intent intent = new Intent( ACTION_SET_INTERVAL );
+        getActivity().sendBroadcast(intent);
+    }
     private void openSticker() {
         final Intent intent = new Intent( ACTION_OPEN_STICKER );
+        getActivity().sendBroadcast(intent);
+    }
+
+    private void readOpenSticker() {
+        final Intent intent = new Intent( ACTION_READ_OPEN_STICKER );
         getActivity().sendBroadcast(intent);
     }
 
@@ -77,5 +109,46 @@ public class TrackAssetFragment extends Fragment {
         final Intent intent = new Intent( ACTION_DISCONNECT );
         getActivity().sendBroadcast(intent);
     }
-}
 
+
+
+
+// -----------------------------------------
+    // Broadcast receiver and message passing
+
+    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+
+            if ( ACTION_SET_INTERVAL_OK.equals(action)) {
+                Log.d("TRACK", "NEW SET INTERVAL");
+                readOpenSticker();
+            }
+            if ( ACTION_STICKER_READ.equals(action)) {
+                Log.d("TRACK", "NEW STICKER DATA");
+                openSticker();
+            }
+            if ( ACTION_STICKER_OPENED.equals(action)) {
+                Log.d("TRACK", "NEW STICKER OPENED");
+                disconnectSticker();
+            }
+            if ( ACTION_GATT_DISCONNECTED.equals(action)) {
+                Intent i = new Intent(getActivity(), MainAssetScreen.class);
+                startActivity ( i );
+            }
+        }
+    };
+
+    private static IntentFilter makeGattUpdateIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+
+        intentFilter.addAction( ACTION_SET_INTERVAL );
+        intentFilter.addAction( ACTION_SET_INTERVAL_OK );
+        intentFilter.addAction( ACTION_STICKER_READ );
+        intentFilter.addAction( ACTION_STICKER_OPENED );
+        intentFilter.addAction( ACTION_GATT_DISCONNECTED );
+
+        return intentFilter;
+    }
+}

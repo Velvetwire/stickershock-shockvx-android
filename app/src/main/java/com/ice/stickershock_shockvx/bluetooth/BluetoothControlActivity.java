@@ -35,9 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_NOTIFY;
-import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ;
-import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_WRITE;
+import static android.bluetooth.BluetoothGattCharacteristic.*;
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
@@ -51,12 +49,14 @@ public class BluetoothControlActivity extends Activity {
     private final static String TAG = BluetoothControlActivity.class.getSimpleName();
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
+    public static final String EXTRAS_DEVICE_UNIT = "DEVICE_UNIT";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
 
     private TextView mSerial;
     private Sticker mSticker;
 
     private String mDeviceName = null;
+    private String mDeviceUnit = null;
     private String mDeviceAddress = null;
 
     private BluetoothLeService mBluetoothLeService;
@@ -65,11 +65,6 @@ public class BluetoothControlActivity extends Activity {
 
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
-
-    private final String DEGREES_C = "\u2103";
-    private final String DEGREES_F = "\u2109";
-    private final String DEGREES = "\u00B0";
-    private final String MILLIBAR = " mB";
 
     // Using BluetoothLeService to handle bluetooth connection
 
@@ -191,7 +186,9 @@ public class BluetoothControlActivity extends Activity {
     public void goToTabbedActivity()
     {
         Log.d("NOTIFY DONE", "GO TO TABBEDACTIVITY");
+
         Intent i = new Intent(BluetoothControlActivity.this, TabbedActivity.class);
+        i.putExtra(EXTRAS_DEVICE_UNIT, mDeviceUnit );
         startActivity(i);
     }
 
@@ -222,8 +219,9 @@ public class BluetoothControlActivity extends Activity {
         setContentView(R.layout.connecting);
 
         final Intent intent = getIntent();
-        mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
-        mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+        mDeviceName    = intent.getStringExtra( EXTRAS_DEVICE_NAME );
+        mDeviceAddress = intent.getStringExtra( EXTRAS_DEVICE_ADDRESS );
+        mDeviceUnit    = intent.getStringExtra( EXTRAS_DEVICE_UNIT );
 
         // Sets up UI references.
         mSerial       = (TextView) findViewById(R.id.serial);

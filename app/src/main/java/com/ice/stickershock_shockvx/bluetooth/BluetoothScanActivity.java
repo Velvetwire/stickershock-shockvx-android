@@ -39,7 +39,9 @@ import java.util.List;
 import java.util.UUID;
 
 
+import static com.ice.stickershock_shockvx.bluetooth.BluetoothControlActivity.*;
 import static com.ice.stickershock_shockvx.bluetooth.GattAttributes.*;
+import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.
  */
@@ -59,9 +61,11 @@ public class         BluetoothScanActivity extends ListActivity {
     String mUnit = "";
     String mControl = "";
     String mPrimary = "";
+
     private final String EXTRAS_UNIT    = "unit";
     private final String EXTRAS_CONTROL = "control";
     private final String EXTRAS_PRIMARY = "control";
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -74,7 +78,7 @@ public class         BluetoothScanActivity extends ListActivity {
         mHandler = new Handler();
 
         final Intent intent = getIntent();
-        mUnit = intent.getStringExtra ( EXTRAS_UNIT );
+        mUnit    = intent.getStringExtra ( EXTRAS_UNIT );
         mPrimary = intent.getStringExtra ( EXTRAS_PRIMARY );
         mControl = intent.getStringExtra ( EXTRAS_CONTROL );
         if (mUnit == null)
@@ -83,12 +87,6 @@ public class         BluetoothScanActivity extends ListActivity {
         if (mControl == null)
             mControl = "";
 
-        // Use this check to determine whether BLE is supported on the device.
-
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
-            finish();
-        }
         // ACCESS_FINE_LOCATION needs to be enabled for the BLE to work.
         // In newer versions of android, prompt user to turn on FINE_LOCATION
         // as location is considered a "sensitive" permission
@@ -183,12 +181,13 @@ public class         BluetoothScanActivity extends ListActivity {
         connectDevice( device );
     }
 
-
     protected void connectDevice(BluetoothDevice device) {
         final Intent intent = new Intent(this, BluetoothControlActivity.class);
         String deviceName = device.getName();
         if (deviceName == null)
             deviceName = "unknown";
+
+        intent.putExtra( EXTRAS_DEVICE_UNIT, mUnit);
         intent.putExtra( BluetoothControlActivity.EXTRAS_DEVICE_NAME, deviceName);
         intent.putExtra( BluetoothControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
         if (mScanning) {
@@ -197,7 +196,6 @@ public class         BluetoothScanActivity extends ListActivity {
         }
         startActivity(intent);
     }
-
 
     // Adapter for holding devices found through scanning.
     private class LeDeviceListAdapter extends BaseAdapter {
@@ -367,9 +365,7 @@ public class         BluetoothScanActivity extends ListActivity {
         mScanFilters.add(mScanFilter);
     }
 
-    /*
-     *   Scan Settings
-     */
+    //Scan Settings
     private void setScanSettings() {
         ScanSettings.Builder mBuilder = new ScanSettings.Builder();
 

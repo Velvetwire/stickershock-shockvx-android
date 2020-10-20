@@ -47,11 +47,6 @@ import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 public class MainAssetScreen extends ListActivity {
 
     Button mNewAsset;
-    TextView mAirTemp;
-    TextView mHumidity;
-    TextView mPressure;
-    TextView mBattery;
-    TextView mRssiValue;
     AssetListAdapter bla;
     List<Sticker> assetList = new ArrayList<Sticker>();
     List<Beacon> beaconList = new ArrayList<Beacon>();
@@ -61,12 +56,7 @@ public class MainAssetScreen extends ListActivity {
     ScanFilter mScanFilter;
     ScanSettings mScanSettings;
 
-    private final String DEGREES_C = "\u2103";
-    private final String DEGREES_F = "\u2109";
-    private final String DEGREES = "\u00B0";
-    private final String MILLIBAR = " mB";
-
-
+    private static int MANUFACTURER_ID = 22103;         // Change this
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,9 +102,6 @@ public class MainAssetScreen extends ListActivity {
         super.onPause();
     }
 
-
-
-
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
         sendBroadcast(intent);
@@ -126,7 +113,7 @@ public class MainAssetScreen extends ListActivity {
 
     // Set up scan filter for only detecting our beacons
 
-    private static int MANUFACTURER_ID = 22103;
+
 
     // now we can set up scan filter anyway we want, these values are just sample code
     private void setScanFilter() {
@@ -153,7 +140,7 @@ public class MainAssetScreen extends ListActivity {
         public void onScanResult(int callbackType, ScanResult result) {
             Beacon myBeacon = new Beacon();
             ScanRecord mScanRecord = result.getScanRecord();
-    //        Log.d("BEACON", "SCAN " + result.toString());
+            Log.d("BEACON", "SCAN " + result.toString() + " MANUF_ID" );
             byte[] manufacturerData = mScanRecord.getManufacturerSpecificData( MANUFACTURER_ID );
 
             if (manufacturerData != null) {
@@ -259,3 +246,24 @@ public class MainAssetScreen extends ListActivity {
         bla.notifyDataSetChanged();
     }
 }
+
+
+
+// Scan Result
+// {device=F8:D7:82:34:F2:18,
+//    scanRecord=ScanRecord [
+//       mAdvertiseFlags=5,
+//       mServiceUuids=[56780000-5657-5353-2020-56454c564554],
+//       mServiceSolicitationUuids=[],
+//       mManufacturerSpecificData={},
+//       mServiceData={0000180a-0000-1000-8000-00805f9b34fb=[3, 53, 66, -124, 121, 127, -116, -11]},
+//       mTxPowerLevel=-2147483648,
+//       mDeviceName=null],
+//     rssi=-38,
+//     timestampNanos=900564925985824,
+//     eventType=27,
+//     primaryPhy=1,
+//     secondaryPhy=0,
+//     advertisingSid=255,
+//     txPower=127,
+//     periodicAdvertisingInterval=0}

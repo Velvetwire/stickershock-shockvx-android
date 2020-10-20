@@ -72,6 +72,10 @@
     <string name="unit">UNIT: </string>
     <string name="control">CONTROL: </string>
 
+    <string name="minus"> - </string>
+    <string name="plus"> + </string>
+
+    <!--
     <string name="ACTION_GATT_CONNECTED">ACTION_GATT_CONNECTED</string>
     <string name="ACTION_GATT_DISCONNECTED">ACTION_GATT_DISCONNECTED</string>
     <string name="ACTION_GATT_SERVICES_DISCOVERED">ACTION_GATT_SERVICES_DISCOVERED</string>
@@ -81,6 +85,8 @@
     <string name="ACTION_WRITE_DATA_AVAILABLE">ACTION_WRITE_DATA_AVAILABLE</string>
     <string name="EXTRA_DATA">EXTRA_DATA</string>
     <string name="MANUFACTURE_DATA">MANUFACTURE_DATA</string>
+
+    -->
 
 
 

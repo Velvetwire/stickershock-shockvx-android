@@ -60,55 +60,63 @@ public class SettingsFragment extends Fragment {
 
     Button mIndicate;;
 
+    int mSurfaceAlarmMin = 20;
+    int mSurfaceAlarmMax = 20;
+
+    int mAmbientAlarmMin = 20;
+
+    int mAngle           = 0;
+
     public static Sticker currentSticker = new Sticker();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.settings, container, false);
-        mMeas15Button = v.findViewById( R.id.meas15button );
-        mMeas60Button = v.findViewById( R.id.meas60button );
-        mRec15Button  = v.findViewById( R.id.rec15button );
-        mRec60Button   = v.findViewById( R.id.rec60button );
-        mSurfSwitch      = v.findViewById( R.id.surfSwitch);
-        mSurfMinVal          = v.findViewById( R.id.surfminVal);
-        mSurfMinMinusButton  = v.findViewById( R.id.surfminminus );
-        mSurfMinPlusButton   = v.findViewById( R.id.surfminplus );
+        mMeas15Button          = v.findViewById( R.id.meas15button );
+        mMeas60Button          = v.findViewById( R.id.meas60button );
+        mRec15Button           = v.findViewById( R.id.rec15button );
+        mRec60Button           = v.findViewById( R.id.rec60button );
+        mSurfSwitch            = v.findViewById( R.id.surfSwitch);
+        mSurfMinVal            = v.findViewById( R.id.surfminVal);
+        mSurfMinMinusButton    = v.findViewById( R.id.surfminminus );
+        mSurfMinPlusButton     = v.findViewById( R.id.surfminplus );
 
-        mSurfMaxVal    = v.findViewById( R.id.surfmaxVal);
-        mSurfMaxMinusButton   = v.findViewById( R.id.surfmaxminus );
-        mSurfMaxPlusButton   = v.findViewById( R.id.surfmaxplus );
+        mSurfMaxVal            = v.findViewById( R.id.surfmaxVal);
+        mSurfMaxMinusButton    = v.findViewById( R.id.surfmaxminus );
+        mSurfMaxPlusButton     = v.findViewById( R.id.surfmaxplus );
 
-        mAmbientSwitch      = v.findViewById( R.id.ambientSwitch);
-        mAmbientMinVal    = v.findViewById( R.id.ambminVal);
-        mAmbientMinMinusButton   = v.findViewById( R.id.ambminminus );
-        mAmbientMinPlusButton   = v.findViewById( R.id.ambminplus );
+        mAmbientSwitch         = v.findViewById( R.id.ambientSwitch);
+        mAmbientMinVal         = v.findViewById( R.id.ambminVal);
+        mAmbientMinMinusButton = v.findViewById( R.id.ambminminus );
+        mAmbientMinPlusButton  = v.findViewById( R.id.ambminplus );
 
-        mAmbientMaxVal    = v.findViewById( R.id.ambmaxVal);
-        mAmbientMaxMinusButton   = v.findViewById( R.id.ambmaxminus );
-        mAmbientMaxPlusButton   = v.findViewById( R.id.ambmaxplus );
+        mAmbientMaxVal         = v.findViewById( R.id.ambmaxVal);
+        mAmbientMaxMinusButton = v.findViewById( R.id.ambmaxminus );
+        mAmbientMaxPlusButton  = v.findViewById( R.id.ambmaxplus );
 
 
-        mNone = v.findViewById( R.id.noneButton );
-        mCareful = v.findViewById( R.id.carefulButton );
-        mFragile = v.findViewById( R.id.fragileButton );
+        mNone      = v.findViewById( R.id.noneButton );
+        mCareful   = v.findViewById( R.id.carefulButton );
+        mFragile   = v.findViewById( R.id.fragileButton );
 
-        mFlat = v.findViewById( R.id.flatButton );
-        mUpright = v.findViewById( R.id.uprightButton );
+        mFlat      = v.findViewById( R.id.flatButton );
+        mUpright   = v.findViewById( R.id.uprightButton );
         mTipSwitch = v.findViewById( R.id.tipSwitch );
-        mAngleVal = v.findViewById( R.id.angleVal );
-        mAngleMin = v.findViewById( R.id.angleminButton );
-        mAngleMax = v.findViewById( R.id.anglemaxButton );
+        mAngleVal  = v.findViewById( R.id.angleVal );
+        mAngleMin  = v.findViewById( R.id.angleminButton );
+        mAngleMax  = v.findViewById( R.id.anglemaxButton );
 
         // Handlers
         //   Measurement row
         mMeas15Button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                transmitBroadcast( ACTION_MEASUREMENT_INTERVAL_15 );
+                setInterval ( 15.0f );
             }
         });
+
         mMeas60Button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                transmitBroadcast( ACTION_MEASUREMENT_INTERVAL_60 );
+                setInterval ( 60.0f );
             }
         });
 
@@ -181,6 +189,7 @@ public class SettingsFragment extends Fragment {
                 setInterval( 15 );
             }
         });
+
         mAmbientMinPlusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 SensorState.captureRate = 15;
@@ -311,10 +320,8 @@ public class SettingsFragment extends Fragment {
         transmitBroadcast( ACTION_BATTERY_STATE );
     }
 
-    public void setInterval(int interval) {
-        String action = "";
-        action = ACTION_SET_INTERVAL;
-        transmitBroadcast(action);
+    public void setInterval(float interval) {
+        transmitBroadcast( ACTION_SET_INTERVAL );
     }
 
     public void setRecord(int interval) {
@@ -374,7 +381,6 @@ public class SettingsFragment extends Fragment {
         int s = SensorState.sampleRate;
         SensorState.ratio = c / s;
         Log.d("DATALOG" , "RATIO " + SensorState.ratio);
-
 
     }
 }

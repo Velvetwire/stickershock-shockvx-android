@@ -36,8 +36,7 @@
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:gravity="center"
-            android:text="70D2-50B3-5346-1A9F" />
+            android:gravity="center" />
         <Space
             android:layout_width="1dp"
             android:layout_height="30dp"/>

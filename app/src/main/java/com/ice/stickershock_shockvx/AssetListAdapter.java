@@ -52,7 +52,7 @@ public class AssetListAdapter extends ArrayAdapter<Sticker> {
             airtempTv   = (TextView) rowView.findViewById(R.id.airtemp);
             humidityTv  = (TextView) rowView.findViewById(R.id.moisture);
             pressureTv  = (TextView) rowView.findViewById(R.id.pressure);
-  //          rssiTv      = (TextView) rowView.findViewById(R.id.rssi);
+            rssiTv      = (TextView) rowView.findViewById(R.id.rssi);
   //          batteryTv   = (TextView) rowView.findViewById(R.id.battery);
      //       angleTv     = (TextView) rowView.findViewById(R.id.angle);
       //      dropsTv     = (TextView) rowView.findViewById(R.id.drops);
