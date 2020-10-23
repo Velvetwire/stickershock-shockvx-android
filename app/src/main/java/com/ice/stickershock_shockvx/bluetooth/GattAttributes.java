@@ -22,14 +22,18 @@ public class GattAttributes {
     public static String SENSOR_ACCESS_CONTROL        = "00004357-5657-5353-2020-56454C564554";  // read write notify
     public static String SENSOR_ACCESS_PASSKEY        = "0000504b-5657-5353-2020-56454C564554";  // read write
 
-    // Control Service
+    // Control Service Identifier
     public static String SENSOR_CONTROL_SERVICE       = "56780000-5657-5353-2020-56454c564554";
+    public static String SENSOR_CONTROL_IDENTIFY      = "56784964-5657-5353-2020-56454c564554";  // WRITE
+          // Tracking identification characteristics
     public static String SENSOR_CONTROL_NODE          = "5678546e-5657-5353-2020-56454c564554";  // read write
     public static String SENSOR_CONTROL_LOCK          = "5678546c-5657-5353-2020-56454c564554";  // WRITE
-    public static String SENSOR_CONTROL_OPENED        = "5678546f-5657-5353-2020-56454c564554";  // read write  write id
-    public static String SENSOR_CONTROL_CLOSED        = "56785463-5657-5353-2020-56454c564554";  // read write
+          // Tracking window characteristics
+    public static String SENSOR_CONTROL_OPENED        = "5678546f-5657-5353-2020-56454c564554";  // UTC TIME
+    public static String SENSOR_CONTROL_CLOSED        = "56785463-5657-5353-2020-56454c564554";  // UTC TIME
     public static String SENSOR_CONTROL_WINDOW        = "56785477-5657-5353-2020-56454c564554";  // read write time period
-    public static String SENSOR_CONTROL_IDENTIFY      = "56784964-5657-5353-2020-56454c564554";  // WRITE
+    public static String SENSOR_CONTROL_SUMMARY       = "56784975-5657-5353-2020-56454c564554";  // short status, char memory, char storage
+
 
     // Handling Service
     public static String SENSOR_HANDLING_SERVICE      = "48610000-5657-5353-2020-56454c564554";
@@ -87,6 +91,10 @@ public class GattAttributes {
     public static int kAccessResponseLocked   = 0x4B434F4C;      // Respond access locked ('LOCK')
     public static int kAccessResponseOpened   = 0x4E45504F;      // Respond access open ('OPEN')
 
+
+    // Asset commands
+    public static String ASSET_BROADCAST_STANDARD     = "00005657-0000-1000-8000-00805f9b34fb";
+    public static String ASSET_BROADCAST_EXTENDED     = "00005658-0000-1000-8000-00805f9b34fb";
 
 
     static {

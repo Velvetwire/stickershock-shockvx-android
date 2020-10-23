@@ -22,26 +22,27 @@ import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
+
+import com.ice.stickershock_shockvx.advertisement.IdentityAD;
+import com.ice.stickershock_shockvx.advertisement.StandardAD;
+import com.ice.stickershock_shockvx.advertisement.TelemetryAD;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
-import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
-
+import static com.ice.stickershock_shockvx.advertisement.Broadcast.*;
+import static com.ice.stickershock_shockvx.bluetooth.GattAttributes.*;
 
 
 public class MainAssetScreen extends ListActivity {
@@ -49,14 +50,12 @@ public class MainAssetScreen extends ListActivity {
     Button mNewAsset;
     AssetListAdapter bla;
     List<Sticker> assetList = new ArrayList<Sticker>();
-    List<Beacon> beaconList = new ArrayList<Beacon>();
 
     BluetoothAdapter mBluetoothAdapter;
     BluetoothLeScanner mBluetoothLeScanner;
     ScanFilter mScanFilter;
     ScanSettings mScanSettings;
 
-    private static int MANUFACTURER_ID = 22103;         // Change this
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +63,6 @@ public class MainAssetScreen extends ListActivity {
         setContentView(R.layout.asset_list);
 
         mNewAsset = findViewById( R.id.addAssetButton );
-        Sticker s1 = new Sticker("TEST STICKER", 2551, 2343, 4610, 10132);
-        Sticker s2 = new Sticker("Sticker topleft", 2456, 2158, 4710, 10132);
-
-        assetList.add(s1);
-        assetList.add(s2);
 
         bla = new AssetListAdapter(this, assetList);
         setListAdapter(bla);
@@ -87,7 +81,7 @@ public class MainAssetScreen extends ListActivity {
                startActivity(intent);
             }
         });
-    //    readRssi();
+
     }
 
     @Override
@@ -118,10 +112,7 @@ public class MainAssetScreen extends ListActivity {
     // now we can set up scan filter anyway we want, these values are just sample code
     private void setScanFilter() {
         ScanFilter.Builder mBuilder = new ScanFilter.Builder();
-//        ByteBuffer mManufacturerData = ByteBuffer.allocate(23);
-        //       ByteBuffer mManufacturerDataMask = ByteBuffer.allocate(24);
-//
-//        mBuilder.setManufacturerData(MANUFACTURER_ID, mManufacturerData.array(), mManufacturerDataMask.array());
+
         mScanFilter = mBuilder.build();
     }
 
@@ -138,33 +129,20 @@ public class MainAssetScreen extends ListActivity {
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
-            Beacon myBeacon = new Beacon();
+            Sticker mySticker = new Sticker();
             ScanRecord mScanRecord = result.getScanRecord();
-            Log.d("BEACON", "SCAN " + result.toString() + " MANUF_ID" );
-            byte[] manufacturerData = mScanRecord.getManufacturerSpecificData( MANUFACTURER_ID );
 
-            if (manufacturerData != null) {
-                myBeacon.rssi = result.getRssi();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    myBeacon.txPowerLevel = result.getTxPower();
-                }
+            mySticker.address = result.getDevice().getAddress();
+            Log.d("BEACON", "RESULT " + result.toString());
+            byte[] standardData = mScanRecord.getServiceData( ParcelUuid.fromString( ASSET_BROADCAST_STANDARD ) );
+            byte[] extendedData = mScanRecord.getServiceData( ParcelUuid.fromString( ASSET_BROADCAST_EXTENDED ) );
 
-                myBeacon.address = result.getDevice().getAddress();
-                Log.d("BEACON", "RSSI " + result.toString());
-
-                byte[] raw = mScanRecord.getBytes();
-                String rawOut = "";
-                for (int i = 0; i < raw.length; i++) {
-                    rawOut += String.valueOf(raw[i]);
-                    rawOut += " ";
-                }
-                Log.d("AD", "RAW " + rawOut);
-                extractRecordsFromBytes(raw, myBeacon.telemetry, myBeacon.identity);
-                updateList(myBeacon, myBeacon.address);
-
-
-                // mRssiText.setText( mRssi );
+            if ( standardData != null) {
+                extractFieldsFromBytes( standardData, mySticker );
+                extractFieldsFromBytes( extendedData,  mySticker);
             }
+
+            updateList(mySticker, mySticker.address);
         }
     };
 
@@ -180,69 +158,79 @@ public class MainAssetScreen extends ListActivity {
     private int TELEMETRY_RECORD  = 0x54;
     private int IDENTITY_RECORD  = 0x49;
 
-    private boolean extractRecordsFromBytes(byte[] raw, TelemetryAD myTelemetry, IdentityAD myIdentity) {
-        byte[] firstHeader = new byte[3];
-        byte[] secondHeader = new byte[3];
-        byte[] identityArray = new byte[29];
-        byte[] telemetryArray = new byte[27];
-        byte position = 0;
-        byte firstLength = (byte) (raw[0] + 1);
-        byte secondLength = (byte) (raw[firstLength] + 1);
-        byte thirdLength = (byte) (raw[secondLength] + 1);
+    private boolean extractFieldsFromBytes(byte[] raw, Sticker mySticker) {
 
-        if (raw.length > 50) {
-            System.arraycopy(raw, 0, firstHeader, 0, firstLength);
-            position += firstLength;
-            System.arraycopy(raw, position, identityArray, 0, secondLength);
-            position += secondLength;
-            System.arraycopy(raw, position, secondHeader, 0, 3);
-            System.arraycopy(raw, 34, telemetryArray, 0, 26);
-            myTelemetry.populateFromByteArray(telemetryArray);
-            myIdentity.populateFromByteArray(identityArray);
-
-            Log.d("TELEMETRY", "PACKETLEN " + myTelemetry.packetlen);
-            Log.d("TELEMETRY", "FLAG " + myTelemetry.flag);
-            Log.d("TELEMETRY", "MANUFACTURER 0x" + Integer.toHexString(myTelemetry.manufacturer & 0xffff));
-            Log.d("TELEMETRY", "RQTYPE " + Integer.toHexString(myTelemetry.requestType & 0xffff));
-            Log.d("TELEMETRY", "LEN " + myTelemetry.smLength);
-            Log.d("TELEMETRY", "TIME " + myTelemetry.timecode);
-            Log.d("TELEMETRY", "SURFACE 0x" + Integer.toHexString(myTelemetry.surface & 0xffff));
-            Log.d("TELEMETRY", "AMBIENT 0x" + Integer.toHexString(myTelemetry.ambient & 0xffff));
-            Log.d("TELEMETRY", "HUMIDITY 0x" + Integer.toHexString(myTelemetry.humidity & 0xffff));
-            Log.d("TELEMETRY", "PRESSURE 0x" + Integer.toHexString(myTelemetry.pressure & 0xffff));
-            Log.d("TELEMETRY", "ALT " + myTelemetry.alternate);
-            Log.d("TELEMETRY", "BATTERY " + myTelemetry.voltage);
-            Log.d("TELEMETRY", "ANGLE " + myTelemetry.angle);
-            Log.d("TELEMETRY", "DROPS " + myTelemetry.drops);
-            Log.d("TELEMETRY", "BUMPS " + myTelemetry.bumps);
-
-            Log.d("IDENTITY", "PACKETLEN " + myIdentity.packetlen);
-            Log.d("IDENTITY", "FLAG " + myIdentity.flag);
-            Log.d("IDENTITY", "MANUFACTURER " + myIdentity.manufacturer);
-            Log.d("IDENTITY", "RQTYPE " + myIdentity.requestType);
-            Log.d("IDENTITY", "LEN " + myIdentity.smLength);
-            Log.d("IDENTITY", "TIME " + myIdentity.timecode);
-            Log.d("IDENTITY", "IDENTITY " + myIdentity.identity);
-            Log.d("IDENTITY", "VALIDITY " + myIdentity.validity);
-            Log.d("IDENTITY", "BATTERY " + myIdentity.battery);
-            Log.d("IDENTITY", "SIGNAL " + myIdentity.signal);
+        List<byte []> adverts = new ArrayList<byte []>();
+        int totalLength = raw.length;
+        int startString = 0;
+        byte stringLength = 0;
+        int endString = 0;
 
 
+        while ( endString < totalLength) {
+            stringLength = (byte) (raw[startString] + 1);
+           //  Log.d("NEW STRING B","StartString " + startString + "LENGTH " + stringLength + " END " + endString + " TOTAL " + totalLength);
+            endString += stringLength;
+            byte [] newArray = Arrays.copyOfRange(raw, startString, endString + 1);
+            startString += stringLength;
+            adverts.add(newArray);
+            // Log.d("NEW STRING A","StartString " + startString + "LENGTH " + stringLength + " END " + endString + " TOTAL " + totalLength);
+        }
+
+        for ( byte [] byteArray : adverts) {
+            byte packetType = byteArray[1];
+            Log.d("BYTEARRAY", "TYPE " + packetType);
+            if ( packetType == BROADCAST_TYPE_IDENTITY ) {
+                Log.d("IDENTITY", "TIMECODE " + Integer.toString( (((byteArray[3] & 0xff) << 8) | byteArray[2] & 0xff)));
+                Log.d("IDENTITY", "HASH" + Integer.toHexString( ((( byteArray[5] & 0xff) << 8) | byteArray[4] & 0xff)));
+                Log.d("IDENTITY", "HORIZON " + byteArray[14]);
+                mySticker.batteryLevel = byteArray[15];
+                Log.d("IDENTITY", "BATTERY " +  byteArray[15]);
+            }
+            if ( packetType == BROADCAST_TYPE_TEMPERATURE ) {
+                Log.d("SURFACE", "TEMP " + Integer.toString( (((byteArray[3] & 0xff) << 8) | byteArray[2] & 0xff)));
+                mySticker.surface = (((byteArray[3] & 0xff) << 8) | byteArray[2] & 0xff);
+            }
+            if ( packetType == BROADCAST_TYPE_ATMOSPHERE ) {
+                Log.d("EXTENDED", "TEMP " + Integer.toString( (((byteArray[3] & 0xff) << 8) | byteArray[2] & 0xff)));
+                mySticker.ambient = (((byteArray[3] & 0xff) << 8) | byteArray[2] & 0xff);
+                // Log.d("EXTENDED", "TEMPLO " + Integer.toString( (((byteArray[5] & 0xff) << 8) | byteArray[4] & 0xff)));
+                // Log.d("EXTENDED", "TEMPHI " + Integer.toString( (((byteArray[7] & 0xff) << 8) | byteArray[6] & 0xff)));
+                Log.d("EXTENDED", "HUMID " + Integer.toString( (((byteArray[9] & 0xff) << 8) | byteArray[8] & 0xff)));
+                mySticker.humidity = (((byteArray[9] & 0xff) << 8) | byteArray[2] & 0xff);
+                        // Log.d("EXTENDED", "HUMIDLO " + Integer.toString( (((byteArray[11] & 0xff) << 8) | byteArray[10] & 0xff)));
+                // Log.d("EXTENDED", "HUMIDHI " + Integer.toString( (((byteArray[13] & 0xff) << 8) | byteArray[12] & 0xff)));
+                Log.d("EXTENDED", "PRESSURE " + Integer.toString( (((byteArray[15] & 0xff) << 8) | byteArray[14] & 0xff)));
+                mySticker.pressure = (((byteArray[15] & 0xff) << 8) | byteArray[14] & 0xff);
+                // Log.d("EXTENDED", "PRESSLO " + Integer.toString( (((byteArray[17] & 0xff) << 8) | byteArray[16] & 0xff)));
+                // Log.d("EXTENDED", "PRESSHI " + Integer.toString( (((byteArray[19] & 0xff) << 8) | byteArray[18] & 0xff)));
+
+                return true;
+            }
+            if ( packetType == BROADCAST_TYPE_HANDLING) {
+                Log.d("TEMPERATURE","PACKETLEN " + byteArray[0]);
+                Log.d("TEMPERATURE", "TYPE "     + byteArray[1]);
+            }
+        }
+
+
+        if (raw.length > 20) {
             return true;
         }
         return false;
     }
 
-    private void updateList(Beacon newBeacon, String address) {
-        // check list to see if beacon is already there
-        for (int i = 0; i < beaconList.size(); i++) {
-            if (beaconList.get(i).address.equals(address) == true) {
-                beaconList.set(i, newBeacon);
+
+    private void updateList(Sticker newSticker, String address) {
+        // check list to see if sticker is already there
+        for (int i = 0; i < assetList.size(); i++) {
+            if ( assetList.get(i).address.equals(address) == true) {
+                assetList.set(i, newSticker);
                 bla.notifyDataSetChanged();
                 return;
             }
         }
-        beaconList.add(newBeacon);
+        assetList.add(newSticker);
         bla.notifyDataSetChanged();
     }
 }

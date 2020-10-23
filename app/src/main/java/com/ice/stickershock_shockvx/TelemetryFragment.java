@@ -26,7 +26,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.ice.stickershock_shockvx.bluetooth.BluetoothLeService;
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 
 
@@ -60,8 +59,8 @@ public class TelemetryFragment extends Fragment {
         mAirTemp   = v.findViewById(R.id.ambientValue);
         mHumidity  = v.findViewById(R.id.humidityValue);
         mPressure  = v.findViewById(R.id.pressureValue);
-        mFaceup  = v.findViewById(R.id.faceValue);
-        mForces  = v.findViewById(R.id.forcesValue);
+        mFaceup    = v.findViewById(R.id.faceValue);
+        mForces    = v.findViewById(R.id.forcesValue);
         mBattery   = v.findViewById(R.id.battery);
         mRssiValue = v.findViewById(R.id.rssi);
 

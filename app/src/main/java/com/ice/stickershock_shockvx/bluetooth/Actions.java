@@ -61,26 +61,30 @@ public class Actions {
 
     // Broadcast Notification Requests
     public final static String ACTION_SET_NOTIFICATION = "ACTION_SET_NOTIFICATION";
-    public final static String ACTION_NOTIFY_SUCCESS = "ACTION_NOTIFY_SUCCESS";
-    public final static String ACTION_NOTIFY_DONE = "ACTION_NOTIFY_DONE";
+    public final static String ACTION_NOTIFY_SUCCESS   = "ACTION_NOTIFY_SUCCESS";
+    public final static String ACTION_NOTIFY_DONE      = "ACTION_NOTIFY_DONE";
 
-    public final static String ACTION_OPEN_STICKER = "ACTION_OPEN_STICKER";
-    public final static String ACTION_CLOSE_STICKER = "ACTION_CLOSE_STICKER";
-    public final static String ACTION_READ_OPEN_STICKER = "ACTION_READ_OPEN_STICKER";
+    public final static String ACTION_SET_UTC_TIME     = "ACTION_SET_UTC_TIME";
+    public final static String ACTION_SET_UTC_SUCCESS  = "ACTION_SET_UTC_SUCCESS ";
+
+    public final static String ACTION_OPEN_STICKER       = "ACTION_OPEN_STICKER";
+    public final static String ACTION_CLOSE_STICKER      = "ACTION_CLOSE_STICKER";
+    public final static String ACTION_READ_OPEN_STICKER  = "ACTION_READ_OPEN_STICKER";
     public final static String ACTION_READ_CLOSE_STICKER = "ACTION_READ_CLOSE_STICKER";
 
-    public final static String ACTION_STICKER_OPENED = "ACTION_STICKER_OPENED";
-    public final static String ACTION_STICKER_CLOSED = "ACTION_STICKER_CLOSED";
-    public final static String ACTION_STICKER_READ = "ACTION_STICKER_READ";
+    public final static String ACTION_STICKER_OPENED     = "ACTION_STICKER_OPENED";
+    public final static String ACTION_STICKER_NOT_OPENED = "ACTION_STICKER_NOT_OPENED";
+    public final static String ACTION_STICKER_CLOSED     = "ACTION_STICKER_CLOSED";
+    public final static String ACTION_STICKER_READ       = "ACTION_STICKER_READ";
 
     public final static String ACTION_MEASUREMENT_INTERVAL_15 = "ACTION_MEASUREMENT_INTERVAL_15";
     public final static String ACTION_MEASUREMENT_INTERVAL_60 = "ACTION_MEASUREMENT_INTERVAL_60";
     public final static String ACTION_RECORDS_INTERVAL_15 = "ACTION_RECORDS_INTERVAL_15";
     public final static String ACTION_RECORDS_INTERVAL_60 = "ACTION_RECORDS_INTERVAL_60";
-    public final static String ACTION_HANDLING_NONE = "ACTION_HANDLING_NONE";
-    public final static String ACTION_HANDLING_CAREFUL = "ACTION_HANDLING_CAREFUL";
-    public final static String ACTION_HANDLING_FRAGILE = "ACTION_HANDLING_FRAGILE";
-    public final static String ACTION_ORIENTATION_FLAT = "ACTION_HANDLING_FLAT";
+    public final static String ACTION_HANDLING_NONE       = "ACTION_HANDLING_NONE";
+    public final static String ACTION_HANDLING_CAREFUL    = "ACTION_HANDLING_CAREFUL";
+    public final static String ACTION_HANDLING_FRAGILE    = "ACTION_HANDLING_FRAGILE";
+    public final static String ACTION_ORIENTATION_FLAT    = "ACTION_HANDLING_FLAT";
     public final static String ACTION_ORIENTATION_UPRIGHT = "ACTION_HANDLING_UPRIGHT";
 
 };

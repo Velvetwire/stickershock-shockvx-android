@@ -1,4 +1,4 @@
-package com.ice.stickershock_shockvx;
+package com.ice.stickershock_shockvx.advertisement;
 
 import java.nio.ByteBuffer;
 

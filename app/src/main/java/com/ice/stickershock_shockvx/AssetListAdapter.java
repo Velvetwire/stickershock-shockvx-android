@@ -65,7 +65,7 @@ public class AssetListAdapter extends ArrayAdapter<Sticker> {
          String surftemp = ((float)device.surface / 100) + DEGREES_C;
          String airtemp = ((float)device.ambient / 100 ) + DEGREES_C;
          String humidity = ((float)device.humidity / 100) + PERCENT;
-         String pressure = ((float)device.pressure / 10) + MILLIBAR;
+         String pressure = ((float)device.pressure ) + MILLIBAR;
          String rssi     = device.rssi +  DECIBEL;
          //String battery  = ((float)device.telemetry.voltage / 1000) +  " V";
 
@@ -91,6 +91,9 @@ public class AssetListAdapter extends ArrayAdapter<Sticker> {
          return rowView;
     }
 
+
+
+    //
     int TX1Meter = - 75;
     float N        = (float) 3.0;
     public String calculateDistance(int rssi ) {

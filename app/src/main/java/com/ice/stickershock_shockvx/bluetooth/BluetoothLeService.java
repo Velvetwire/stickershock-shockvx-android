@@ -33,11 +33,16 @@ import android.os.IBinder;
 import android.util.Log;
 
 import java.nio.ByteBuffer;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import static com.ice.stickershock_shockvx.bluetooth.GattAttributes.*;
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
+import static java.lang.System.currentTimeMillis;
+
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
  * given Bluetooth LE device.
@@ -114,6 +119,9 @@ public class BluetoothLeService extends Service {
                }
                 if (characteristic.getUuid().toString().equals ( SENSOR_TELEMETRY_INTERVAL  )) {
                     broadcastUpdate( ACTION_SET_INTERVAL_OK );
+                }
+                if (characteristic.getUuid().toString().equals ( SENSOR_ACCESS_TIME  )) {
+                    broadcastUpdate( ACTION_SET_UTC_SUCCESS );
                 }
             }
         }
@@ -206,6 +214,9 @@ public class BluetoothLeService extends Service {
             }
             if ( ACTION_CLOSE_STICKER.equals(action)) {
                 closeSticker();
+            }
+            if ( ACTION_SET_UTC_TIME.equals(action)) {
+                setStickerTime();
             }
 
         }
@@ -306,8 +317,12 @@ public class BluetoothLeService extends Service {
         }
         if ( uuid.equals( SENSOR_CONTROL_OPENED )) {
             String svalue = characteristic.getStringValue(0);
-            Log.d("SERVICE", "ACTION_STICKER_READ");
-            broadcastStringUpdate( ACTION_STICKER_OPENED, svalue);
+            byte[] value = characteristic.getValue();
+            Log.d("SERVICE", "ACTION_STICKER_READ " + svalue);
+            if ( value[0] > 0)
+               broadcastStringUpdate( ACTION_STICKER_OPENED, svalue);
+            else
+                broadcastStringUpdate( ACTION_STICKER_NOT_OPENED, svalue);
         }
  //       else
  //           broadcastUpdate(ACTION_READ_DATA_AVAILABLE, characteristic);
@@ -329,6 +344,10 @@ public class BluetoothLeService extends Service {
 
     private byte[] floatToByteArray(float data) {
         return ByteBuffer.allocate(4).putFloat(data).array();
+    }
+
+    private byte[] intToByteArray( int data) {
+        return ByteBuffer.allocate(4).putInt(data).array();
     }
 
     // --------------------------------------------------
@@ -544,6 +563,7 @@ public class BluetoothLeService extends Service {
         intentFilter.addAction( ACTION_HANDLING_FRAGILE );
         intentFilter.addAction( ACTION_ORIENTATION_FLAT );
         intentFilter.addAction( ACTION_ORIENTATION_UPRIGHT );
+        intentFilter.addAction( ACTION_SET_UTC_TIME );
         return intentFilter;
     }
 
@@ -561,16 +581,40 @@ public class BluetoothLeService extends Service {
        ACTION_SAMPLE_15SEC
      */
 
-    public void openSticker(  ) {
-        String stickerId = "1111222256575353202056454c564554";
-        byte[] dataArray = new byte[128];
-        dataArray = stickerId.getBytes();
+    public int getUtcTime () {
+        int currentTime = (int) System.currentTimeMillis () / 1000;
+        return currentTime;
+    }
 
-        Log.d("OPEN SENSOR", dataArray[0] + " " +  dataArray[1] + " " + dataArray[2] + " " + dataArray[3]);
+
+    public void setStickerTime(  ) {
+
+        int utcSeconds = getUtcTime();
+        byte utcTime[] = reverseArray( intToByteArray ( utcSeconds ));
+
+        Log.d("SET STICKER TIME", utcTime[0] + " " +  utcTime[1] + " " + utcTime[2] + " " + utcTime[3]);
+
+        BluetoothGattService mService = mBluetoothGatt.getService(UUID.fromString( SENSOR_ACCESS_SERVICE ));
+        BluetoothGattCharacteristic mIntervalChar = mService.getCharacteristic(UUID.fromString( SENSOR_ACCESS_TIME ));
+        writeCharacteristic ( mIntervalChar, utcTime );
+    }
+    // SENSOR_CONTROL_OPENED VALUES
+    // 0 not opened
+    // opened -  set to UTC time opened
+
+
+
+    public void openSticker(  ) {
+        byte[] newUuid = new byte[16];
+        for (int i = 0; i < 16; i++) {
+            newUuid [i] = 0x41;
+        }
+
+        Log.d("OPEN SENSOR", newUuid[0] + " " +  newUuid[1] + " " + newUuid[2] + " " + newUuid[3]);
 
         BluetoothGattService mService = mBluetoothGatt.getService(UUID.fromString( SENSOR_CONTROL_SERVICE ));
         BluetoothGattCharacteristic mIntervalChar = mService.getCharacteristic(UUID.fromString( SENSOR_CONTROL_OPENED ));
-        writeCharacteristic(mIntervalChar, dataArray);
+        writeCharacteristic ( mIntervalChar, newUuid );
     }
 
     public void readOpenSticker () {
@@ -580,8 +624,8 @@ public class BluetoothLeService extends Service {
     }
 
     public void closeSticker(  ) {
-        byte[] dataArray = {0x01, 0x01, 0x01, 0x01};
-        String stickerId = "OFF";
+        byte[] dataArray = new byte[16];
+
         BluetoothGattService mService = mBluetoothGatt.getService(UUID.fromString(GattAttributes.SENSOR_CONTROL_SERVICE));
         BluetoothGattCharacteristic mIntervalChar = mService.getCharacteristic(UUID.fromString(SENSOR_CONTROL_CLOSED));
         writeCharacteristic(mIntervalChar, dataArray);

@@ -107,7 +107,8 @@ public class SettingsFragment extends Fragment {
         mAngleMax  = v.findViewById( R.id.anglemaxButton );
 
         // Handlers
-        //   Measurement row
+//      MEASUREMENT Handlers
+// -----------------------------------------------------------------------
         mMeas15Button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setInterval ( 15.0f );
@@ -131,6 +132,8 @@ public class SettingsFragment extends Fragment {
                 transmitBroadcast( ACTION_RECORDS_INTERVAL_60 );
             }
         });
+
+//      SURFACE SETTINGS
 // -----------------------------------------------------------------------
         mSurfSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()  {
             @Override

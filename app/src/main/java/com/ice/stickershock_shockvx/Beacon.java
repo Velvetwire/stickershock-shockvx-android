@@ -1,12 +1,15 @@
 package com.ice.stickershock_shockvx;
 
 
+import com.ice.stickershock_shockvx.advertisement.IdentityAD;
+import com.ice.stickershock_shockvx.advertisement.StandardAD;
+
 public class Beacon {
     public String address;
     public int rssi;
     public int txPowerLevel;
-    public TelemetryAD telemetry;
-    public IdentityAD  identity;
+    public StandardAD telemetry;
+    public IdentityAD identity;
 
 
     public Beacon() {
@@ -14,12 +17,12 @@ public class Beacon {
         this.address= null;
         this.rssi = 0;
         this.txPowerLevel = 100;
-        this.telemetry = new TelemetryAD();
+        this.telemetry = new StandardAD();
         this.identity = new IdentityAD();
 
     }
 
-    public Beacon(String s1, TelemetryAD s2, IdentityAD s3) {
+    public Beacon(String s1, StandardAD s2, IdentityAD s3) {
         // Auto-generated constructor
         this.address= s1;
         this.telemetry = s2;

@@ -100,6 +100,11 @@ public class TrackAssetFragment extends Fragment {
         getActivity().sendBroadcast(intent);
     }
 
+    private void setUtcTime () {
+        final Intent intent = new Intent( ACTION_SET_UTC_TIME );
+        getActivity().sendBroadcast(intent);
+    }
+
     private void saveStickerInfo() {
         // send broadcast command to open sticker with id
         return;
@@ -125,7 +130,11 @@ public class TrackAssetFragment extends Fragment {
                 Log.d("TRACK", "NEW SET INTERVAL");
                 readOpenSticker();
             }
-            if ( ACTION_STICKER_READ.equals(action)) {
+            if ( ACTION_STICKER_NOT_OPENED.equals(action)) {
+                Log.d("TRACK", "NEW STICKER DATA");
+                setUtcTime();
+            }
+            if ( ACTION_SET_UTC_SUCCESS.equals(action)) {
                 Log.d("TRACK", "NEW STICKER DATA");
                 openSticker();
             }
@@ -146,7 +155,9 @@ public class TrackAssetFragment extends Fragment {
         intentFilter.addAction( ACTION_SET_INTERVAL );
         intentFilter.addAction( ACTION_SET_INTERVAL_OK );
         intentFilter.addAction( ACTION_STICKER_READ );
+        intentFilter.addAction( ACTION_SET_UTC_SUCCESS );
         intentFilter.addAction( ACTION_STICKER_OPENED );
+        intentFilter.addAction( ACTION_STICKER_NOT_OPENED );
         intentFilter.addAction( ACTION_GATT_DISCONNECTED );
 
         return intentFilter;

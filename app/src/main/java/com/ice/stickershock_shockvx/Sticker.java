@@ -1,26 +1,32 @@
 package com.ice.stickershock_shockvx;
 
 
+import android.util.Log;
+
+import com.ice.stickershock_shockvx.advertisement.IdentityAD;
+import com.ice.stickershock_shockvx.advertisement.StandardAD;
 
 public class Sticker {
     public String name;
     public String annotation;
-    public String make;
-    public String model;
-    public String serial;
-    public String hardware;
-    public String firmware;
+    public StandardAD telemetry;
+    public IdentityAD identity;
     public String address;
-    public String batteryLevel;
+    public int batteryLevel;
     public String batteryState;
 
-    public int rssi;
+    public String rssi;
     public int txPowerLevel;
     int   surface;       // surface temperature in 1/100 degrees C
     int   ambient;       // ambient temperature in 1/100 degrees C
     int   humidity;      // humidity in 1/100 percent
     int   pressure;      // pressure in mbar
-    public IdentityAD  identity;
+
+    public String make;
+    public String model;
+    public String firmware;
+    public String hardware;
+    public String serial;
 
     public int     sticker_state;           //
 
@@ -28,26 +34,22 @@ public class Sticker {
 
     public Sticker() {
         this.name = null;
-        this.make = null;
-        this.model = null;
-        this.serial = null;
-        this.hardware = null;
-        this.firmware = null;
         this.address = null;
 
-
-        this.batteryLevel = null;
+        this.batteryLevel = 100;
         this.batteryState = null;
+        this.rssi         = null;
 
 
     }
 
-    Sticker(String s1, int i2, int i3, int i4, int i5) {
+    Sticker(String s1, int i2, int i3, int i4, int i5, String s2) {
         this.name = s1;
         this.surface = i2;
         this.ambient = i3;
         this.humidity = i4;
         this.pressure = i5;
+        this.address  = s2;
     }
 
     Sticker(String s1, String s2, String s3, String s4, String s5, String s6, String s7, String s8) {
