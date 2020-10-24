@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.UUID;
 
 
+import static com.ice.stickershock_shockvx.Constants.*;
 import static com.ice.stickershock_shockvx.bluetooth.BluetoothControlActivity.*;
 import static com.ice.stickershock_shockvx.bluetooth.GattAttributes.*;
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
@@ -62,9 +63,6 @@ public class         BluetoothScanActivity extends ListActivity {
     String mControl = "";
     String mPrimary = "";
 
-    private final String EXTRAS_UNIT    = "unit";
-    private final String EXTRAS_CONTROL = "control";
-    private final String EXTRAS_PRIMARY = "control";
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -181,6 +179,7 @@ public class         BluetoothScanActivity extends ListActivity {
         connectDevice( device );
     }
 
+    // Connect to device and pass control to BluetoothControlActivity
     protected void connectDevice(BluetoothDevice device) {
         final Intent intent = new Intent(this, BluetoothControlActivity.class);
         String deviceName = device.getName();
@@ -188,13 +187,14 @@ public class         BluetoothScanActivity extends ListActivity {
             deviceName = "unknown";
 
         intent.putExtra( EXTRAS_DEVICE_UNIT, mUnit);
-        intent.putExtra( BluetoothControlActivity.EXTRAS_DEVICE_NAME, deviceName);
-        intent.putExtra( BluetoothControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
+        intent.putExtra( EXTRAS_DEVICE_NAME, deviceName);
+        intent.putExtra( EXTRAS_DEVICE_ADDRESS, device.getAddress());
         if (mScanning) {
             scanLeDevice(false);
             mScanning = false;
         }
         startActivity(intent);
+
     }
 
     // Adapter for holding devices found through scanning.

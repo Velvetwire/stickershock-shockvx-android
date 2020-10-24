@@ -41,6 +41,7 @@ import java.util.UUID;
 
 import static com.ice.stickershock_shockvx.bluetooth.GattAttributes.*;
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
+import static com.ice.stickershock_shockvx.Constants.*;
 import static java.lang.System.currentTimeMillis;
 
 /**
@@ -57,9 +58,7 @@ public class BluetoothLeService extends Service {
 
 
     private int mConnectionState = STATE_DISCONNECTED;
-    private static final int STATE_DISCONNECTED = 0;
-    private static final int STATE_CONNECTING   = 1;
-    private static final int STATE_CONNECTED    = 2;
+
 
 
 

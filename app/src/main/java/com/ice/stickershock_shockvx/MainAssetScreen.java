@@ -32,10 +32,6 @@ import android.widget.Button;
 
 import androidx.annotation.RequiresApi;
 
-import com.ice.stickershock_shockvx.advertisement.IdentityAD;
-import com.ice.stickershock_shockvx.advertisement.StandardAD;
-import com.ice.stickershock_shockvx.advertisement.TelemetryAD;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +39,7 @@ import java.util.List;
 import static android.content.ContentValues.TAG;
 import static com.ice.stickershock_shockvx.advertisement.Broadcast.*;
 import static com.ice.stickershock_shockvx.bluetooth.GattAttributes.*;
+import static com.ice.stickershock_shockvx.Constants.*;
 
 
 public class MainAssetScreen extends ListActivity {
@@ -133,16 +130,21 @@ public class MainAssetScreen extends ListActivity {
             ScanRecord mScanRecord = result.getScanRecord();
 
             mySticker.address = result.getDevice().getAddress();
-            Log.d("BEACON", "RESULT " + result.toString());
+            mySticker.rssi = result.getRssi();
+
             byte[] standardData = mScanRecord.getServiceData( ParcelUuid.fromString( ASSET_BROADCAST_STANDARD ) );
             byte[] extendedData = mScanRecord.getServiceData( ParcelUuid.fromString( ASSET_BROADCAST_EXTENDED ) );
 
             if ( standardData != null) {
-                extractFieldsFromBytes( standardData, mySticker );
-                extractFieldsFromBytes( extendedData,  mySticker);
+                Log.d("BEACON", "RESULT " + result.toString());
+                extractFieldsFromBytes(standardData, mySticker);
+                if ( extendedData != null) {
+                    extractFieldsFromBytes(extendedData, mySticker);
+                }
+                updateList(mySticker, mySticker.address);
             }
 
-            updateList(mySticker, mySticker.address);
+
         }
     };
 
@@ -155,61 +157,54 @@ public class MainAssetScreen extends ListActivity {
     };
 
 
-    private int TELEMETRY_RECORD  = 0x54;
-    private int IDENTITY_RECORD  = 0x49;
-
     private boolean extractFieldsFromBytes(byte[] raw, Sticker mySticker) {
 
         List<byte []> adverts = new ArrayList<byte []>();
-        int totalLength = raw.length;
-        int startString = 0;
+
+        int startString   = 0;
         byte stringLength = 0;
-        int endString = 0;
+        int endString     = 0;
 
-
-        while ( endString < totalLength) {
+        // break concatenated string into single
+        while ( endString < raw.length ) {
             stringLength = (byte) (raw[startString] + 1);
-           //  Log.d("NEW STRING B","StartString " + startString + "LENGTH " + stringLength + " END " + endString + " TOTAL " + totalLength);
             endString += stringLength;
+
             byte [] newArray = Arrays.copyOfRange(raw, startString, endString + 1);
-            startString += stringLength;
             adverts.add(newArray);
-            // Log.d("NEW STRING A","StartString " + startString + "LENGTH " + stringLength + " END " + endString + " TOTAL " + totalLength);
+
+            startString += stringLength;
         }
 
         for ( byte [] byteArray : adverts) {
             byte packetType = byteArray[1];
             Log.d("BYTEARRAY", "TYPE " + packetType);
             if ( packetType == BROADCAST_TYPE_IDENTITY ) {
-                Log.d("IDENTITY", "TIMECODE " + Integer.toString( (((byteArray[3] & 0xff) << 8) | byteArray[2] & 0xff)));
-                Log.d("IDENTITY", "HASH" + Integer.toHexString( ((( byteArray[5] & 0xff) << 8) | byteArray[4] & 0xff)));
-                Log.d("IDENTITY", "HORIZON " + byteArray[14]);
                 mySticker.batteryLevel = byteArray[15];
-                Log.d("IDENTITY", "BATTERY " +  byteArray[15]);
             }
             if ( packetType == BROADCAST_TYPE_TEMPERATURE ) {
-                Log.d("SURFACE", "TEMP " + Integer.toString( (((byteArray[3] & 0xff) << 8) | byteArray[2] & 0xff)));
                 mySticker.surface = (((byteArray[3] & 0xff) << 8) | byteArray[2] & 0xff);
+                mySticker.surfaceAlarmLo = (((byteArray[5] & 0xff) << 8) | byteArray[4] & 0xff);
+                mySticker.surfaceAlarmHi = (((byteArray[7] & 0xff) << 8) | byteArray[6] & 0xff);
             }
             if ( packetType == BROADCAST_TYPE_ATMOSPHERE ) {
-                Log.d("EXTENDED", "TEMP " + Integer.toString( (((byteArray[3] & 0xff) << 8) | byteArray[2] & 0xff)));
                 mySticker.ambient = (((byteArray[3] & 0xff) << 8) | byteArray[2] & 0xff);
-                // Log.d("EXTENDED", "TEMPLO " + Integer.toString( (((byteArray[5] & 0xff) << 8) | byteArray[4] & 0xff)));
-                // Log.d("EXTENDED", "TEMPHI " + Integer.toString( (((byteArray[7] & 0xff) << 8) | byteArray[6] & 0xff)));
-                Log.d("EXTENDED", "HUMID " + Integer.toString( (((byteArray[9] & 0xff) << 8) | byteArray[8] & 0xff)));
+                mySticker.ambientAlarmLo = (((byteArray[5] & 0xff) << 8) | byteArray[4] & 0xff);
+                mySticker.ambientAlarmHi = (((byteArray[7] & 0xff) << 8) | byteArray[6] & 0xff);
+
                 mySticker.humidity = (((byteArray[9] & 0xff) << 8) | byteArray[2] & 0xff);
-                        // Log.d("EXTENDED", "HUMIDLO " + Integer.toString( (((byteArray[11] & 0xff) << 8) | byteArray[10] & 0xff)));
-                // Log.d("EXTENDED", "HUMIDHI " + Integer.toString( (((byteArray[13] & 0xff) << 8) | byteArray[12] & 0xff)));
-                Log.d("EXTENDED", "PRESSURE " + Integer.toString( (((byteArray[15] & 0xff) << 8) | byteArray[14] & 0xff)));
+                mySticker.humidityAlarmLo = (((byteArray[11] & 0xff) << 8) | byteArray[10] & 0xff);
+                mySticker.humidityAlarmHi = (((byteArray[13] & 0xff) << 8) | byteArray[12] & 0xff);
+
                 mySticker.pressure = (((byteArray[15] & 0xff) << 8) | byteArray[14] & 0xff);
-                // Log.d("EXTENDED", "PRESSLO " + Integer.toString( (((byteArray[17] & 0xff) << 8) | byteArray[16] & 0xff)));
-                // Log.d("EXTENDED", "PRESSHI " + Integer.toString( (((byteArray[19] & 0xff) << 8) | byteArray[18] & 0xff)));
+                mySticker.pressureAlarmLo = (((byteArray[17] & 0xff) << 8) | byteArray[16] & 0xff);
+                mySticker.pressureAlarmHi = (((byteArray[19] & 0xff) << 8) | byteArray[18] & 0xff);
 
                 return true;
             }
             if ( packetType == BROADCAST_TYPE_HANDLING) {
-                Log.d("TEMPERATURE","PACKETLEN " + byteArray[0]);
-                Log.d("TEMPERATURE", "TYPE "     + byteArray[1]);
+                mySticker.orientation = byteArray[2];
+                mySticker.angle       = byteArray[3];
             }
         }
 

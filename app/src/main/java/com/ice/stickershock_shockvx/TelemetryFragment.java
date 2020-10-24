@@ -27,7 +27,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
-
+import static com.ice.stickershock_shockvx.Constants.*;
 
 public class TelemetryFragment extends Fragment {
     TextView mSurfTemp;
@@ -39,11 +39,7 @@ public class TelemetryFragment extends Fragment {
     TextView mBattery;
     TextView mRssiValue;
 
-    private final String DEGREES_C = "\u2103";
-    private final String DEGREES_F = "\u2109";
-    private final String DEGREES = "\u00B0";
-    private final String MILLIBAR = " mB";
-    private final String BAR      = " bar";
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

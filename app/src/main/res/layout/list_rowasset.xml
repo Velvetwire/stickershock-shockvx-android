@@ -27,7 +27,7 @@
                 android:text="New Asset" />
 
             <TextView
-                android:id="@+id/battery"
+                android:id="@+id/batterylevel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"

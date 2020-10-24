@@ -37,6 +37,7 @@ import java.util.List;
 
 import static android.bluetooth.BluetoothGattCharacteristic.*;
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
+import static com.ice.stickershock_shockvx.Constants.*;
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
  * and display GATT services and characteristics supported by the device.
@@ -48,12 +49,11 @@ import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 public class BluetoothControlActivity extends Activity {
     private final static String TAG = BluetoothControlActivity.class.getSimpleName();
 
-    public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
-    public static final String EXTRAS_DEVICE_UNIT = "DEVICE_UNIT";
-    public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
 
     private TextView mSerial;
     private Sticker mSticker;
+
+    private int stickerState = STICKER_OPEN;
 
     private String mDeviceName = null;
     private String mDeviceUnit = null;
@@ -68,6 +68,8 @@ public class BluetoothControlActivity extends Activity {
 
     // Using BluetoothLeService to handle bluetooth connection
 
+    // create class for storing notification strings. We can then store all notifications in
+    // a list structure, and then turn on all the notifies on.
     private class Notification {
          String service;
          String characteristic;
@@ -188,7 +190,8 @@ public class BluetoothControlActivity extends Activity {
         Log.d("NOTIFY DONE", "GO TO TABBEDACTIVITY");
 
         Intent i = new Intent(BluetoothControlActivity.this, TabbedActivity.class);
-        i.putExtra(EXTRAS_DEVICE_UNIT, mDeviceUnit );
+        i.putExtra( EXTRAS_DEVICE_STATE, stickerState);
+        i.putExtra( EXTRAS_DEVICE_UNIT, mDeviceUnit );
         startActivity(i);
     }
 
@@ -199,9 +202,9 @@ public class BluetoothControlActivity extends Activity {
         Notification n;
         final Intent intent;
 
-        if (notifyList.size() > 0) {                          // notifications in list
+        if (notifyList.size() > 0) {                          // all notifications to be set in list
             n = notifyList.remove(0);                  // select next notification
-            intent = new Intent(ACTION_SET_NOTIFICATION);
+            intent = new Intent( ACTION_SET_NOTIFICATION );
             intent.putExtra("SERVICE", n.service);
             intent.putExtra("CHARACTERISTIC", n.characteristic);
             sendBroadcast(intent);

@@ -41,13 +41,13 @@
         android:layout_height="wrap_content"
         android:foregroundTint="#FAF8F8"
         android:orientation="horizontal">
-        <ImageView
-            android:id="@+id/stickerImage"
-            android:layout_width="160dp"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:tint="#914FBF"
-            android:src="@drawable/stickershock" />
+    <ImageView
+        android:id="@+id/stickerImage"
+        android:layout_width="160dp"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:tint="#914FBF"
+        android:src="@drawable/stickershock" />
 
         <TextView
             android:id="@+id/openDate"
@@ -58,7 +58,7 @@
             android:textSize="18sp"
             android:gravity="center"
             android:textColor="#914FBF"
-            android:text=""/>
+            android:text="Oct 6 2020 at 4:33 PM"/>
     </LinearLayout>
     <Space
         android:layout_width="1dp"
@@ -115,6 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="18sp"
+            android:inputType="textPersonName"
             android:text="Location" />
 
     </LinearLayout>
@@ -127,12 +128,12 @@
         android:paddingTop="20dp">
 
         <Button
-            android:id="@+id/trackButton"
+            android:id="@+id/acceptButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/rounded_rect_shape"
-            android:text="TRACK"
+            android:text="ACCEPT"
             android:textSize="18sp" />
 
     </LinearLayout>

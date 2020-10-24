@@ -7,20 +7,37 @@ import com.ice.stickershock_shockvx.advertisement.IdentityAD;
 import com.ice.stickershock_shockvx.advertisement.StandardAD;
 
 public class Sticker {
-    public String name;
-    public String annotation;
+    public String     name;
+    public String     address;
+    public String     annotation;
     public StandardAD telemetry;
     public IdentityAD identity;
-    public String address;
-    public int batteryLevel;
+
+    public int    batteryLevel;
     public String batteryState;
 
-    public String rssi;
+    public int rssi;
     public int txPowerLevel;
+
+    // telemetry data
     int   surface;       // surface temperature in 1/100 degrees C
     int   ambient;       // ambient temperature in 1/100 degrees C
     int   humidity;      // humidity in 1/100 percent
     int   pressure;      // pressure in mbar
+
+    // alarm and limits
+    int   surfaceAlarmLo;
+    int   surfaceAlarmHi;
+    int   ambientAlarmLo;
+    int   ambientAlarmHi;
+    int   humidityAlarmLo;
+    int   humidityAlarmHi;
+    int   pressureAlarmLo;
+    int   pressureAlarmHi;
+
+    // handling
+    int   orientation;   // orientation
+    int   angle;         // pressure in mbar
 
     public String make;
     public String model;
@@ -38,7 +55,7 @@ public class Sticker {
 
         this.batteryLevel = 100;
         this.batteryState = null;
-        this.rssi         = null;
+        this.rssi         = 0;
 
 
     }

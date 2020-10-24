@@ -24,7 +24,7 @@ public class AssetListAdapter extends ArrayAdapter<Sticker> {
     TextView angleTv;
     TextView dropsTv;
     TextView bumpsTv;
-    TextView distanceTv;
+    TextView addressTv;
 
     private final String DEGREES_C = "\u2103";
     private final String DEGREES_F = "\u2109";
@@ -53,7 +53,8 @@ public class AssetListAdapter extends ArrayAdapter<Sticker> {
             humidityTv  = (TextView) rowView.findViewById(R.id.moisture);
             pressureTv  = (TextView) rowView.findViewById(R.id.pressure);
             rssiTv      = (TextView) rowView.findViewById(R.id.rssi);
-  //          batteryTv   = (TextView) rowView.findViewById(R.id.battery);
+            batteryTv   = (TextView) rowView.findViewById(R.id.batterylevel);
+            addressTv   = (TextView) rowView.findViewById(R.id.stickerid);
      //       angleTv     = (TextView) rowView.findViewById(R.id.angle);
       //      dropsTv     = (TextView) rowView.findViewById(R.id.drops);
       //      bumpsTv     = (TextView) rowView.findViewById(R.id.bumps);
@@ -62,12 +63,13 @@ public class AssetListAdapter extends ArrayAdapter<Sticker> {
          Sticker device = myList.get(position);
 
          String assetname = device.name;
+         String address   = device.address;
          String surftemp = ((float)device.surface / 100) + DEGREES_C;
          String airtemp = ((float)device.ambient / 100 ) + DEGREES_C;
          String humidity = ((float)device.humidity / 100) + PERCENT;
          String pressure = ((float)device.pressure ) + MILLIBAR;
          String rssi     = device.rssi +  DECIBEL;
-         //String battery  = ((float)device.telemetry.voltage / 1000) +  " V";
+         String battery  = ((float)device.batteryLevel) +  " %";
 
          //float degrees = (float) (((float)device.telemetry.angle / 1000.00) * 31.82);  // 90 / 2sqrt2
          //double degrees2 = Math.round(degrees * 100.0) / 100.0;
@@ -78,12 +80,13 @@ public class AssetListAdapter extends ArrayAdapter<Sticker> {
          //String distance = calculateDistance (device.rssi) +" " + "m";
 
          mAssetName.setText ( assetname );
+         addressTv.setText  ( address );
          surftempTv.setText ( surftemp );
          airtempTv.setText  ( airtemp );
          humidityTv.setText ( humidity );
          pressureTv.setText ( pressure );
-         //rssiTv.setText     (rssi);
-         //batteryTv.setText ( battery );
+         rssiTv.setText     (rssi);
+         batteryTv.setText ( battery );
      //    angleTv.setText  ( angle );
      ////    dropsTv.setText  ( drops );
      //    bumpsTv.setText  ( bumps );

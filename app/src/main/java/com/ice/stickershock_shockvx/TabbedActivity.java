@@ -33,7 +33,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
-import static com.ice.stickershock_shockvx.bluetooth.BluetoothControlActivity.EXTRAS_DEVICE_UNIT;
+import static com.ice.stickershock_shockvx.Constants.*;
 
 
 public class TabbedActivity extends AppCompatActivity {
@@ -41,6 +41,7 @@ public class TabbedActivity extends AppCompatActivity {
     public static ViewPager2 viewPager;
     private FragmentStateAdapter pagerAdapter;
     String mDeviceUnit;
+    int mDeviceState;
 
     int[] tabIcons = {
             R.drawable.tracking,
@@ -61,6 +62,7 @@ public class TabbedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         final Intent intent = getIntent();
         mDeviceUnit    = intent.getStringExtra( EXTRAS_DEVICE_UNIT );
+        mDeviceState    = intent.getIntExtra( EXTRAS_DEVICE_STATE, 0 );
         setContentView(R.layout.frag_activity_main);
         viewPager = findViewById(R.id.mypager);
 
@@ -94,7 +96,10 @@ public class TabbedActivity extends AppCompatActivity {
         public Fragment createFragment(int pos) {
             switch (pos) {
                 case 0: {
-                    return TrackAssetFragment.newInstance("");
+                    if (mDeviceState == STICKER_NEW)
+                       return TrackAssetFragment.newInstance("");
+                    else
+                        return AcceptAssetFragment.newInstance("");
                 }
                 case 1: {
                     return TelemetryFragment.newInstance("");
