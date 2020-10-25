@@ -174,7 +174,9 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-
+ // -----------------------------------------------------------------------
+//      AMBIENT SETTINGS
+// -----------------------------------------------------------------------
         mAmbientSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()  {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -215,7 +217,9 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        //   Handling row
+// -----------------------------------------------------------------------
+// Handling Settings
+// -----------------------------------------------------------------------
         mNone.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 transmitBroadcast( ACTION_HANDLING_NONE );
@@ -347,12 +351,12 @@ public class SettingsFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
 
-         if ( ACTION_BATTERY_LEVEL_AVAILABLE.equals(action) ) {
+         if ( RESPONSE_BATTERY_LEVEL.equals(action) ) {
 
                 int intData = intent.getIntExtra( INT_DATA, 0);
  //               mBattery.setText(String.valueOf(intData + "%"));
             }
-         if ( ACTION_RSSI_DATA_AVAILABLE.equals(action) ) {
+         if ( RESPONSE_RSSI_DATA.equals(action) ) {
                 int rssiData = intent.getIntExtra( INT_DATA,0);
 //                mRssi.setText(String.valueOf(rssiData + " dB"));
                 readBattery();
@@ -372,8 +376,8 @@ public class SettingsFragment extends Fragment {
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
 
-        intentFilter.addAction( ACTION_RSSI_DATA_AVAILABLE );
-        intentFilter.addAction( ACTION_BATTERY_LEVEL_AVAILABLE );
+        intentFilter.addAction( RESPONSE_RSSI_DATA );
+        intentFilter.addAction( RESPONSE_BATTERY_LEVEL );
 
         return intentFilter;
     }

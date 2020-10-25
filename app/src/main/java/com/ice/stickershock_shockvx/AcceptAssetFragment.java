@@ -107,7 +107,7 @@ public class AcceptAssetFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
 
-            if ( ACTION_STICKER_CLOSED.equals(action)) {
+            if ( RESPONSE_STICKER_CLOSED.equals(action)) {
                 Log.d("TRACK", "STICKER CLOSED");
              //   disconnectSticker();
             }
@@ -121,12 +121,7 @@ public class AcceptAssetFragment extends Fragment {
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
 
-        intentFilter.addAction( ACTION_SET_INTERVAL );
-        intentFilter.addAction( ACTION_SET_INTERVAL_OK );
-        intentFilter.addAction( ACTION_STICKER_READ );
-        intentFilter.addAction( ACTION_SET_UTC_SUCCESS );
-        intentFilter.addAction( ACTION_STICKER_OPENED );
-        intentFilter.addAction( ACTION_STICKER_NOT_OPENED );
+        intentFilter.addAction( RESPONSE_STICKER_CLOSED );
         intentFilter.addAction( ACTION_GATT_DISCONNECTED );
 
         return intentFilter;

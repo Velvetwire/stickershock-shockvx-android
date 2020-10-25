@@ -38,6 +38,7 @@ import java.util.List;
 import static android.bluetooth.BluetoothGattCharacteristic.*;
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 import static com.ice.stickershock_shockvx.Constants.*;
+import static com.ice.stickershock_shockvx.Helpers.*;
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
  * and display GATT services and characteristics supported by the device.
@@ -114,83 +115,97 @@ public class BluetoothControlActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
+            String extraData = "";
 
-            if (ACTION_GATT_CONNECTED.equals(action)) {
+            switch ( action )  {
+             case ACTION_GATT_CONNECTED:
                 mConnected = true;
                 updateConnectionState(R.string.connected);
                 invalidateOptionsMenu();
+                break;
 
-            }
-            else if (ACTION_GATT_DISCONNECTED.equals(action)) {
+             case ACTION_GATT_DISCONNECTED:
                 mConnected = false;
                 updateConnectionState(R.string.disconnected);
                 invalidateOptionsMenu();
+                 break;
 
-            }
-            else if (ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+             case ACTION_GATT_SERVICES_DISCOVERED:
                 displayGattServices(mBluetoothLeService.getSupportedGattServices());
                 enableAllNotifications();
+                break;
 
-                // here is where available data is found
-                // as far as notification there seems to be a timing problem where one
-                // can only set one notification at a time.
-
-            }
-            else if (ACTION_NOTIFY_SUCCESS.equals(action)) {
+             case RESPONSE_NOTIFY_SUCCESS:
                 enableAllNotifications();
-            }
+                break;
 
-            else if (ACTION_READ_DATA_AVAILABLE.equals(action)) {
-                String extraData = intent.getStringExtra ( STRING_DATA );
+             case RESPONSE_STICKER_NEW:
+                goToTabbedActivity( STICKER_NEW );
+                break;
+
+             case RESPONSE_STICKER_OPENED:
+                goToTabbedActivity( STICKER_OPEN );
+                break;
+
+             case RESPONSE_STICKER_CLOSED:
+                goToTabbedActivity( STICKER_CLOSED );
+                break;
+
+             case RESPONSE_READ_DATA_AVAILABLE:
+                extraData = intent.getStringExtra ( STRING_DATA );
                 Log.d("DISCOVERED", "READ DATA AVAILABLE" + extraData);
-            }
-            else if ( ACTION_MANUFACTURER_AVAILABLE.equals(action)) {
-                String extraData = intent.getStringExtra ( STRING_DATA );
+                break;
+
+             case RESPONSE_MANUFACTURER_AVAILABLE:
+                extraData = intent.getStringExtra ( STRING_DATA );
                 mSticker.make = extraData;
                 Log.d("Manufacturer", extraData);
                 //mMake.setText(extraData);
-            }
-            else if ( ACTION_MODEL_AVAILABLE .equals(action)) {
-                String extraData = intent.getStringExtra ( STRING_DATA );
+                 break;
+
+             case RESPONSE_MODEL_AVAILABLE:
+                extraData = intent.getStringExtra ( STRING_DATA );
                 mSticker.model = extraData;
                 Log.d("Model", extraData);
+                break;
 
-            }
-            else if ( ACTION_FIRMWARE_AVAILABLE .equals(action)) {
-                String extraData = intent.getStringExtra ( STRING_DATA );
-                mSticker.firmware = extraData;
+             case RESPONSE_FIRMWARE_AVAILABLE:
+                mSticker.firmware = intent.getStringExtra ( STRING_DATA );
                 Log.d("Firmware", extraData);
-            }
-            else if ( ACTION_HARDWARE_AVAILABLE .equals(action)) {
-                String extraData = intent.getStringExtra ( STRING_DATA );
-                mSticker.hardware = extraData;
+                break;
+
+             case RESPONSE_HARDWARE_AVAILABLE:
+                mSticker.hardware = intent.getStringExtra ( STRING_DATA );
                 Log.d("Hardware", extraData);
-            }
-            else if ( ACTION_SERIAL_AVAILABLE .equals(action)) {
-                String extraData = intent.getStringExtra ( STRING_DATA );
-                mSticker.serial = extraData;
+                break;
+
+             case RESPONSE_SERIAL_AVAILABLE:
+                mSticker.serial = intent.getStringExtra ( STRING_DATA );
                 mSerial.setText(extraData);
                 Log.d("Serial", extraData);
+                break;
 
-            }
-            else if ( ACTION_WRITE_DATA_AVAILABLE.equals(action)) {
-                String  extraData = intent.getStringExtra(EXTRA_DATA);
+             case RESPONSE_WRITE_DATA_AVAILABLE:
+                extraData = intent.getStringExtra(EXTRA_DATA);
                 Log.d("ACTION", "WRITE DATA SUCCESS " + extraData);
-            }
-            else if ( ACTION_SENSOR_DATA_AVAILABLE.equals(action)) {
-                String extraData = intent.getStringExtra( EXTRA_DATA );
-                Log.d("SENSOR_DATA", "available " + extraData);
+                break;
 
-            }
+             case ACTION_SENSOR_DATA_AVAILABLE:
+                 extraData = intent.getStringExtra( EXTRA_DATA );
+                 Log.d("SENSOR_DATA", "available " + extraData);
+                 break;
+             default:
+                 break;
+             }
          }
     };
 
-    public void goToTabbedActivity()
+    public void goToTabbedActivity( int state )
     {
         Log.d("NOTIFY DONE", "GO TO TABBEDACTIVITY");
 
         Intent i = new Intent(BluetoothControlActivity.this, TabbedActivity.class);
-        i.putExtra( EXTRAS_DEVICE_STATE, stickerState);
+        i.putExtra( EXTRAS_STICKER_STATE, state);
         i.putExtra( EXTRAS_DEVICE_UNIT, mDeviceUnit );
         startActivity(i);
     }
@@ -210,11 +225,15 @@ public class BluetoothControlActivity extends Activity {
             sendBroadcast(intent);
         // all notifications processed, so go to telemetry page
         } else {
-            goToTabbedActivity();
+            checkStickerStatus();
         }
 
     }
 
+    private void checkStickerStatus() {
+        final Intent intent = new Intent( ACTION_CHECK_STICKER_STATUS );
+        sendBroadcast(intent);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -249,7 +268,7 @@ public class BluetoothControlActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "inside onResume");
+
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         if (mBluetoothLeService != null) {
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
@@ -313,27 +332,6 @@ public class BluetoothControlActivity extends Activity {
         });
     }
 
-
-    private byte[] reverseArray(byte[] array)  {
-        for(int i=0; i<array.length/2; i++) {
-            byte temp = array[i];
-            array[i] = array[array.length - i - 1];
-            array[array.length - i - 1] = temp;
-        }
-        return array;
-    }
-
-    private float byteArrayToFloat(byte[] data) {
-        ByteBuffer buffer = ByteBuffer.wrap(data);
-        return buffer.getFloat();
-    }
-
-    private byte[] floatToByteArray(float data) {
-        return ByteBuffer.allocate(4).putFloat(data).array();
-    }
-
-    public void switchToTelemetry() {
-    }
 
 
 
@@ -431,16 +429,22 @@ public class BluetoothControlActivity extends Activity {
         intentFilter.addAction( ACTION_GATT_DISCONNECTED);
         intentFilter.addAction( ACTION_GATT_SERVICES_DISCOVERED);
         intentFilter.addAction( ACTION_DATA_AVAILABLE);
-        intentFilter.addAction( ACTION_READ_DATA_AVAILABLE);
-        intentFilter.addAction( ACTION_WRITE_DATA_AVAILABLE);
+
         intentFilter.addAction( ACTION_SENSOR_DATA_AVAILABLE );
-        intentFilter.addAction( ACTION_MANUFACTURER_AVAILABLE );
-        intentFilter.addAction( ACTION_MODEL_AVAILABLE );
-        intentFilter.addAction( ACTION_FIRMWARE_AVAILABLE );
-        intentFilter.addAction( ACTION_HARDWARE_AVAILABLE );
-        intentFilter.addAction( ACTION_SERIAL_AVAILABLE );
-        intentFilter.addAction( ACTION_NOTIFY_SUCCESS );
-        intentFilter.addAction( ACTION_NOTIFY_DONE );
+        intentFilter.addAction( RESPONSE_MANUFACTURER_AVAILABLE );
+        intentFilter.addAction( RESPONSE_MODEL_AVAILABLE );
+        intentFilter.addAction( RESPONSE_FIRMWARE_AVAILABLE );
+        intentFilter.addAction( RESPONSE_HARDWARE_AVAILABLE );
+        intentFilter.addAction( RESPONSE_SERIAL_AVAILABLE );
+
+        intentFilter.addAction( RESPONSE_READ_DATA_AVAILABLE);
+        intentFilter.addAction( RESPONSE_WRITE_DATA_AVAILABLE);
+        intentFilter.addAction( RESPONSE_NOTIFY_SUCCESS );
+        intentFilter.addAction( RESPONSE_NOTIFY_DONE );
+        intentFilter.addAction( RESPONSE_STICKER_NEW );
+        intentFilter.addAction( RESPONSE_STICKER_OPENED );
+        intentFilter.addAction( RESPONSE_STICKER_CLOSED );
+
         return intentFilter;
     }
 

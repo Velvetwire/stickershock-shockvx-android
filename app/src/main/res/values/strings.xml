@@ -72,6 +72,8 @@
     <string name="unit">UNIT: </string>
     <string name="control">CONTROL: </string>
 
+    <string name="trackasset">Track Asset</string>
+
     <string name="minus"> - </string>
     <string name="plus"> + </string>
 

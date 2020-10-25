@@ -15,7 +15,7 @@ public class Constants {
     public static final String EXTRAS_DEVICE_NAME    = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_UNIT    = "DEVICE_UNIT";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
-    public static final String EXTRAS_DEVICE_STATE   = "DEVICE_STATE";
+    public static final String EXTRAS_STICKER_STATE  = "STICKER_STATE";
 
 
     public static final String EXTRAS_UNIT    = "unit";

@@ -20,7 +20,7 @@ public class WelcomeScreen extends Activity {
     private static EditText username;
     private static EditText password;
     private static EditText email;
-    private static Button login_btn;
+    private static Button   login_btn;
     int attempt_counter = 5;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,24 +30,19 @@ public class WelcomeScreen extends Activity {
     }
 
     public  void LoginButton() {
-        username = (EditText)findViewById(R.id.textName);
-        password = (EditText)findViewById(R.id.textPassword);
-        email    = (EditText)findViewById(R.id.textEmail);
-        login_btn = (Button)findViewById(R.id.registerButton);
+        username  = (EditText) findViewById(R.id.textName);
+        password  = (EditText) findViewById(R.id.textPassword);
+        email     = (EditText) findViewById(R.id.textEmail);
+        login_btn = (Button)   findViewById(R.id.registerButton);
 
         login_btn.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-           //             if(username.getText().toString().equals("user") &&
-             //                   password.getText().toString().equals("pass")  ) {
-                 //           Toast.makeText(WelcomeScreen.this,"User and Password is correct",
-                  //                  Toast.LENGTH_SHORT).show();
 
                             Intent intent = new Intent(WelcomeScreen.this, ReadStickerNfc.class);
                             intent.putExtra("id", generateID());
                             startActivity(intent);
-
 
                     }
                 }

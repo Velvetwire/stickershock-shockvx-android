@@ -41,7 +41,7 @@ public class TabbedActivity extends AppCompatActivity {
     public static ViewPager2 viewPager;
     private FragmentStateAdapter pagerAdapter;
     String mDeviceUnit;
-    int mDeviceState;
+    int mStickerState;
 
     int[] tabIcons = {
             R.drawable.tracking,
@@ -59,15 +59,15 @@ public class TabbedActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate( savedInstanceState );
         final Intent intent = getIntent();
         mDeviceUnit    = intent.getStringExtra( EXTRAS_DEVICE_UNIT );
-        mDeviceState    = intent.getIntExtra( EXTRAS_DEVICE_STATE, 0 );
-        setContentView(R.layout.frag_activity_main);
-        viewPager = findViewById(R.id.mypager);
+        mStickerState    = intent.getIntExtra( EXTRAS_STICKER_STATE, 0 );
+        setContentView( R.layout.frag_activity_main );
+        viewPager = findViewById( R.id.mypager );
 
-        pagerAdapter = new MyPagerAdapter(this);
-        viewPager.setAdapter(pagerAdapter);
+        pagerAdapter = new MyPagerAdapter(this );
+        viewPager.setAdapter( pagerAdapter );
 
         //inflating tab layout
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -75,9 +75,9 @@ public class TabbedActivity extends AppCompatActivity {
         //displaying tabs
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                tab.setText(tabTitles[position]);
-                tab.setIcon(tabIcons[position]);
+            public void onConfigureTab( @NonNull TabLayout.Tab tab, int position ) {
+                tab.setText( tabTitles[position] );
+                tab.setIcon( tabIcons[position] );
             }
         }).attach();
 
@@ -96,9 +96,9 @@ public class TabbedActivity extends AppCompatActivity {
         public Fragment createFragment(int pos) {
             switch (pos) {
                 case 0: {
-                    if (mDeviceState == STICKER_NEW)
+                    if ( mStickerState == STICKER_NEW )
                        return TrackAssetFragment.newInstance("");
-                    else
+                    if ( mStickerState == STICKER_OPEN )
                         return AcceptAssetFragment.newInstance("");
                 }
                 case 1: {
@@ -159,23 +159,23 @@ public class TabbedActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
 
-            if ( ACTION_MANUFACTURER_AVAILABLE.equals(action)) {
+            if ( RESPONSE_MANUFACTURER_AVAILABLE.equals(action)) {
                 String extraData = intent.getStringExtra ( STRING_DATA );
                 currentSticker.make = extraData;
             }
-            else if ( ACTION_MODEL_AVAILABLE .equals(action)) {
+            else if ( RESPONSE_MODEL_AVAILABLE .equals(action)) {
                 String extraData = intent.getStringExtra ( STRING_DATA );
                 currentSticker.model = extraData;
             }
-            else if ( ACTION_FIRMWARE_AVAILABLE .equals(action)) {
+            else if ( RESPONSE_FIRMWARE_AVAILABLE .equals(action)) {
                 String extraData = intent.getStringExtra ( STRING_DATA );
                 currentSticker.firmware = extraData;
             }
-            else if ( ACTION_HARDWARE_AVAILABLE .equals(action)) {
+            else if ( RESPONSE_HARDWARE_AVAILABLE .equals(action)) {
                 String extraData = intent.getStringExtra ( STRING_DATA );
                 currentSticker.hardware = extraData;;
             }
-            else if ( ACTION_SERIAL_AVAILABLE .equals(action)) {
+            else if ( RESPONSE_SERIAL_AVAILABLE .equals(action)) {
                 String extraData = intent.getStringExtra ( STRING_DATA );
                 currentSticker.serial = extraData;;
             }
@@ -187,33 +187,15 @@ public class TabbedActivity extends AppCompatActivity {
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction( ACTION_DATA_AVAILABLE);
-        intentFilter.addAction( ACTION_READ_DATA_AVAILABLE);
-        intentFilter.addAction( ACTION_WRITE_DATA_AVAILABLE);
+        intentFilter.addAction( RESPONSE_READ_DATA_AVAILABLE);
+        intentFilter.addAction( RESPONSE_WRITE_DATA_AVAILABLE);
         intentFilter.addAction( ACTION_SENSOR_DATA_AVAILABLE );
-        intentFilter.addAction( ACTION_MANUFACTURER_AVAILABLE );
-        intentFilter.addAction( ACTION_MODEL_AVAILABLE );
-        intentFilter.addAction( ACTION_FIRMWARE_AVAILABLE );
-        intentFilter.addAction( ACTION_HARDWARE_AVAILABLE );
-        intentFilter.addAction( ACTION_SERIAL_AVAILABLE );
+        intentFilter.addAction( RESPONSE_MANUFACTURER_AVAILABLE );
+        intentFilter.addAction( RESPONSE_MODEL_AVAILABLE );
+        intentFilter.addAction( RESPONSE_FIRMWARE_AVAILABLE );
+        intentFilter.addAction( RESPONSE_HARDWARE_AVAILABLE );
+        intentFilter.addAction( RESPONSE_SERIAL_AVAILABLE );
         return intentFilter;
-    }
-
-    private boolean retrieveStickerProperties() {
-
-        if ( currentSticker.make == null) {
-            transmitBroadcast( ACTION_GET_MANUFACTURER );
-        }
-        else if (( currentSticker.model == null)) {
-            transmitBroadcast( ACTION_GET_MODEL );
-        }
-        else if (( currentSticker.serial == null)) {
-            transmitBroadcast( ACTION_GET_SERIAL );
-        }
-        else if (( currentSticker.hardware == null)) {
-            transmitBroadcast( ACTION_GET_HARDWARE_REV );
-        }
-
-        return currentSticker.isComplete();
     }
 
 

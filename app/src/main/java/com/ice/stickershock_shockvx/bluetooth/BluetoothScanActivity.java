@@ -43,35 +43,37 @@ import static com.ice.stickershock_shockvx.Constants.*;
 import static com.ice.stickershock_shockvx.bluetooth.BluetoothControlActivity.*;
 import static com.ice.stickershock_shockvx.bluetooth.GattAttributes.*;
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
+import static com.ice.stickershock_shockvx.Helpers.*;
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.
  */
 public class         BluetoothScanActivity extends ListActivity {
     private LeDeviceListAdapter mLeDeviceListAdapter;
-    private BluetoothAdapter mBluetoothAdapter;
-    private boolean mScanning;
-    private Handler mHandler;
-    private BluetoothLeScanner mLEScanner;
-    private ScanSettings mScanSettings;
-    List<ScanFilter> mScanFilters = new ArrayList<ScanFilter>();
-    private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
+    private BluetoothAdapter    mBluetoothAdapter;
+    private boolean             mScanning;
+    private Handler             mHandler;
+    private BluetoothLeScanner  mLEScanner;
+    private ScanSettings        mScanSettings;
+    List<ScanFilter>            mScanFilters = new ArrayList<ScanFilter>();
 
+
+    private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 3000;
+
+
     String mUnit = "";
     String mControl = "";
     String mPrimary = "";
 
-
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi( api = Build.VERSION_CODES.M )
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getActionBar().setTitle(R.string.track_asset);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setTitle( R.string.track_asset );
+        getActionBar().setDisplayHomeAsUpEnabled( true );
 
         mHandler = new Handler();
 
@@ -89,10 +91,10 @@ public class         BluetoothScanActivity extends ListActivity {
         // In newer versions of android, prompt user to turn on FINE_LOCATION
         // as location is considered a "sensitive" permission
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ) {
+            requestPermissions(new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, PERMISSION_REQUEST_FINE_LOCATION );
         }
-        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService( Context.BLUETOOTH_SERVICE );
         mBluetoothAdapter = bluetoothManager.getAdapter();
 
         if (mBluetoothAdapter == null) {
@@ -327,7 +329,7 @@ public class         BluetoothScanActivity extends ListActivity {
                 @Override
                 public void run() {
                     mScanning = false;
-                    bluetoothLeScanner.stopScan((ScanCallback) mLeScanCallback);
+                    bluetoothLeScanner.stopScan(( ScanCallback ) mLeScanCallback);
                     invalidateOptionsMenu();
                 }
             }, SCAN_PERIOD);
@@ -351,9 +353,6 @@ public class         BluetoothScanActivity extends ListActivity {
         ScanFilter mScanFilter;
         ScanFilter.Builder mBuilder = new ScanFilter.Builder();
 
-//          mBuilder.setManufacturerData(MANUFACTURER_ID, mManufacturerData.array(), mManufacturerDataMask.array());
-//          mBuilder.setDeviceAddress ( mDeviceAddress );          // Filter on device address
-//          mBuilder.setDeviceName ( mDeviceName );                // Filter on device name
 //          mBuilder.setServiceData ( mServiceData.array(), mServiceDataMask.array() );
 //          mBuilder.setServiceSolicitationUuid ( ParcelUUID(uuid) );
         Log.d("ScanFilter", mControl);
@@ -365,12 +364,12 @@ public class         BluetoothScanActivity extends ListActivity {
         mScanFilters.add(mScanFilter);
     }
 
-    //Scan Settings
+    // Scan Settings
     private void setScanSettings() {
         ScanSettings.Builder mBuilder = new ScanSettings.Builder();
 
         mBuilder.setReportDelay(0);
-        mBuilder.setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY);
+        mBuilder.setScanMode( ScanSettings.SCAN_MODE_LOW_LATENCY );
         mScanSettings = mBuilder.build();
     }
 }

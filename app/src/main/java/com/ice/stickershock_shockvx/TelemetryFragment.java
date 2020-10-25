@@ -51,14 +51,14 @@ public class TelemetryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.telemetry, container, false);
 
-        mSurfTemp  = v.findViewById(R.id.surfaceValue);
-        mAirTemp   = v.findViewById(R.id.ambientValue);
-        mHumidity  = v.findViewById(R.id.humidityValue);
-        mPressure  = v.findViewById(R.id.pressureValue);
-        mFaceup    = v.findViewById(R.id.faceValue);
-        mForces    = v.findViewById(R.id.forcesValue);
-        mBattery   = v.findViewById(R.id.battery);
-        mRssiValue = v.findViewById(R.id.rssi);
+        mSurfTemp  = v.findViewById(R.id.surfaceValue );
+        mAirTemp   = v.findViewById(R.id.ambientValue );
+        mHumidity  = v.findViewById(R.id.humidityValue );
+        mPressure  = v.findViewById(R.id.pressureValue );
+        mFaceup    = v.findViewById(R.id.faceValue );
+        mForces    = v.findViewById(R.id.forcesValue );
+        mBattery   = v.findViewById(R.id.battery );
+        mRssiValue = v.findViewById(R.id.rssi );
 
     //    readRssi();
         return v;
@@ -67,14 +67,14 @@ public class TelemetryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        requireActivity().registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        requireActivity().registerReceiver( mGattUpdateReceiver, makeGattUpdateIntentFilter() );
         readRssi();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        requireActivity().unregisterReceiver(mGattUpdateReceiver);
+        requireActivity().unregisterReceiver( mGattUpdateReceiver );
     }
 
 
@@ -95,7 +95,7 @@ public class TelemetryFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
 
-            if ( ACTION_AMBIENT_AVAILABLE.equals(action)) {
+            if ( RESPONSE_AMBIENT_AVAILABLE.equals(action)) {
                 float fValue = intent.getFloatExtra( PRESSURE_DATA, 0.0f );
                 String value = String.format("%.3f", fValue);
                 String pressValue = value + BAR;
@@ -112,14 +112,14 @@ public class TelemetryFragment extends Fragment {
                 mAirTemp.setText( ambientValue );
             }
 
-            if ( ACTION_SURFACE_AVAILABLE.equals(action)) {
-                float fValue = intent.getFloatExtra( FLOAT_DATA, 0.0f );
+            if ( RESPONSE_SURFACE_AVAILABLE.equals(action)) {
+                float fValue = intent.getFloatExtra( SURFACE_DATA, 0.0f );
                 String value = String.format("%.2f", fValue);
                 value = value + DEGREES_C;
                 mSurfTemp.setText( value );
             }
 
-            if ( ACTION_HANDLING_AVAILABLE.equals(action)) {
+            if ( RESPONSE_HANDLING_AVAILABLE.equals(action)) {
                 float fValue = intent.getFloatExtra( FACEUP_DATA, 0.0f );
                 String value = String.format("%.2f", fValue);
                 String faceValue = value + DEGREES;
@@ -131,12 +131,12 @@ public class TelemetryFragment extends Fragment {
                 mForces.setText( forcesValue );
             }
 
-            if ( ACTION_BATTERY_LEVEL_AVAILABLE.equals(action)) {
+            if ( RESPONSE_BATTERY_LEVEL.equals(action)) {
 
                 int intData = intent.getIntExtra( INT_DATA, 0);
     //            mBattery.setText(String.valueOf(intData + "%"));
             }
-            if ( ACTION_RSSI_DATA_AVAILABLE.equals(action)) {
+            if ( RESPONSE_RSSI_DATA.equals(action)) {
 
                 int rssiData = intent.getIntExtra( INT_DATA,0);
                 Log.d("RECVD", "RSSI " + rssiData);
@@ -149,11 +149,11 @@ public class TelemetryFragment extends Fragment {
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
 
-        intentFilter.addAction( ACTION_AMBIENT_AVAILABLE );
-        intentFilter.addAction( ACTION_HANDLING_AVAILABLE );
-        intentFilter.addAction( ACTION_SURFACE_AVAILABLE );
-        intentFilter.addAction( ACTION_BATTERY_LEVEL_AVAILABLE );
-        intentFilter.addAction( ACTION_RSSI_DATA_AVAILABLE );
+        intentFilter.addAction( RESPONSE_AMBIENT_AVAILABLE );
+        intentFilter.addAction( RESPONSE_HANDLING_AVAILABLE );
+        intentFilter.addAction( RESPONSE_SURFACE_AVAILABLE );
+        intentFilter.addAction( RESPONSE_BATTERY_LEVEL );
+        intentFilter.addAction( RESPONSE_RSSI_DATA );
         return intentFilter;
     }
 

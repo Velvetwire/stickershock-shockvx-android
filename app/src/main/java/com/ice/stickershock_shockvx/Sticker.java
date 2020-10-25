@@ -57,11 +57,10 @@ public class Sticker {
         this.batteryState = null;
         this.rssi         = 0;
 
-
     }
 
     Sticker(String s1, int i2, int i3, int i4, int i5, String s2) {
-        this.name = s1;
+        this.name    = s1;
         this.surface = i2;
         this.ambient = i3;
         this.humidity = i4;

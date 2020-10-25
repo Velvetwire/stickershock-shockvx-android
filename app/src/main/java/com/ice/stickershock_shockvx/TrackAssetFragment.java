@@ -40,10 +40,10 @@ public class TrackAssetFragment extends Fragment {
         View v = inflater.inflate(R.layout.track_asset, container, false);
         super.onCreate(savedInstanceState);
 
-        mTrackButton = (Button)   v.findViewById(R.id.trackButton);
-        mName        = (EditText) v.findViewById(R.id.assetName);
-        mLocation    = (EditText) v.findViewById(R.id.assetLocation);
-        mStickerId   = (TextView) v.findViewById(R.id.stickerid);
+        mTrackButton = (Button)   v.findViewById(R.id.trackButton );
+        mName        = (EditText) v.findViewById(R.id.assetName );
+        mLocation    = (EditText) v.findViewById(R.id.assetLocation );
+        mStickerId   = (TextView) v.findViewById(R.id.stickerid );
 
         setInterval ( );
 
@@ -64,13 +64,13 @@ public class TrackAssetFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        requireActivity().registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        requireActivity().registerReceiver( mGattUpdateReceiver, makeGattUpdateIntentFilter() );
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        requireActivity().unregisterReceiver(mGattUpdateReceiver);
+        requireActivity().unregisterReceiver( mGattUpdateReceiver );
     }
 
     public static TrackAssetFragment newInstance(String text) {
@@ -90,11 +90,6 @@ public class TrackAssetFragment extends Fragment {
     }
     private void openSticker() {
         final Intent intent = new Intent( ACTION_OPEN_STICKER );
-        getActivity().sendBroadcast(intent);
-    }
-
-    private void checkStickerStatus() {
-        final Intent intent = new Intent( ACTION_READ_OPEN_STICKER );
         getActivity().sendBroadcast(intent);
     }
 
@@ -124,19 +119,18 @@ public class TrackAssetFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
 
-            if ( ACTION_SET_INTERVAL_OK.equals(action)) {
+            if ( RESPONSE_SET_INTERVAL.equals(action)) {
                 Log.d("TRACK", "NEW SET INTERVAL");
-                checkStickerStatus();
             }
-            if ( ACTION_STICKER_NOT_OPENED.equals(action)) {
+            if ( RESPONSE_STICKER_NEW.equals(action)) {
                 Log.d("TRACK", "NEW STICKER DATA");
                 setUtcTime();
             }
-            if ( ACTION_SET_UTC_SUCCESS.equals(action)) {
+            if ( RESPONSE_SET_UTC.equals(action)) {
                 Log.d("TRACK", "NEW STICKER DATA");
                 openSticker();
             }
-            if ( ACTION_STICKER_OPENED.equals(action)) {
+            if ( RESPONSE_STICKER_OPENED.equals(action)) {
                 Log.d("TRACK", "NEW STICKER OPENED");
                 disconnectSticker();
             }
@@ -151,11 +145,10 @@ public class TrackAssetFragment extends Fragment {
         final IntentFilter intentFilter = new IntentFilter();
 
         intentFilter.addAction( ACTION_SET_INTERVAL );
-        intentFilter.addAction( ACTION_SET_INTERVAL_OK );
-        intentFilter.addAction( ACTION_STICKER_READ );
-        intentFilter.addAction( ACTION_SET_UTC_SUCCESS );
-        intentFilter.addAction( ACTION_STICKER_OPENED );
-        intentFilter.addAction( ACTION_STICKER_NOT_OPENED );
+        intentFilter.addAction( RESPONSE_SET_INTERVAL );
+        intentFilter.addAction( RESPONSE_SET_UTC );
+        intentFilter.addAction( RESPONSE_STICKER_OPENED );
+        intentFilter.addAction( RESPONSE_STICKER_NEW );
         intentFilter.addAction( ACTION_GATT_DISCONNECTED );
 
         return intentFilter;

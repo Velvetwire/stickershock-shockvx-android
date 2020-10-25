@@ -16,39 +16,41 @@ public class Actions {
     public final static String ACTION_GATT_SERVICES_DISCOVERED = "ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_DATA_AVAILABLE           = "ACTION_DATA_AVAILABLE";
     public final static String ACTION_SENSOR_DATA_AVAILABLE    = "ACTION_SENSOR_DATA_AVAILABLE";
-    public final static String ACTION_READ_DATA_AVAILABLE      = "ACTION_READ_DATA_AVAILABLE";
-    public final static String ACTION_WRITE_DATA_AVAILABLE     = "ACTION_WRITE_DATA_AVAILABLE";
-    public final static String ACTION_RSSI_DATA_AVAILABLE      = "ACTION_RSSI_DATA_AVAILABLE";
-    public final static String ACTION_BATTERY_LEVEL_AVAILABLE  = "ACTION_BATTERY_LEVEL_AVAILABLE";
-    public final static String ACTION_BATTERY_STATE_AVAILABLE  = "ACTION_BATTERY_STATE_AVAILABLE";
+    public final static String RESPONSE_READ_DATA_AVAILABLE    = "RESPONSE_READ_DATA_AVAILABLE";
+    public final static String RESPONSE_WRITE_DATA_AVAILABLE   = "RESPONSE_WRITE_DATA_AVAILABLE";
+    public final static String RESPONSE_RSSI_DATA              = "RESPONSE_RSSI_DATA";
+    public final static String RESPONSE_BATTERY_LEVEL          = "RESPONSE_BATTERY_LEVEL";
+    public final static String RESPONSE_BATTERY_STATE          = "RESPONSE_BATTERY_STATE";
 
-    public final static String ACTION_MANUFACTURER_AVAILABLE   = "ACTION_MANUFACTURER_AVAILABLE";
-    public final static String ACTION_MODEL_AVAILABLE          = "ACTION_MODEL_AVAILABLE";
-    public final static String ACTION_FIRMWARE_AVAILABLE       = "ACTION_FIRMWARE_AVAILABLE";
-    public final static String ACTION_HARDWARE_AVAILABLE       = "ACTION_HARDWARE_AVAILABLE";
-    public final static String ACTION_SERIAL_AVAILABLE         = "ACTION_SERIAL_AVAILABLE";
+    public final static String RESPONSE_MANUFACTURER_AVAILABLE = "RESPONSE_MANUFACTURER_AVAILABLE";
+    public final static String RESPONSE_MODEL_AVAILABLE        = "RESPONSE_MODEL_AVAILABLE";
+    public final static String RESPONSE_FIRMWARE_AVAILABLE     = "RESPONSE_FIRMWARE_AVAILABLE";
+    public final static String RESPONSE_HARDWARE_AVAILABLE     = "RESPONSE_HARDWARE_AVAILABLE";
+    public final static String RESPONSE_SERIAL_AVAILABLE       = "RESPONSE_SERIAL_AVAILABLE";
 
-    public final static String ACTION_HANDLING_AVAILABLE       = "ACTION_HANDLING_AVAILABLE";
-    public final static String ACTION_SURFACE_AVAILABLE        = "ACTION_SURFACE_AVAILABLE";
-    public final static String ACTION_AMBIENT_AVAILABLE        = "ACTION_AMBIENT_AVAILABLE";
+    public final static String RESPONSE_HANDLING_AVAILABLE     = "RESPONSE_HANDLING_AVAILABLE";
+    public final static String RESPONSE_SURFACE_AVAILABLE      = "RESPONSE_SURFACE_AVAILABLE";
+    public final static String RESPONSE_AMBIENT_AVAILABLE      = "RESPONSE_AMBIENT_AVAILABLE";
 
     // Broadcast Data Types
-    public final static String EXTRA_DATA = "EXTRA_DATA";
-    public final static String INT_DATA = "INT_DATA";
-    public final static String STRING_DATA = "STRING_DATA";
-    public final static String FLOAT_DATA = "FLOAT_DATA";
-    public final static String BYTE_DATA  = "BYTE_DATA";
+    public final static String EXTRA_DATA     = "EXTRA_DATA";
+    public final static String INT_DATA       = "INT_DATA";
+    public final static String STRING_DATA    = "STRING_DATA";
+    public final static String FLOAT_DATA     = "FLOAT_DATA";
+    public final static String BYTE_DATA      = "BYTE_DATA";
+
     public final static String PRESSURE_DATA  = "PRESSURE_DATA";
     public final static String HUMIDITY_DATA  = "HUMIDITY_DATA";
     public final static String AMBIENT_DATA   = "AMBIENT_DATA";
     public final static String FACEUP_DATA    = "FACEUP_DATA";
-    public final static String FORCES_DATA    = "FORCES_DATA_DATA";
+    public final static String FORCES_DATA    = "FORCES_DATA";
+    public final static String SURFACE_DATA   = "SURFACE_DATA";
 
     public final static String ACTION_DISCONNECT       = "ACTION_DISCONNECT";
     // Broadcast Requests
     public final static String ACTION_LED_INCOMING     = "ACTION_LED_INCOMING";
     public final static String ACTION_SET_INTERVAL     = "ACTION_SET_INTERVAL";
-    public final static String ACTION_SET_INTERVAL_OK  = "ACTION_SET_INTERVAL_OK";
+    public final static String RESPONSE_SET_INTERVAL   = "RESPONSE_SET_INTERVAL";
     public final static String ACTION_READ_RSSI        = "ACTION_READ_RSSI";
     public final static String ACTION_BATTERY_LEVEL    = "ACTION_BATTERY_LEVEL";
     public final static String ACTION_BATTERY_STATE    = "ACTION_BATTERY_STATE";
@@ -61,30 +63,29 @@ public class Actions {
 
     // Broadcast Notification Requests
     public final static String ACTION_SET_NOTIFICATION = "ACTION_SET_NOTIFICATION";
-    public final static String ACTION_NOTIFY_SUCCESS   = "ACTION_NOTIFY_SUCCESS";
-    public final static String ACTION_NOTIFY_DONE      = "ACTION_NOTIFY_DONE";
+    public final static String RESPONSE_NOTIFY_SUCCESS = "RESPONSE_NOTIFY_SUCCESS";
+    public final static String RESPONSE_NOTIFY_DONE    = "RESPONSE_NOTIFY_DONE";
 
     public final static String ACTION_SET_UTC_TIME     = "ACTION_SET_UTC_TIME";
-    public final static String ACTION_SET_UTC_SUCCESS  = "ACTION_SET_UTC_SUCCESS ";
+    public final static String RESPONSE_SET_UTC        = "RESPONSE_SET_UTC_SUCCESS ";
 
-    public final static String ACTION_OPEN_STICKER       = "ACTION_OPEN_STICKER";
-    public final static String ACTION_CLOSE_STICKER      = "ACTION_CLOSE_STICKER";
-    public final static String ACTION_READ_OPEN_STICKER  = "ACTION_READ_OPEN_STICKER";
-    public final static String ACTION_READ_CLOSE_STICKER = "ACTION_READ_CLOSE_STICKER";
+    public final static String ACTION_CHECK_STICKER_STATUS = "CHECK_STICKER_STATUS";
+    public final static String ACTION_CHECK_STICKER_CLOSED = "CHECK_STICKER_CLOSED";
+    public final static String ACTION_OPEN_STICKER         = "ACTION_OPEN_STICKER";
+    public final static String ACTION_CLOSE_STICKER        = "ACTION_CLOSE_STICKER";
 
-    public final static String ACTION_STICKER_OPENED     = "ACTION_STICKER_OPENED";
-    public final static String ACTION_STICKER_NOT_OPENED = "ACTION_STICKER_NOT_OPENED";
-    public final static String ACTION_STICKER_CLOSED     = "ACTION_STICKER_CLOSED";
-    public final static String ACTION_STICKER_READ       = "ACTION_STICKER_READ";
+    public final static String RESPONSE_STICKER_NEW        = "RESPONSE_STICKER_NEW";
+    public final static String RESPONSE_STICKER_OPENED     = "RESPONSE_STICKER_OPENED";
+    public final static String RESPONSE_STICKER_CLOSED     = "RESPONSE_STICKER_CLOSED";
 
     public final static String ACTION_MEASUREMENT_INTERVAL_15 = "ACTION_MEASUREMENT_INTERVAL_15";
     public final static String ACTION_MEASUREMENT_INTERVAL_60 = "ACTION_MEASUREMENT_INTERVAL_60";
-    public final static String ACTION_RECORDS_INTERVAL_15 = "ACTION_RECORDS_INTERVAL_15";
-    public final static String ACTION_RECORDS_INTERVAL_60 = "ACTION_RECORDS_INTERVAL_60";
-    public final static String ACTION_HANDLING_NONE       = "ACTION_HANDLING_NONE";
-    public final static String ACTION_HANDLING_CAREFUL    = "ACTION_HANDLING_CAREFUL";
-    public final static String ACTION_HANDLING_FRAGILE    = "ACTION_HANDLING_FRAGILE";
-    public final static String ACTION_ORIENTATION_FLAT    = "ACTION_HANDLING_FLAT";
-    public final static String ACTION_ORIENTATION_UPRIGHT = "ACTION_HANDLING_UPRIGHT";
+    public final static String ACTION_RECORDS_INTERVAL_15   = "ACTION_RECORDS_INTERVAL_15";
+    public final static String ACTION_RECORDS_INTERVAL_60   = "ACTION_RECORDS_INTERVAL_60";
+    public final static String ACTION_HANDLING_NONE         = "ACTION_HANDLING_NONE";
+    public final static String ACTION_HANDLING_CAREFUL      = "ACTION_HANDLING_CAREFUL";
+    public final static String ACTION_HANDLING_FRAGILE      = "ACTION_HANDLING_FRAGILE";
+    public final static String ACTION_ORIENTATION_FLAT      = "ACTION_HANDLING_FLAT";
+    public final static String ACTION_ORIENTATION_UPRIGHT   = "ACTION_HANDLING_UPRIGHT";
 
 };
