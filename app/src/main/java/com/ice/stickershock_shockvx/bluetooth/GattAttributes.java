@@ -6,7 +6,7 @@ import java.util.HashMap;
 /**
  * This class includes the GATT attributes for Stickershock Shock VX.
  */
-public class GattAttributes {
+public class   GattAttributes {
     private static HashMap<String, String> attributes = new HashMap();
     // Standard bluetooth services
     public static final String GENERIC_ACCESS_SERVICE       = "00001800-0000-1000-8000-00805f9b34fb";

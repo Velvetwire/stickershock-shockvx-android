@@ -99,10 +99,10 @@ public class TabbedActivity extends AppCompatActivity {
                     if ( mStickerState == STICKER_NEW )
                        return TrackAssetFragment.newInstance("");
                     if ( mStickerState == STICKER_OPEN )
-                        return AcceptAssetFragment.newInstance("");
+                        return AcceptAssetFragment.newInstance( mDeviceUnit );
                 }
                 case 1: {
-                    return TelemetryFragment.newInstance("");
+                    return TelemetryFragment.newInstance( mDeviceUnit );
                 }
                 case 2: {
                     return SettingsFragment.newInstance("t 3");

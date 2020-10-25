@@ -359,7 +359,7 @@ public class SettingsFragment extends Fragment {
          if ( RESPONSE_RSSI_DATA.equals(action) ) {
                 int rssiData = intent.getIntExtra( INT_DATA,0);
 //                mRssi.setText(String.valueOf(rssiData + " dB"));
-                readBattery();
+ //               readBattery();
             }
 
         }

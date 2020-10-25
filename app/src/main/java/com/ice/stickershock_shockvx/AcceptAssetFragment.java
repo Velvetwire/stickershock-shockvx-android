@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 
 public class AcceptAssetFragment extends Fragment {
+    private static String stickerId;
     Button mAcceptButton;
     EditText mName, mLocation;
     TextView mStickerId;
@@ -42,6 +43,7 @@ public class AcceptAssetFragment extends Fragment {
         mLocation    = (EditText) v.findViewById(R.id.assetLocation);
         mStickerId   = (TextView) v.findViewById(R.id.stickerid);
 
+        mStickerId.setText (stickerId);
 
         mAcceptButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -72,8 +74,8 @@ public class AcceptAssetFragment extends Fragment {
 
         AcceptAssetFragment f = new AcceptAssetFragment();
         Bundle b = new Bundle();
-        b.putString("msg", text);
-
+        b.putString("DeviceId", text);
+        stickerId = text;
         f.setArguments(b);
 
         return f;

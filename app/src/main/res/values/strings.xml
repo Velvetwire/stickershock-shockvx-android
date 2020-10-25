@@ -76,6 +76,7 @@
 
     <string name="minus"> - </string>
     <string name="plus"> + </string>
+    <string name="_64_db">-64 dB</string>
 
     <!--
     <string name="ACTION_GATT_CONNECTED">ACTION_GATT_CONNECTED</string>

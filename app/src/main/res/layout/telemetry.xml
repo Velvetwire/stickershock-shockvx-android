@@ -9,14 +9,24 @@
         android:layout_width="1dp"
         android:layout_height="30dp"/>
     <TextView
+        android:id="@+id/stickerid"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#914FBF"
+        android:gravity="center"
+        android:paddingLeft="15dp"
+        android:textSize="20sp"
+        android:textColor="#ffffff" />
+    <TextView
         android:id="@+id/environment"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#dddddd"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:text="Environment" />
+
     <Space
         android:layout_width="1dp"
         android:layout_height="30dp"/>
@@ -264,7 +274,7 @@
         android:background="#dddddd"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:text="Handling" />
     <Space
         android:layout_width="1dp"

@@ -30,6 +30,7 @@ import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 import static com.ice.stickershock_shockvx.Constants.*;
 
 public class TelemetryFragment extends Fragment {
+    private static String stickerId;
     TextView mSurfTemp;
     TextView mAirTemp;
     TextView mHumidity;
@@ -38,6 +39,7 @@ public class TelemetryFragment extends Fragment {
     TextView mForces;
     TextView mBattery;
     TextView mRssiValue;
+    TextView mStickerId;
 
 
 
@@ -59,7 +61,8 @@ public class TelemetryFragment extends Fragment {
         mForces    = v.findViewById(R.id.forcesValue );
         mBattery   = v.findViewById(R.id.battery );
         mRssiValue = v.findViewById(R.id.rssi );
-
+        mStickerId = v.findViewById(R.id.stickerid );
+        mStickerId.setText ( stickerId );
     //    readRssi();
         return v;
     }
@@ -83,8 +86,8 @@ public class TelemetryFragment extends Fragment {
 
         TelemetryFragment f = new TelemetryFragment();
         Bundle b = new Bundle();
-        b.putString("msg", text);
-
+        b.putString("DeviceId", text);
+        stickerId = text;
         f.setArguments(b);
 
         return f;
@@ -131,17 +134,17 @@ public class TelemetryFragment extends Fragment {
                 mForces.setText( forcesValue );
             }
 
-            if ( RESPONSE_BATTERY_LEVEL.equals(action)) {
+ //           if ( RESPONSE_BATTERY_LEVEL.equals(action)) {
 
-                int intData = intent.getIntExtra( INT_DATA, 0);
+//                int intData = intent.getIntExtra( INT_DATA, 0);
     //            mBattery.setText(String.valueOf(intData + "%"));
-            }
+//            }
             if ( RESPONSE_RSSI_DATA.equals(action)) {
 
                 int rssiData = intent.getIntExtra( INT_DATA,0);
                 Log.d("RECVD", "RSSI " + rssiData);
        //         mRssiValue.setText(String.valueOf(rssiData + " dB"));
-                readBattery();
+//                readBattery();
             }
         }
     };

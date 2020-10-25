@@ -144,6 +144,8 @@ public class BluetoothLeService extends Service {
         }
     };
 
+
+
 // -------------------------------------------------------
 // receives broadcast messages and performs appropriate action
 
@@ -175,31 +177,31 @@ public class BluetoothLeService extends Service {
                     break;
 
                 case ACTION_BATTERY_LEVEL:
-                    getCharacteristicValue ( BATTERY_SERVICE, BATTERY_LEVEL );
+                    getCharacteristicReadValue ( BATTERY_SERVICE, BATTERY_LEVEL );
                     break;
 
                 case ACTION_BATTERY_STATE:
-                    getCharacteristicValue ( BATTERY_SERVICE, BATTERY_STATE );
+                    getCharacteristicReadValue ( BATTERY_SERVICE, BATTERY_STATE );
                     break;
 
                 case ACTION_GET_MANUFACTURER:
-                    getCharacteristicValue ( DEVICE_INFORMATION_SERVICE, MANUFACTURER_NAME );
+                    getCharacteristicReadValue ( DEVICE_INFORMATION_SERVICE, MANUFACTURER_NAME );
                     break;
 
                 case ACTION_GET_MODEL:
-                    getCharacteristicValue ( DEVICE_INFORMATION_SERVICE, MODEL_NUMBER );
+                    getCharacteristicReadValue ( DEVICE_INFORMATION_SERVICE, MODEL_NUMBER );
                     break;
 
                 case ACTION_GET_FIRMWARE:
-                    getCharacteristicValue ( DEVICE_INFORMATION_SERVICE, FIRMWARE );
+                    getCharacteristicReadValue ( DEVICE_INFORMATION_SERVICE, FIRMWARE );
                     break;
 
                 case ACTION_GET_HARDWARE_REV:
-                    getCharacteristicValue ( DEVICE_INFORMATION_SERVICE, HARDWARE_REV );
+                    getCharacteristicReadValue ( DEVICE_INFORMATION_SERVICE, HARDWARE_REV );
                     break;
 
                 case ACTION_GET_SERIAL:
-                    getCharacteristicValue ( DEVICE_INFORMATION_SERVICE, SERIAL_NUMBER );
+                    getCharacteristicReadValue ( DEVICE_INFORMATION_SERVICE, SERIAL_NUMBER );
                     break;
 
                 case ACTION_SET_NOTIFICATION:
@@ -250,14 +252,14 @@ public class BluetoothLeService extends Service {
 
     private void broadcastCharacteristicWrite ( BluetoothGattCharacteristic characteristic, int status ) {
         Log.d(TAG, " CALLBACK WRITE " + characteristic.getUuid().toString());
-        if (status == BluetoothGatt.GATT_SUCCESS) {
-            if (characteristic.getUuid().toString().equals ( SENSOR_CONTROL_OPEN )) {
+        if ( status == BluetoothGatt.GATT_SUCCESS ) {
+            if ( characteristic.getUuid().toString().equals ( SENSOR_CONTROL_OPEN )) {
                 broadcastUpdate( RESPONSE_STICKER_OPENED );
             }
-            if (characteristic.getUuid().toString().equals ( SENSOR_TELEMETRY_INTERVAL  )) {
+            if ( characteristic.getUuid().toString().equals ( SENSOR_TELEMETRY_INTERVAL  )) {
                 broadcastUpdate( RESPONSE_SET_INTERVAL);
             }
-            if (characteristic.getUuid().toString().equals ( SENSOR_ACCESS_TIME  )) {
+            if ( characteristic.getUuid().toString().equals ( SENSOR_ACCESS_TIME  )) {
                 broadcastUpdate( RESPONSE_SET_UTC );
             }
         }
@@ -285,7 +287,7 @@ public class BluetoothLeService extends Service {
          case SENSOR_SURFACE_VALUE:     // 53744d76
             intent.setAction( RESPONSE_SURFACE_AVAILABLE );
             outData = buffer.getFloat();
-            intent.putExtra( FLOAT_DATA, outData );
+            intent.putExtra( SURFACE_DATA, outData );
             break;
 
          case SENSOR_ATMOSPHERE_VALUE:        //  41740000
@@ -704,7 +706,7 @@ public class BluetoothLeService extends Service {
 
 
 
-    public void getCharacteristicValue ( String service, String characteristic) {
+    public void getCharacteristicReadValue ( String service, String characteristic) {
         BluetoothGattService mService = mBluetoothGatt.getService(UUID.fromString( service ));
         BluetoothGattCharacteristic mIdentifyChar = mService.getCharacteristic(UUID.fromString( characteristic ));
         readCharacteristic(mIdentifyChar);
