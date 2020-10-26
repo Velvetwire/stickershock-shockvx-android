@@ -134,11 +134,11 @@ public class TelemetryFragment extends Fragment {
                 mForces.setText( forcesValue );
             }
 
- //           if ( RESPONSE_BATTERY_LEVEL.equals(action)) {
+ //          if ( RESPONSE_BATTERY_LEVEL.equals(action)) {
 
-//                int intData = intent.getIntExtra( INT_DATA, 0);
-    //            mBattery.setText(String.valueOf(intData + "%"));
-//            }
+ //               int intData = intent.getIntExtra( INT_DATA, 0);
+ //               mBattery.setText(String.valueOf(intData + "%"));
+ //           }
             if ( RESPONSE_RSSI_DATA.equals(action)) {
 
                 int rssiData = intent.getIntExtra( INT_DATA,0);

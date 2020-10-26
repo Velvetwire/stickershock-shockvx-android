@@ -13,7 +13,6 @@
 //=============================================================================
 package com.ice.stickershock_shockvx;
 
-
 import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -104,8 +103,6 @@ public class MainAssetScreen extends ListActivity {
 
     // Set up scan filter for only detecting our beacons
 
-
-
     // now we can set up scan filter anyway we want, these values are just sample code
     private void setScanFilter() {
         ScanFilter.Builder mBuilder = new ScanFilter.Builder();
@@ -131,6 +128,7 @@ public class MainAssetScreen extends ListActivity {
 
             mySticker.address = result.getDevice().getAddress();
             mySticker.rssi = result.getRssi();
+            mySticker.name = mySticker.address;
 
             byte[] standardData = mScanRecord.getServiceData( ParcelUuid.fromString( ASSET_BROADCAST_STANDARD ) );
             byte[] extendedData = mScanRecord.getServiceData( ParcelUuid.fromString( ASSET_BROADCAST_EXTENDED ) );
@@ -178,25 +176,25 @@ public class MainAssetScreen extends ListActivity {
 
         for ( byte [] byteArray : adverts) {
             byte packetType = byteArray[1];
-            Log.d("BYTEARRAY", "TYPE " + packetType);
+  //          Log.d("BYTEARRAY", "TYPE " + packetType);
             if ( packetType == BROADCAST_TYPE_IDENTITY ) {
                 mySticker.batteryLevel = byteArray[15];
             }
             if ( packetType == BROADCAST_TYPE_TEMPERATURE ) {
-                mySticker.surface = (((byteArray[3] & 0xff) << 8) | byteArray[2] & 0xff);
+                mySticker.surface        = (((byteArray[3] & 0xff) << 8) | byteArray[2] & 0xff);
                 mySticker.surfaceAlarmLo = (((byteArray[5] & 0xff) << 8) | byteArray[4] & 0xff);
                 mySticker.surfaceAlarmHi = (((byteArray[7] & 0xff) << 8) | byteArray[6] & 0xff);
             }
             if ( packetType == BROADCAST_TYPE_ATMOSPHERE ) {
-                mySticker.ambient = (((byteArray[3] & 0xff) << 8) | byteArray[2] & 0xff);
+                mySticker.ambient        = (((byteArray[3] & 0xff) << 8) | byteArray[2] & 0xff);
                 mySticker.ambientAlarmLo = (((byteArray[5] & 0xff) << 8) | byteArray[4] & 0xff);
                 mySticker.ambientAlarmHi = (((byteArray[7] & 0xff) << 8) | byteArray[6] & 0xff);
 
-                mySticker.humidity = (((byteArray[9] & 0xff) << 8) | byteArray[2] & 0xff);
+                mySticker.humidity        = (((byteArray[9] & 0xff) << 8) | byteArray[2] & 0xff);
                 mySticker.humidityAlarmLo = (((byteArray[11] & 0xff) << 8) | byteArray[10] & 0xff);
                 mySticker.humidityAlarmHi = (((byteArray[13] & 0xff) << 8) | byteArray[12] & 0xff);
 
-                mySticker.pressure = (((byteArray[15] & 0xff) << 8) | byteArray[14] & 0xff);
+                mySticker.pressure        = (((byteArray[15] & 0xff) << 8) | byteArray[14] & 0xff);
                 mySticker.pressureAlarmLo = (((byteArray[17] & 0xff) << 8) | byteArray[16] & 0xff);
                 mySticker.pressureAlarmHi = (((byteArray[19] & 0xff) << 8) | byteArray[18] & 0xff);
 

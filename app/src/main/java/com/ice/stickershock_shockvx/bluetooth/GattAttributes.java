@@ -12,7 +12,7 @@ public class   GattAttributes {
     public static final String GENERIC_ACCESS_SERVICE       = "00001800-0000-1000-8000-00805f9b34fb";
     public static final String GENERIC_ATTRIBUTE_SERVICE    = "00001801-0000-1000-8000-00805f9b34fb";
     public static final String DEVICE_INFORMATION_SERVICE   = "0000180a-0000-1000-8000-00805f9b34fb";
-    public static final String BATTERY_SERVICE              = "0000180f-0000-1000-8000-00805f9b34fb";
+    public static final String DEVICE_BATTERY_SERVICE              = "0000180f-0000-1000-8000-00805f9b34fb";
     public static final String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
 
     // ShockVX services
@@ -63,9 +63,9 @@ public class   GattAttributes {
 
     // Records Service
    public static final String SENSOR_RECORDS_SERVICE       = "54720000-5657-5353-2020-56454c564554";
- //   public static final String SENSOR_RECORDS_INTERVAL      = "54725269-5657-5353-2020-56454C564554";
- //   public static final String SENSOR_RECORDS_CURSOR        = "54725263-5657-5353-2020-56454C564554";
- //   public static final String SENSOR_RECORDS_DATA          = "54725264-5657-5353-2020-56454C564554";
+   public static final String SENSOR_RECORDS_INTERVAL      = "54725269-5657-5353-2020-56454c564554";
+ //   public static final String SENSOR_RECORDS_CURSOR        = "54725263-5657-5353-2020-56454c564554";
+ //   public static final String SENSOR_RECORDS_DATA          = "54725264-5657-5353-2020-56454c564554";
 
     public static final String DEVICE_NAME                  = "00002a00-0000-1000-8000-00805f9b34fb";
     public static final String MODEL_NUMBER                 = "00002a24-0000-1000-8000-00805f9b34fb";
@@ -74,8 +74,8 @@ public class   GattAttributes {
     public static final String HARDWARE_REV                 = "00002a27-0000-1000-8000-00805f9b34fb";
     public static final String MANUFACTURER_NAME            = "00002a29-0000-1000-8000-00805f9b34fb";
 
-    public static final String BATTERY_LEVEL                = "00002a19-0000-1000-8000-00805f9b34fb";
-    public static final String BATTERY_STATE                = "00002a1a-0000-1000-8000-00805f9b34fb";
+    public static final String DEVICE_BATTERY_LEVEL         = "00002a19-0000-1000-8000-00805f9b34fb";
+    public static final String DEVICE_BATTERY_STATE                = "00002a1a-0000-1000-8000-00805f9b34fb";
 
 
     // Sensor access commands
@@ -102,7 +102,7 @@ public class   GattAttributes {
         attributes.put( GENERIC_ACCESS_SERVICE,     "Generic Access");
         attributes.put( GENERIC_ATTRIBUTE_SERVICE, "Generic Attribute");
         attributes.put( DEVICE_INFORMATION_SERVICE, "Device Information Service");
-        attributes.put( BATTERY_SERVICE, "Battery Service");
+        attributes.put( DEVICE_BATTERY_SERVICE, "Battery Service");
 
 
         // Standard Characteristics.
@@ -118,8 +118,8 @@ public class   GattAttributes {
         attributes.put(MANUFACTURER_NAME, "Manufacturer Name");
         attributes.put(FIRMWARE, "Firmware");
 
-        attributes.put(BATTERY_LEVEL, "Battery Level");
-        attributes.put(BATTERY_STATE, "Battery State");
+        attributes.put( DEVICE_BATTERY_LEVEL, "Battery Level");
+        attributes.put( DEVICE_BATTERY_STATE, "Battery State");
 
         // Stickershock Services
         attributes.put(SENSOR_ACCESS_SERVICE,    "Sensor Access Service");

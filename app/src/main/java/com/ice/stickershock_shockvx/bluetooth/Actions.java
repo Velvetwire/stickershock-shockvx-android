@@ -38,6 +38,8 @@ public class Actions {
     public final static String STRING_DATA    = "STRING_DATA";
     public final static String FLOAT_DATA     = "FLOAT_DATA";
     public final static String BYTE_DATA      = "BYTE_DATA";
+    public final static String ALARM_DATA     = "ALARM_DATA";
+
 
     public final static String PRESSURE_DATA  = "PRESSURE_DATA";
     public final static String HUMIDITY_DATA  = "HUMIDITY_DATA";
@@ -78,6 +80,7 @@ public class Actions {
     public final static String RESPONSE_STICKER_OPENED     = "RESPONSE_STICKER_OPENED";
     public final static String RESPONSE_STICKER_CLOSED     = "RESPONSE_STICKER_CLOSED";
 
+    // Settings actions
     public final static String ACTION_MEASUREMENT_INTERVAL_15 = "ACTION_MEASUREMENT_INTERVAL_15";
     public final static String ACTION_MEASUREMENT_INTERVAL_60 = "ACTION_MEASUREMENT_INTERVAL_60";
     public final static String ACTION_RECORDS_INTERVAL_15   = "ACTION_RECORDS_INTERVAL_15";
@@ -87,5 +90,9 @@ public class Actions {
     public final static String ACTION_HANDLING_FRAGILE      = "ACTION_HANDLING_FRAGILE";
     public final static String ACTION_ORIENTATION_FLAT      = "ACTION_HANDLING_FLAT";
     public final static String ACTION_ORIENTATION_UPRIGHT   = "ACTION_HANDLING_UPRIGHT";
-
+    public final static String ACTION_SET_ANGLE_ALARM       = "ACTION_SET_ANGLE_ALARM";
+    public final static String ACTION_SET_AMBIENT_LOWER     = "ACTION_SET_AMBIENT_LOWER";
+    public final static String ACTION_SET_AMBIENT_UPPER     = "ACTION_SET_AMBIENT_UPPER";
+    public final static String ACTION_SET_SURFACE_LOWER     = "ACTION_SET_SURFACE_LOWER";
+    public final static String ACTION_SET_SURFACE_UPPER     = "ACTION_SET_SURFACE_UPPER";
 };

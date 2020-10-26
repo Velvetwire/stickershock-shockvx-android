@@ -248,9 +248,9 @@ public class         BluetoothScanActivity extends ListActivity {
             if (view == null) {
                 view = mInflator.inflate(R.layout.listitem_device, null);
                 viewHolder = new ViewHolder();
-                //viewHolder.deviceAddress = view.findViewById(R.id.device_address);
-                viewHolder.deviceName    = view.findViewById(R.id.device_name);
-                viewHolder.deviceUnit    = view.findViewById(R.id.device_unit);
+                //viewHolder.deviceAddress = view.findViewById( R.id.device_address );
+                viewHolder.deviceName    = view.findViewById( R.id.device_name );
+                viewHolder.deviceUnit    = view.findViewById( R.id.device_unit );
                 //viewHolder.deviceControl = view.findViewById(R.id.device_control);
                 view.setTag(viewHolder);
 
@@ -264,9 +264,9 @@ public class         BluetoothScanActivity extends ListActivity {
             // Device name is not always found
             final String deviceName = device.getName();
             if (deviceName != null && deviceName.length() > 0)
-                viewHolder.deviceName.setText(deviceName);
+                viewHolder.deviceName.setText( deviceName );
             else
-                viewHolder.deviceName.setText("Stickershock");
+                viewHolder.deviceName.setText( "Stickershock" );
 
             //viewHolder.deviceAddress.setText(device.getAddress());
             viewHolder.deviceUnit.setText(mUnit);
@@ -290,7 +290,7 @@ public class         BluetoothScanActivity extends ListActivity {
                 List<ParcelUuid> uuidList = result.getScanRecord().getServiceUuids();
                 for (int i = 0; i < uuidList.size(); i++ )  {
                    String uuid = uuidList.get(i).toString();
-                   Log.d("UUID", uuid + " : " + SENSOR_CONTROL_SERVICE);
+                   Log.d("UUID", uuid + " : " + SENSOR_CONTROL_SERVICE );
 
                    if (uuid.equals( SENSOR_CONTROL_SERVICE) == true) {
                        mLeDeviceListAdapter.addDevice(result.getDevice());
@@ -348,14 +348,14 @@ public class         BluetoothScanActivity extends ListActivity {
 
     // set scan filters, look only for stickers
     UUID SENSOR_CONTROL_SERVICE_UUID = UUID.fromString( SENSOR_CONTROL_SERVICE );
-    UUID[] serviceUUIDs = new UUID[] { SENSOR_CONTROL_SERVICE_UUID};
+    UUID[] serviceUUIDs = new UUID[] { SENSOR_CONTROL_SERVICE_UUID };
     private void setScanFilter() {
         ScanFilter mScanFilter;
         ScanFilter.Builder mBuilder = new ScanFilter.Builder();
 
 //          mBuilder.setServiceData ( mServiceData.array(), mServiceDataMask.array() );
 //          mBuilder.setServiceSolicitationUuid ( ParcelUUID(uuid) );
-        Log.d("ScanFilter", mControl);
+        Log.d("ScanFilter", mControl );
 
         // get UUID filter from NFC tag.
 //          mBuilder.setServiceUuid (new ParcelUuid( UUID.fromString(mControl)) );

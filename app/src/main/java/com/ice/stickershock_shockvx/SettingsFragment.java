@@ -111,13 +111,13 @@ public class SettingsFragment extends Fragment {
 // -----------------------------------------------------------------------
         mMeas15Button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                setInterval ( 15.0f );
+                transmitBroadcast( ACTION_MEASUREMENT_INTERVAL_15 );
             }
         });
 
         mMeas60Button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                setInterval ( 60.0f );
+                transmitBroadcast( ACTION_MEASUREMENT_INTERVAL_60 );
             }
         });
 
@@ -148,29 +148,24 @@ public class SettingsFragment extends Fragment {
         //   Surface Temp Alarm
         mSurfMinMinusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                setInterval( 15 );
+                // subtract 5 degrees from min alarm and set
             }
         });
 
         mSurfMinPlusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                SensorState.captureRate = 15;
-          //      getCaptureRatio();
-           //     mCapture1m.setChecked(false);
-           //     mCapture5m.setChecked(false);
+                // add 5 degrees to min alarm and set
             }
         });
         mSurfMaxMinusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                SensorState.captureRate = 60;
-
+                // subtract 5 degrees from max alarm and set
             }
         });
+
         mSurfMaxPlusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                SensorState.captureRate = 300;
-                getCaptureRatio();
-
+                // add 5 degrees to max alarm and set
             }
         });
 
@@ -191,29 +186,24 @@ public class SettingsFragment extends Fragment {
         //   Ambient Temp Alarm
         mAmbientMinMinusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                setInterval( 15 );
+                // subtract 5 degrees from min alarm and set
             }
         });
 
         mAmbientMinPlusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                SensorState.captureRate = 15;
-                //      getCaptureRatio();
-                //     mCapture1m.setChecked(false);
-                //     mCapture5m.setChecked(false);
+                // add 5 degrees to min alarm and set
             }
         });
         mAmbientMaxMinusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                SensorState.captureRate = 60;
+                // subtract 5 degrees from max alarm and set
 
             }
         });
         mAmbientMaxPlusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                SensorState.captureRate = 300;
-                getCaptureRatio();
-
+                // add 5 degrees to max alarm and set
             }
         });
 
@@ -260,36 +250,14 @@ public class SettingsFragment extends Fragment {
 
         mAngleMin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // set measurement button to ic
-                //    mMeas60Button.setChecked(false);
+                // subtract 5 degrees from angle alarm and set
             }
         });
         mAngleMax.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // set measurement button to ic
-                //      mMeas15Button.setChecked(false);
+                // add 5 degrees to angle alarm and set
             }
         });
-/*
-//        mIndicate.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                requestLed();
-//            }
-//        });
-
-        mName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String text = v.getText().toString();
-                    SensorState.currentSticker.name = text;
-                    return true;
-                }
-                return false;
-            }
-        });
-*/
-//        readRssi();
 
         return v;
     }

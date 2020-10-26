@@ -23,6 +23,8 @@ public class AcceptAssetFragment extends Fragment {
     Button mAcceptButton;
     EditText mName, mLocation;
     TextView mStickerId;
+    TextView mRssi;
+    TextView mBattery;
     // constants
 
 
@@ -35,15 +37,18 @@ public class AcceptAssetFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.accept_asset, container, false);
+        View v = inflater.inflate( R.layout.accept_asset, container, false );
         super.onCreate(savedInstanceState);
 
-        mAcceptButton = (Button)   v.findViewById(R.id.acceptButton);
-        mName        = (EditText) v.findViewById(R.id.assetName);
-        mLocation    = (EditText) v.findViewById(R.id.assetLocation);
-        mStickerId   = (TextView) v.findViewById(R.id.stickerid);
+        mAcceptButton = (Button)   v.findViewById( R.id.acceptButton );
+        mName         = (EditText) v.findViewById( R.id.assetName );
+        mLocation     = (EditText) v.findViewById( R.id.assetLocation );
+        mStickerId    = (TextView) v.findViewById( R.id.stickerid );
+        mRssi         = (TextView) v.findViewById( R.id.rssi );
+        mBattery      = (TextView) v.findViewById( R.id.batteryLevel );
 
         mStickerId.setText (stickerId);
+        readRssi();
 
         mAcceptButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -61,16 +66,16 @@ public class AcceptAssetFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        requireActivity().registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        requireActivity().registerReceiver( mGattUpdateReceiver, makeGattUpdateIntentFilter() );
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        requireActivity().unregisterReceiver(mGattUpdateReceiver);
+        requireActivity().unregisterReceiver( mGattUpdateReceiver );
     }
 
-    public static AcceptAssetFragment newInstance(String text) {
+    public static AcceptAssetFragment newInstance( String text ) {
 
         AcceptAssetFragment f = new AcceptAssetFragment();
         Bundle b = new Bundle();
@@ -98,6 +103,15 @@ public class AcceptAssetFragment extends Fragment {
         getActivity().sendBroadcast(intent);
     }
 
+    public void readRssi() {
+        final Intent intent = new Intent( ACTION_READ_RSSI );
+        getActivity().sendBroadcast(intent);
+    }
+
+    public void readBattery() {
+        final Intent intent = new Intent( ACTION_BATTERY_LEVEL  );
+        getActivity().sendBroadcast(intent);
+    }
 
 
 
@@ -109,13 +123,27 @@ public class AcceptAssetFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
 
-            if ( RESPONSE_STICKER_CLOSED.equals(action)) {
-                Log.d("TRACK", "STICKER CLOSED");
+            switch (action) {
+            case RESPONSE_STICKER_CLOSED:
+                Log.d("TRACK", "STICKER CLOSED" );
              //   disconnectSticker();
-            }
-            if ( ACTION_GATT_DISCONNECTED.equals(action)) {
+                break;
+            case ACTION_GATT_DISCONNECTED:
                 Intent i = new Intent(getActivity(), MainAssetScreen.class);
                 startActivity ( i );
+                break;
+            case RESPONSE_BATTERY_LEVEL:
+                int intData = intent.getIntExtra( INT_DATA, 0);
+                mBattery.setText(String.valueOf(intData + "%"));
+                break;
+            case RESPONSE_RSSI_DATA:
+                int rssiData = intent.getIntExtra( INT_DATA,0);
+                Log.d("RECVD", "RSSI " + rssiData);
+                mRssi.setText(String.valueOf(rssiData + " dB"));
+                readBattery();
+                break;
+            default:
+                break;
             }
         }
     };
@@ -125,7 +153,8 @@ public class AcceptAssetFragment extends Fragment {
 
         intentFilter.addAction( RESPONSE_STICKER_CLOSED );
         intentFilter.addAction( ACTION_GATT_DISCONNECTED );
-
+        intentFilter.addAction( RESPONSE_BATTERY_LEVEL );
+        intentFilter.addAction( RESPONSE_RSSI_DATA );
         return intentFilter;
     }
 }

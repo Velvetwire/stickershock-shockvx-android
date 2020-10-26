@@ -9,9 +9,7 @@ import com.ice.stickershock_shockvx.advertisement.StandardAD;
 public class Sticker {
     public String     name;
     public String     address;
-    public String     annotation;
-    public StandardAD telemetry;
-    public IdentityAD identity;
+    public String     location;
 
     public int    batteryLevel;
     public String batteryState;

@@ -38,4 +38,6 @@ public class Constants {
     public static final String MILLIBAR = " mB";
     public static final String BAR      = " bar";
 
+    public static final float SECONDS_15    = 15.0f;
+    public static final float SECONDS_60    = 60.0f;
 };
