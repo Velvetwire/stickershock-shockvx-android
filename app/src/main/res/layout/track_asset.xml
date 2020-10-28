@@ -8,7 +8,22 @@
     android:paddingTop="10dp"
     android:paddingBottom="20dp"
     android:id="@+id/mainLayout">
-
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:foregroundTint="#FAF8F8"
+        android:paddingTop="1dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/assetButton"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="left"
+            android:text="@string/assets" />
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/batteryLayout"
         android:layout_width="fill_parent"
@@ -22,8 +37,8 @@
             android:layout_weight="1"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:gravity="center"
-            android:text="-64 dB"/>
+            android:gravity="left"
+            android:text="Signal -64 dB"/>
         <TextView
             android:id="@+id/batteryLevel"
             android:layout_width="fill_parent"
@@ -31,8 +46,8 @@
             android:layout_weight="1"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:gravity="center"
-            android:text="91%"/>
+            android:gravity="right"
+            android:text="Battery 91%"/>
     </LinearLayout>
 
     <LinearLayout

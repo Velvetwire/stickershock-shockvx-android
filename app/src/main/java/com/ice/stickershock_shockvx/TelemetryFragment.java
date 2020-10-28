@@ -10,7 +10,6 @@
 //=============================================================================
 package com.ice.stickershock_shockvx;
 
-
 import androidx.fragment.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -41,28 +41,38 @@ public class TelemetryFragment extends Fragment {
     TextView mRssiValue;
     TextView mStickerId;
 
-
+    Button   mBackAssets;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.telemetry, container, false);
 
-        mSurfTemp  = v.findViewById(R.id.surfaceValue );
-        mAirTemp   = v.findViewById(R.id.ambientValue );
-        mHumidity  = v.findViewById(R.id.humidityValue );
-        mPressure  = v.findViewById(R.id.pressureValue );
-        mFaceup    = v.findViewById(R.id.faceValue );
-        mForces    = v.findViewById(R.id.forcesValue );
-        mBattery   = v.findViewById(R.id.battery );
-        mRssiValue = v.findViewById(R.id.rssi );
-        mStickerId = v.findViewById(R.id.stickerid );
+        mSurfTemp  = v.findViewById( R.id.surfaceValue );
+        mAirTemp   = v.findViewById( R.id.ambientValue );
+        mHumidity  = v.findViewById( R.id.humidityValue );
+        mPressure  = v.findViewById( R.id.pressureValue );
+        mFaceup    = v.findViewById( R.id.faceValue );
+        mForces    = v.findViewById( R.id.forcesValue );
+        mBattery   = v.findViewById( R.id.batteryLevel );
+        mRssiValue = v.findViewById( R.id.rssi );
+        mStickerId = v.findViewById( R.id.stickerid );
+
         mStickerId.setText ( stickerId );
+
+        // Clear back stack and return to main assets screen
+        mBackAssets = v.findViewById( R.id.assetButton );
+        mBackAssets.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MainAssetScreen.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
     //    readRssi();
         return v;
     }
@@ -79,7 +89,6 @@ public class TelemetryFragment extends Fragment {
         super.onPause();
         requireActivity().unregisterReceiver( mGattUpdateReceiver );
     }
-
 
 
     public static TelemetryFragment newInstance(String text) {
@@ -99,52 +108,53 @@ public class TelemetryFragment extends Fragment {
             final String action = intent.getAction();
 
             if ( RESPONSE_AMBIENT_AVAILABLE.equals(action)) {
-                float fValue = intent.getFloatExtra( PRESSURE_DATA, 0.0f );
-                String value = String.format("%.3f", fValue);
+                float fValue      = intent.getFloatExtra( PRESSURE_DATA, ZERO_FLOAT );
+                String value      = String.format("%.3f", fValue);
                 String pressValue = value + BAR;
                 mPressure.setText( pressValue );
 
-                fValue = intent.getFloatExtra( HUMIDITY_DATA, 0.0f )  * 100.0f;
+                fValue = intent.getFloatExtra( HUMIDITY_DATA, ZERO_FLOAT)  * 100.0f;
                 value = String.format("%.2f", fValue);
-                String humidityValue = value + "%";
+                String humidityValue = value + PERCENT;
                 mHumidity.setText( humidityValue );
 
-                fValue = intent.getFloatExtra( AMBIENT_DATA, 0.0f );
+                fValue = intent.getFloatExtra( AMBIENT_DATA, ZERO_FLOAT );
                 value = String.format("%.2f", fValue);
                 String ambientValue = value + DEGREES_C;
                 mAirTemp.setText( ambientValue );
             }
 
             if ( RESPONSE_SURFACE_AVAILABLE.equals(action)) {
-                float fValue = intent.getFloatExtra( SURFACE_DATA, 0.0f );
+                float fValue = intent.getFloatExtra( SURFACE_DATA, ZERO_FLOAT );
                 String value = String.format("%.2f", fValue);
                 value = value + DEGREES_C;
                 mSurfTemp.setText( value );
             }
 
             if ( RESPONSE_HANDLING_AVAILABLE.equals(action)) {
-                float fValue = intent.getFloatExtra( FACEUP_DATA, 0.0f );
-                String value = String.format("%.2f", fValue);
+                float fValue     = intent.getFloatExtra( FACEUP_DATA, ZERO_FLOAT );
+                String value     = String.format("%.2f", fValue);
                 String faceValue = value + DEGREES;
                 mFaceup.setText( faceValue );
 
-                fValue = intent.getFloatExtra( FORCES_DATA, 0.0f );
+                fValue = intent.getFloatExtra( FORCES_DATA, ZERO_FLOAT );
                 value = String.format("%.2f", fValue);
                 String forcesValue = value + " g";
                 mForces.setText( forcesValue );
+                readRssi();
             }
 
- //          if ( RESPONSE_BATTERY_LEVEL.equals(action)) {
+            if ( RESPONSE_BATTERY_LEVEL.equals(action)) {
 
- //               int intData = intent.getIntExtra( INT_DATA, 0);
- //               mBattery.setText(String.valueOf(intData + "%"));
- //           }
+                int intData = intent.getIntExtra( INT_DATA, 0);
+                mBattery.setText(String.valueOf("Battery " + intData + PERCENT));
+            }
             if ( RESPONSE_RSSI_DATA.equals(action)) {
 
                 int rssiData = intent.getIntExtra( INT_DATA,0);
                 Log.d("RECVD", "RSSI " + rssiData);
-       //         mRssiValue.setText(String.valueOf(rssiData + " dB"));
-//                readBattery();
+                mRssiValue.setText(String.valueOf("Signal " + rssiData + " dB"));
+                readBattery();
             }
         }
     };

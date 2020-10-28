@@ -96,21 +96,5 @@ public class AssetListAdapter extends ArrayAdapter<Sticker> {
 
 
 
-    //
-    int TX1Meter = - 75;
-    float N        = (float) 3.0;
-    public String calculateDistance(int rssi ) {
-           int difference =  TX1Meter - rssi;
-
-           float exponent = (float) ((float)difference / (10.0 * N));
-           Log.d("DiSTANCE", "DIFFERENCE " + difference);
-           Log.d("DiSTANCE", "EXPONENT " + exponent);
-           double dist = Math.pow(10, exponent);
-           double distance = Math.round(dist * 1.0) / 1.0;
-           if (distance < 1.0) {
-               return "<1";
-           }
-           return String.valueOf(distance);
-    }
 
 }

@@ -21,6 +21,7 @@ import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 public class AcceptAssetFragment extends Fragment {
     private static String stickerId;
     Button mAcceptButton;
+    Button mBackAssets;
     EditText mName, mLocation;
     TextView mStickerId;
     TextView mRssi;
@@ -60,6 +61,15 @@ public class AcceptAssetFragment extends Fragment {
                     }
                 }
         );
+
+        mBackAssets = v.findViewById( R.id.assetButton );
+        mBackAssets.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MainAssetScreen.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
         return v;
     }
 

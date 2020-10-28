@@ -26,6 +26,8 @@ import static com.ice.stickershock_shockvx.bluetooth.BluetoothLeService.*;
 
 public class TrackAssetFragment extends Fragment {
     Button mTrackButton;
+    Button mBackAssets;
+
     EditText mName, mLocation;
     TextView mStickerId;
 
@@ -49,7 +51,14 @@ public class TrackAssetFragment extends Fragment {
 
         setInterval ( );
 
-
+        mBackAssets = v.findViewById( R.id.assetButton );
+        mBackAssets.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MainAssetScreen.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
         mTrackButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override

@@ -53,7 +53,7 @@ public class TabbedActivity extends AppCompatActivity {
     // tab titles
 
 
-    private String stickerName = "test";
+    private String stickerName           = "test";
     public static Sticker currentSticker = new Sticker();
 
 
@@ -61,7 +61,7 @@ public class TabbedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         final Intent intent = getIntent();
-        mDeviceUnit    = intent.getStringExtra( EXTRAS_DEVICE_UNIT );
+        mDeviceUnit      = intent.getStringExtra( EXTRAS_DEVICE_UNIT );
         mStickerState    = intent.getIntExtra( EXTRAS_STICKER_STATE, 0 );
         setContentView( R.layout.frag_activity_main );
         viewPager = findViewById( R.id.mypager );
@@ -106,7 +106,6 @@ public class TabbedActivity extends AppCompatActivity {
                 }
                 case 2: {
                     return SettingsFragment.newInstance("t 3");
-
                 }
                 default:
                     return TelemetryFragment.newInstance("");
@@ -131,27 +130,27 @@ public class TabbedActivity extends AppCompatActivity {
             getSupportFragmentManager().popBackStack();
         }
         transmitBroadcast( ACTION_DISCONNECT );
-        Intent intent = new Intent(TabbedActivity.this, MainAssetScreen.class);
-        startActivity(intent);
+        Intent intent = new Intent(TabbedActivity.this, MainAssetScreen.class );
+        startActivity( intent );
         finish();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        registerReceiver( mGattUpdateReceiver, makeGattUpdateIntentFilter() );
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(mGattUpdateReceiver);
+        unregisterReceiver( mGattUpdateReceiver );
     }
 
-    private void transmitBroadcast(final String action) {
-        final Intent intent = new Intent(action);
-        sendBroadcast(intent);
+    private void transmitBroadcast( final String action ) {
+        final Intent intent = new Intent( action );
+        sendBroadcast( intent );
     }
 
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
@@ -200,12 +199,4 @@ public class TabbedActivity extends AppCompatActivity {
 
 
 }
-
-
-
-
-
-
-
-
 

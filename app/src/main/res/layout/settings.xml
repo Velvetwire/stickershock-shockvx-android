@@ -6,7 +6,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
+    <Button
+        android:id="@+id/assetButton"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/assets" />
     <TextView
         android:id="@+id/textView25"
         android:layout_width="fill_parent"
@@ -19,7 +25,6 @@
         android:textStyle="bold"
         android:text="TELEMETRY"
         android:textSize="14sp" />
-
 
 
     <LinearLayout

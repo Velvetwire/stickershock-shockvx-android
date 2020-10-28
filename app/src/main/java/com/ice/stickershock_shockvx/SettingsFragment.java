@@ -26,6 +26,7 @@ import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 
 public class SettingsFragment extends Fragment {
 
+    Button mBackAssets;
     Button mMeas15Button;
     Button mMeas60Button;
     Button mRec15Button;
@@ -62,9 +63,7 @@ public class SettingsFragment extends Fragment {
 
     int mSurfaceAlarmMin = 20;
     int mSurfaceAlarmMax = 20;
-
     int mAmbientAlarmMin = 20;
-
     int mAngle           = 0;
 
     public static Sticker currentSticker = new Sticker();
@@ -106,7 +105,18 @@ public class SettingsFragment extends Fragment {
         mAngleMin  = v.findViewById( R.id.angleminButton );
         mAngleMax  = v.findViewById( R.id.anglemaxButton );
 
-        // Handlers
+
+        mBackAssets = v.findViewById( R.id.assetButton );
+        mBackAssets.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MainAssetScreen.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+
+
+// -----------------------------------------------------------------------
 //      MEASUREMENT Handlers
 // -----------------------------------------------------------------------
         mMeas15Button.setOnClickListener(new View.OnClickListener() {
@@ -295,9 +305,6 @@ public class SettingsFragment extends Fragment {
         transmitBroadcast( ACTION_BATTERY_STATE );
     }
 
-    public void setInterval(float interval) {
-        transmitBroadcast( ACTION_SET_INTERVAL );
-    }
 
     public void setRecord(int interval) {
     }
