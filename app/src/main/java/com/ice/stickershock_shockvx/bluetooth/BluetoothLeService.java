@@ -57,26 +57,30 @@ public class BluetoothLeService extends Service {
 
     private int mConnectionState = STATE_DISCONNECTED;
 
-
-    // Implements callback methods for GATT events that the app cares about.  For example,
+    // -------------------------------------------------------------------------------------
+    // Implements callback methods for GATT events
     // connection change and services discovered.
+    // characteristic read, write, update
+    // descriptor read, write
+    // -------------------------------------------------------------------------------------
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-            String intentAction;
 
             if (newState == BluetoothProfile.STATE_CONNECTED ) {
-                intentAction     = ACTION_GATT_CONNECTED;
+
                 mConnectionState = STATE_CONNECTED;
-                broadcastUpdate(intentAction);
                 Log.i(TAG, "Connected to GATT server.");
+
+                broadcastUpdate( ACTION_GATT_CONNECTED );
                 mBluetoothGatt.discoverServices();
 
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED ) {
-                intentAction     = ACTION_GATT_DISCONNECTED;
+
                 mConnectionState = STATE_DISCONNECTED;
                 Log.i(TAG, "Disconnected from GATT server.");
-                broadcastUpdate(intentAction);
+
+                broadcastUpdate( ACTION_GATT_DISCONNECTED );
             }
         }
 
@@ -96,8 +100,6 @@ public class BluetoothLeService extends Service {
                                          int status) {
             Log.d(TAG, " CALLBACK READ");
             if ( status == BluetoothGatt.GATT_SUCCESS ) {
-                Log.d("READ", "VALUESTR " + characteristic.getStringValue(0));
-                Log.d("READ", "VALUE " + characteristic.getValue());
                 processReadData( characteristic );
             }
         }
@@ -129,7 +131,6 @@ public class BluetoothLeService extends Service {
          */
         public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
             if ( status == BluetoothGatt.GATT_SUCCESS ) {
-                Log.d( TAG, "RSSI" + rssi + " dB" );
                 broadcastIntUpdate( RESPONSE_RSSI_DATA, rssi);
             }
         }
@@ -288,6 +289,9 @@ public class BluetoothLeService extends Service {
             if ( characteristic.getUuid().toString().equals ( SENSOR_CONTROL_OPEN )) {
                 broadcastUpdate( RESPONSE_STICKER_OPENED );
             }
+            if ( characteristic.getUuid().toString().equals ( SENSOR_CONTROL_CLOSE )) {
+                broadcastUpdate( RESPONSE_STICKER_CLOSED );
+            }
             if ( characteristic.getUuid().toString().equals ( SENSOR_TELEMETRY_INTERVAL  )) {
                 broadcastUpdate( RESPONSE_SET_INTERVAL);
             }
@@ -308,8 +312,8 @@ public class BluetoothLeService extends Service {
         switch ( cString )  {
          case SENSOR_HANDLING_VALUE:        // 48614d76
             intent.setAction( RESPONSE_HANDLING_AVAILABLE );
-            outData = buffer.getFloat();
-            outData2 = buffer.getFloat();
+            outData = buffer.getFloat();       // first byte unused, need to read because
+            outData2 = buffer.getFloat();      // of reversed byte array
             outData3 = buffer.getFloat();
 
             intent.putExtra( FACEUP_DATA, outData2 );

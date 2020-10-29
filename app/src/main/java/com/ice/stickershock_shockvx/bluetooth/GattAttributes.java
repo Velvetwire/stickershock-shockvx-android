@@ -12,14 +12,14 @@ public class   GattAttributes {
     public static final String GENERIC_ACCESS_SERVICE       = "00001800-0000-1000-8000-00805f9b34fb";
     public static final String GENERIC_ATTRIBUTE_SERVICE    = "00001801-0000-1000-8000-00805f9b34fb";
     public static final String DEVICE_INFORMATION_SERVICE   = "0000180a-0000-1000-8000-00805f9b34fb";
-    public static final String DEVICE_BATTERY_SERVICE              = "0000180f-0000-1000-8000-00805f9b34fb";
+    public static final String DEVICE_BATTERY_SERVICE       = "0000180f-0000-1000-8000-00805f9b34fb";
     public static final String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
 
     // ShockVX services
     // Access Service  -- Future use
     public static final String SENSOR_ACCESS_SERVICE        = "00004143-5657-5353-2020-56454c564554";
     public static final String SENSOR_ACCESS_TIME           = "00005554-5657-5353-2020-56454C564554";  // write
-    public static final String SENSOR_ACCESS_CONTROL        = "00004357-5657-5353-2020-56454C564554";  // read write notify
+
     public static final String SENSOR_ACCESS_PASSKEY        = "0000504b-5657-5353-2020-56454C564554";  // read write
 
     // Control Service Identifier
@@ -75,22 +75,47 @@ public class   GattAttributes {
     public static final String MANUFACTURER_NAME            = "00002a29-0000-1000-8000-00805f9b34fb";
 
     public static final String DEVICE_BATTERY_LEVEL         = "00002a19-0000-1000-8000-00805f9b34fb";
-    public static final String DEVICE_BATTERY_STATE                = "00002a1a-0000-1000-8000-00805f9b34fb";
+    public static final String DEVICE_BATTERY_STATE         = "00002a1a-0000-1000-8000-00805f9b34fb";
 
 
     // Sensor access commands
 
-    public static final int kAccessRequestShutdown  = 0x504F5453;      // Request shutdown notice ('STOP')
-    public static final int kAccessRequestFactory   = 0x4F52455A;      // Request factory erase ('ZERO')
-    public static final int kAccessRequestReboot    = 0x544F4F42;      // Request reboot ('BOOT')
-    public static final int kAccessRequestLoader    = 0x4D414F4C;      // Request boot loader ('LOAD')
-    public static final int kAccessRequestErase     = 0x45504957;      // Request storage erase ('WIPE')
 
-    public static final int kAccessResponseAccepted = 0x454E4F44;      // Respond accepted ('DONE')
-    public static final int kAccessResponseRejected = 0x4C494146;      // Respond rejected ('FAIL')
-    public static final int kAccessResponseLocked   = 0x4B434F4C;      // Respond access locked ('LOCK')
-    public static final int kAccessResponseOpened   = 0x4E45504F;      // Respond access open ('OPEN')
+// Expected primary and control UUIDs for a Stickershock device
+    public static final String LOADER_CONTROL_SERVICE_UUID = "00004655-0000-1000-8000-00805f9b34fb";
+    public static final String UPDATE_CONTROL_SERVICE_UUID = "00004655-5657-5353-2020-56454c564554";
 
+    public static final int PackageMagic                = 0x50465353;
+
+
+    // DEVICE ACCESS
+    public static final String SENSOR_ACCESS_CONTROL       = "00004357-5657-5353-2020-56454C564554";  // read write notify
+
+    public static final int ACCESS_REQUEST_SHUTDOWN        = 0x504f5453;      // Request shutdown notice ('STOP')
+    public static final int ACCESS_REQUEST_FACTORY         = 0x4f52455A;      // Request factory erase ('ZERO')
+    public static final int ACCESS_REQUEST_REBOOT          = 0x544f4f42;      // Request reboot ('BOOT')
+    public static final int ACCESS_REQUEST_LOADER          = 0x4d414f4c;      // Request boot loader ('LOAD')
+    public static final int ACCESS_REQUEST_ERASE           = 0x45504957;      // Request storage erase ('WIPE')
+
+    public static final int ACCESS_RESPONSE_ACCEPTED       = 0x454e4f44;      // Respond accepted ('DONE')
+    public static final int ACCESS_RESPONSE_REJECTED       = 0x4c494146;      // Respond rejected ('FAIL')
+    public static final int ACCESS_RESPONSE_LOCKED         = 0x4b434f4c;      // Respond access locked ('LOCK')
+    public static final int ACCESS_RESPONSE_OPENED         = 0x4e45504f;      // Respond access open ('OPEN')
+
+    // DEVICE UPDATE
+    public static final String DEVICE_UPDATE_STATUS_PREFIX = "00005056";
+    public static final String DEVICE_UPDATE_REGION_PREFIX = "0000524d";
+    public static final String DEVICE_UPDATE_RECORD_PREFIX = "00005552";
+
+    public static final int UPDATE_REQUEST_RESET           = 0x504f5453;     // Request shutdown notice ('STOP')
+    public static final int UPDATE_REQUEST_ERASE           = 0x4f52455a;     // Request setttings erase ('ZERO')
+    public static final int UPDATE_REQUEST_CLEAR           = 0x45504957;     // Request storage erase ('WIPE')
+    public static final int UPDATE_REQUEST_BLANK           = 0x45455246;     // Request firmware erase ('FREE')
+
+    public static final int UPDATE_RESPONSE_EMPTY          = 0x454e4f4e;     // Respond empty package ('NONE')
+    public static final int UPDATE_RESPONSE_PACKAGE        = 0x45444f43;     // Respond with package ('CODE')
+    public static final int UPDATE_RESPONSE_ACCEPTED       = 0x454e4f44;     // Respond accepted ('DONE')
+    public static final int UPDATE_RESPONSE_REJECTED       = 0x4c494146;     // Respond rejected ('FAIL')
 
     // Asset commands
     public static final String ASSET_BROADCAST_STANDARD     = "00005657-0000-1000-8000-00805f9b34fb";

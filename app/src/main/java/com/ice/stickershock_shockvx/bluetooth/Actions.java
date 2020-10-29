@@ -22,6 +22,14 @@ public class Actions {
     public final static String RESPONSE_BATTERY_LEVEL          = "RESPONSE_BATTERY_LEVEL";
     public final static String RESPONSE_BATTERY_STATE          = "RESPONSE_BATTERY_STATE";
 
+
+   // Device info requests
+    public final static String ACTION_GET_MANUFACTURER         = "ACTION_GET_MANUFACTURER";
+    public final static String ACTION_GET_MODEL                = "ACTION_GET_MODEL";
+    public final static String ACTION_GET_FIRMWARE             = "ACTION_GET_FIRMWARE";
+    public final static String ACTION_GET_HARDWARE_REV         = "ACTION_GET_HARDWARE_REV";
+    public final static String ACTION_GET_SERIAL               = "ACTION_GET_SERIAL";
+
     public final static String RESPONSE_MANUFACTURER_AVAILABLE = "RESPONSE_MANUFACTURER_AVAILABLE";
     public final static String RESPONSE_MODEL_AVAILABLE        = "RESPONSE_MODEL_AVAILABLE";
     public final static String RESPONSE_FIRMWARE_AVAILABLE     = "RESPONSE_FIRMWARE_AVAILABLE";
@@ -57,11 +65,7 @@ public class Actions {
     public final static String ACTION_BATTERY_LEVEL    = "ACTION_BATTERY_LEVEL";
     public final static String ACTION_BATTERY_STATE    = "ACTION_BATTERY_STATE";
 
-    public final static String ACTION_GET_MANUFACTURER = "ACTION_GET_MANUFACTURER";
-    public final static String ACTION_GET_MODEL        = "ACTION_GET_MODEL";
-    public final static String ACTION_GET_FIRMWARE     = "ACTION_GET_FIRMWARE";
-    public final static String ACTION_GET_HARDWARE_REV = "ACTION_GET_HARDWARE_REV";
-    public final static String ACTION_GET_SERIAL       = "ACTION_GET_SERIAL";
+
 
     // Broadcast Notification Requests
     public final static String ACTION_SET_NOTIFICATION = "ACTION_SET_NOTIFICATION";
@@ -83,16 +87,16 @@ public class Actions {
     // Settings actions
     public final static String ACTION_MEASUREMENT_INTERVAL_15 = "ACTION_MEASUREMENT_INTERVAL_15";
     public final static String ACTION_MEASUREMENT_INTERVAL_60 = "ACTION_MEASUREMENT_INTERVAL_60";
-    public final static String ACTION_RECORDS_INTERVAL_15   = "ACTION_RECORDS_INTERVAL_15";
-    public final static String ACTION_RECORDS_INTERVAL_60   = "ACTION_RECORDS_INTERVAL_60";
-    public final static String ACTION_HANDLING_NONE         = "ACTION_HANDLING_NONE";
-    public final static String ACTION_HANDLING_CAREFUL      = "ACTION_HANDLING_CAREFUL";
-    public final static String ACTION_HANDLING_FRAGILE      = "ACTION_HANDLING_FRAGILE";
-    public final static String ACTION_ORIENTATION_FLAT      = "ACTION_HANDLING_FLAT";
-    public final static String ACTION_ORIENTATION_UPRIGHT   = "ACTION_HANDLING_UPRIGHT";
-    public final static String ACTION_SET_ANGLE_ALARM       = "ACTION_SET_ANGLE_ALARM";
-    public final static String ACTION_SET_AMBIENT_LOWER     = "ACTION_SET_AMBIENT_LOWER";
-    public final static String ACTION_SET_AMBIENT_UPPER     = "ACTION_SET_AMBIENT_UPPER";
-    public final static String ACTION_SET_SURFACE_LOWER     = "ACTION_SET_SURFACE_LOWER";
-    public final static String ACTION_SET_SURFACE_UPPER     = "ACTION_SET_SURFACE_UPPER";
+    public final static String ACTION_RECORDS_INTERVAL_15     = "ACTION_RECORDS_INTERVAL_15";
+    public final static String ACTION_RECORDS_INTERVAL_60     = "ACTION_RECORDS_INTERVAL_60";
+    public final static String ACTION_HANDLING_NONE           = "ACTION_HANDLING_NONE";
+    public final static String ACTION_HANDLING_CAREFUL        = "ACTION_HANDLING_CAREFUL";
+    public final static String ACTION_HANDLING_FRAGILE        = "ACTION_HANDLING_FRAGILE";
+    public final static String ACTION_ORIENTATION_FLAT        = "ACTION_HANDLING_FLAT";
+    public final static String ACTION_ORIENTATION_UPRIGHT     = "ACTION_HANDLING_UPRIGHT";
+    public final static String ACTION_SET_ANGLE_ALARM         = "ACTION_SET_ANGLE_ALARM";
+    public final static String ACTION_SET_AMBIENT_LOWER       = "ACTION_SET_AMBIENT_LOWER";
+    public final static String ACTION_SET_AMBIENT_UPPER       = "ACTION_SET_AMBIENT_UPPER";
+    public final static String ACTION_SET_SURFACE_LOWER       = "ACTION_SET_SURFACE_LOWER";
+    public final static String ACTION_SET_SURFACE_UPPER       = "ACTION_SET_SURFACE_UPPER";
 };

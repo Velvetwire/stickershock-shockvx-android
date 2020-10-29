@@ -105,7 +105,6 @@ public class SettingsFragment extends Fragment {
         mAngleMin  = v.findViewById( R.id.angleminButton );
         mAngleMax  = v.findViewById( R.id.anglemaxButton );
 
-
         mBackAssets = v.findViewById( R.id.assetButton );
         mBackAssets.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -329,7 +328,7 @@ public class SettingsFragment extends Fragment {
          if ( RESPONSE_BATTERY_LEVEL.equals(action) ) {
 
                 int intData = intent.getIntExtra( INT_DATA, 0);
- //               mBattery.setText(String.valueOf(intData + "%"));
+ //             mBattery.setText(String.valueOf(intData + "%"));
             }
          if ( RESPONSE_RSSI_DATA.equals(action) ) {
                 int rssiData = intent.getIntExtra( INT_DATA,0);

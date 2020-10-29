@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainLayout"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:foregroundTint="#FAF8F8"
     android:orientation="vertical"
     android:paddingTop="10dp"
-    android:paddingBottom="20dp"
-    android:id="@+id/mainLayout">
+    android:paddingBottom="20dp">
+
     <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:foregroundTint="#FAF8F8"
-        android:paddingTop="1dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="1dp">
+
         <Button
             android:id="@+id/assetButton"
             style="?attr/materialButtonOutlinedStyle"
@@ -24,30 +26,33 @@
             android:gravity="left"
             android:text="@string/assets" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/batteryLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:foregroundTint="#FAF8F8"
         android:orientation="horizontal">
+
         <TextView
             android:id="@+id/rssi"
             android:layout_width="fill_parent"
             android:layout_height="45dp"
             android:layout_weight="1"
-            android:textStyle="bold"
-            android:textSize="18sp"
             android:gravity="left"
-            android:text="Signal -64 dB"/>
+            android:text="Signal -64 dB"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/batteryLevel"
             android:layout_width="fill_parent"
             android:layout_height="45dp"
             android:layout_weight="1"
-            android:textStyle="bold"
-            android:textSize="18sp"
             android:gravity="right"
-            android:text="Battery 91%"/>
+            android:text="Battery 91%"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
@@ -56,28 +61,31 @@
         android:layout_height="wrap_content"
         android:foregroundTint="#FAF8F8"
         android:orientation="horizontal">
+
         <ImageView
             android:id="@+id/stickerImage"
             android:layout_width="160dp"
             android:layout_height="100dp"
             android:layout_weight="1"
-            android:tint="#914FBF"
-            android:src="@drawable/stickershock" />
+            android:src="@drawable/stickershock"
+            android:tint="#914FBF" />
 
         <TextView
             android:id="@+id/openDate"
             android:layout_width="fill_parent"
             android:layout_height="45dp"
             android:layout_weight="1"
-            android:textStyle="bold"
-            android:textSize="18sp"
             android:gravity="center"
+            android:text=""
             android:textColor="#914FBF"
-            android:text=""/>
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </LinearLayout>
+
     <Space
         android:layout_width="1dp"
-        android:layout_height="30dp"/>
+        android:layout_height="30dp" />
+
     <LinearLayout
         android:id="@+id/formLayout"
         android:layout_width="fill_parent"
@@ -91,13 +99,15 @@
             android:layout_height="45dp"
             android:layout_weight="1"
             android:background="#914FBF"
+            android:gravity="center"
             android:textColor="#FFFFFF"
-            android:textStyle="bold"
             android:textSize="18sp"
-            android:gravity="center" />
+            android:textStyle="bold" />
+
         <Space
             android:layout_width="1dp"
-            android:layout_height="30dp"/>
+            android:layout_height="30dp" />
+
         <EditText
             android:id="@+id/assetName"
             android:layout_width="match_parent"
@@ -106,15 +116,17 @@
             android:background="@drawable/rounded_rect_shape_2"
             android:backgroundTint="#F1E4FF"
             android:ems="10"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName" />
+
         <TextView
             android:id="@+id/textName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="18sp"
             android:inputType="textPersonName"
-            android:text="Name" />
+            android:text="Name"
+            android:textSize="18sp" />
+
         <EditText
             android:id="@+id/assetLocation"
             android:layout_width="match_parent"
@@ -124,13 +136,14 @@
             android:backgroundTint="#F1E4FF"
             android:ems="10"
             android:inputType="textPersonName" />
+
         <TextView
             android:id="@+id/textLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="18sp"
-            android:text="Location" />
+            android:text="Location"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
