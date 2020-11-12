@@ -1,3 +1,13 @@
+/**
+ * project: ShockVx
+ *  module: Stickershock Android App for cold chain tracking.
+ *  author: Velvetwire, llc
+ *    file: AcceptAssetFragment.java
+ *
+ * Accept Asset - Close Sticker
+ *
+ * (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+ */
 package com.ice.stickershock_shockvx;
 
 import android.content.BroadcastReceiver;
@@ -26,7 +36,6 @@ public class AcceptAssetFragment extends Fragment {
     TextView mStickerId;
     TextView mRssi;
     TextView mBattery;
-    // constants
 
 
 
@@ -41,16 +50,16 @@ public class AcceptAssetFragment extends Fragment {
         View v = inflater.inflate( R.layout.accept_asset, container, false );
         super.onCreate(savedInstanceState);
 
-        mAcceptButton = (Button)   v.findViewById( R.id.acceptButton );
-        mName         = (EditText) v.findViewById( R.id.assetName );
-        mLocation     = (EditText) v.findViewById( R.id.assetLocation );
-        mStickerId    = (TextView) v.findViewById( R.id.stickerid );
-        mRssi         = (TextView) v.findViewById( R.id.rssi );
-        mBattery      = (TextView) v.findViewById( R.id.batteryLevel );
+        mName         = v.findViewById( R.id.assetName );
+        mLocation     = v.findViewById( R.id.assetLocation );
+        mStickerId    = v.findViewById( R.id.stickerid );
+        mRssi         = v.findViewById( R.id.rssi );
+        mBattery      = v.findViewById( R.id.batteryLevel );
 
         mStickerId.setText (stickerId);
         readRssi();
 
+        mAcceptButton = v.findViewById( R.id.acceptButton );
         mAcceptButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -99,17 +108,6 @@ public class AcceptAssetFragment extends Fragment {
 
     private void closeSticker() {
         final Intent intent = new Intent( ACTION_CLOSE_STICKER );
-        getActivity().sendBroadcast(intent);
-    }
-
-
-    private void saveStickerInfo() {
-        // send broadcast command to open sticker with id
-        return;
-    }
-
-    private void disconnectSticker () {
-        final Intent intent = new Intent( ACTION_DISCONNECT );
         getActivity().sendBroadcast(intent);
     }
 

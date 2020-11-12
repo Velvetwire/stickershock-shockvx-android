@@ -1,14 +1,14 @@
-//=============================================================================
-// project: ShockVx
-//  module: Stickershock Android App for cold chain tracking.
-//  author: Velvetwire, llc
-//    file: ReadStickerNfc.java
-//
-// Read Nfc Tag for android shockVx app
-//
-//
-// (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
-//=============================================================================
+/**
+ * project: ShockVx
+ *  module: Stickershock Android App for cold chain tracking.
+ *  author: Velvetwire, llc
+ *    file: ReadStickerNfc.java
+ *
+ * Read Nfc Tag for android shockVx app
+ *
+ *
+ * (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+ */
 package com.ice.stickershock_shockvx;
 
 import android.app.Activity;
@@ -34,16 +34,13 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.content.ContentValues.TAG;
+import static com.ice.stickershock_shockvx.Constants.*;
 
 public class ReadStickerNfc extends Activity {
     TextView mNfcMessage;
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
-    public static final int REQUEST_ENABLE_BT = 1;
-    public static final int VIBRATE_150_MS = 150;
-    private NfcAdapter mNfcAdapter; 
-    String mUnit = "";
-    String mPrimary = "";
-    String mControl = "";
+
+    private NfcAdapter mNfcAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +53,12 @@ public class ReadStickerNfc extends Activity {
     }
 
 
-    // Here is routine which searches for NFC tags
-    // filter is set up to look for NFC tags that have NDEF payloads
-    // and MIME-Type text/xml
-    // Other tag encodings will be ignored
-
+    /**
+     * Here is routine which searches for NFC tags
+     * filter is set up to look for NFC tags that have NDEF payloads
+     * and MIME-Type text/xml
+     * Other tag encodings will be ignored
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -68,7 +66,7 @@ public class ReadStickerNfc extends Activity {
 
         IntentFilter ndefDetected = null;
         try {
-            ndefDetected = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED, "text/xml");
+            ndefDetected = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED, TEXT_XML);
         } catch (IntentFilter.MalformedMimeTypeException e) {
             e.printStackTrace();
         }
@@ -113,7 +111,7 @@ public class ReadStickerNfc extends Activity {
                     if (ndefMessage != null) {
                         String message = new String(ndefMessage.getRecords()[0].getPayload());
 
-                        unit = extractFieldFromXML(message, "unit");
+                        unit    = extractFieldFromXML(message, "unit");
                         primary = extractFieldFromXML(message, "primary");
                         control = extractFieldFromXML(message, "control");
                         mTagFound = true;
@@ -180,7 +178,7 @@ public class ReadStickerNfc extends Activity {
 
     private String extractFieldFromXML(String message, String tag ) {
         String startTag = "<" + tag + ">";
-        String endTag = "</" + tag + ">";
+        String endTag   = "</" + tag + ">";
 
         String substr = message.substring(message.indexOf(startTag) + startTag.length(), message.indexOf(endTag));
         return substr;

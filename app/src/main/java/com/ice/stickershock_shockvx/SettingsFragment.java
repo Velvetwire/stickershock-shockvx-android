@@ -1,3 +1,13 @@
+/**
+ * project: ShockVx
+ *  module: Stickershock Android App for cold chain tracking.
+ *  author: Velvetwire, llc
+ *    file: SettingsFragment.java
+ *
+ * Settings page for Sticker
+ *
+ * (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+ */
 package com.ice.stickershock_shockvx;
 
 import android.content.BroadcastReceiver;
@@ -104,6 +114,7 @@ public class SettingsFragment extends Fragment {
         mAngleVal  = v.findViewById( R.id.angleVal );
         mAngleMin  = v.findViewById( R.id.angleminButton );
         mAngleMax  = v.findViewById( R.id.anglemaxButton );
+
 
         mBackAssets = v.findViewById( R.id.assetButton );
         mBackAssets.setOnClickListener(new View.OnClickListener() {
@@ -328,7 +339,7 @@ public class SettingsFragment extends Fragment {
          if ( RESPONSE_BATTERY_LEVEL.equals(action) ) {
 
                 int intData = intent.getIntExtra( INT_DATA, 0);
- //             mBattery.setText(String.valueOf(intData + "%"));
+ //               mBattery.setText(String.valueOf(intData + "%"));
             }
          if ( RESPONSE_RSSI_DATA.equals(action) ) {
                 int rssiData = intent.getIntExtra( INT_DATA,0);

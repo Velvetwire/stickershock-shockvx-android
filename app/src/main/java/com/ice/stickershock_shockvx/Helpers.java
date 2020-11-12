@@ -1,3 +1,13 @@
+/**
+ * project: ShockVx
+ *  module: Stickershock Android App for cold chain tracking.
+ *  author: Velvetwire, llc
+ *        file: Helpers.java
+ *
+ *  Simple routines
+ *
+ * (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+ */
 package com.ice.stickershock_shockvx;
 
 
@@ -23,12 +33,12 @@ public class Helpers {
         return array;
     }
 
-    public static float byteArrayToFloat(byte[] data) {
+    public static float byteArrayToFloat( byte[] data ) {
         ByteBuffer buffer = ByteBuffer.wrap(data);
         return buffer.getFloat();
     }
 
-    public static byte[] floatToByteArray(float data) {
+    public static byte[] floatToByteArray( float data ) {
         return ByteBuffer.allocate(4).putFloat(data).array();
     }
 
@@ -36,9 +46,15 @@ public class Helpers {
         return ByteBuffer.allocate(4).putInt(data).array();
     }
 
+    public static int byteArrayToInt( byte[] data ) {
+        ByteBuffer buffer = ByteBuffer.wrap(data);
+        return buffer.getInt();
+    }
 
 
-    //
+    /**
+     *   calculate distance from rssi value
+     */
     int TX1Meter = - 75;
     float N        = (float) 3.0;
     public String calculateDistance(int rssi ) {

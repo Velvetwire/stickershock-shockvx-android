@@ -1,3 +1,13 @@
+/**
+ * project: ShockVx
+ *  module: Stickershock Android App for cold chain tracking.
+ *  author: Velvetwire, llc
+ *    file: WelcomeScreen.java
+ *
+ * Welcome Screen
+ *
+ * (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+ */
 package com.ice.stickershock_shockvx;
 
 import android.app.Activity;
@@ -21,7 +31,7 @@ public class WelcomeScreen extends Activity {
     private static EditText password;
     private static EditText email;
     private static Button   login_btn;
-    int attempt_counter = 5;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +73,6 @@ public class WelcomeScreen extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }

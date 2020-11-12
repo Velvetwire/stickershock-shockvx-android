@@ -1,12 +1,15 @@
-//=============================================================================
-// project: Stickershock Explore Android
-//  author: Velvetwire, llc
-//  file: BluetoothControlActivity.c
-//
-//  Control Bluetooth LE devices.
-//  Connect, display data, and display GATT services and characteristics
-//
-//=============================================================================
+/**
+ * project: ShockVx
+ *  module: Stickershock Android App for cold chain tracking.
+ *  author: Velvetwire, llc
+ *    file: BluetoothControlActivity.java
+ *
+ * Control Bluetooth LE devices.
+ * Connect, display data, and display GATT services and characteristics
+ *
+ * (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+ */
+
 package com.ice.stickershock_shockvx.bluetooth;
 
 import android.app.Activity;
@@ -39,6 +42,7 @@ import static android.bluetooth.BluetoothGattCharacteristic.*;
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 import static com.ice.stickershock_shockvx.Constants.*;
 import static com.ice.stickershock_shockvx.Helpers.*;
+
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
  * and display GATT services and characteristics supported by the device.
@@ -50,14 +54,13 @@ import static com.ice.stickershock_shockvx.Helpers.*;
 public class  BluetoothControlActivity extends Activity {
     private final static String TAG = BluetoothControlActivity.class.getSimpleName();
 
-
     private TextView mSerial;
     private Sticker mSticker;
 
-    private int stickerState = STICKER_OPEN;
+    private int stickerState      = STICKER_OPEN;
 
-    private String mDeviceName = null;
-    private String mDeviceUnit = null;
+    private String mDeviceName    = null;
+    private String mDeviceUnit    = null;
     private String mDeviceAddress = null;
 
     private BluetoothLeService mBluetoothLeService;
@@ -69,9 +72,10 @@ public class  BluetoothControlActivity extends Activity {
 
     // Using BluetoothLeService to handle bluetooth connection
 
-    // ---------------------------------------------------------------------------
-    // create class for storing notification strings. We can then store all notifications in
-    // a list structure, and then turn on all the notifies on.
+   /**
+    * create class for storing notification strings. We can then store all notifications in
+    * a list structure, and then turn on all the notifies on.
+    */
     private class Notification {
          String service;
          String characteristic;
@@ -84,8 +88,9 @@ public class  BluetoothControlActivity extends Activity {
 
     public List<Notification> notifyList = new ArrayList<Notification>();
 
-// ---------------------------------------------------------------------------
-
+    /**
+     * service connection
+     */
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
@@ -97,22 +102,23 @@ public class  BluetoothControlActivity extends Activity {
             }
             // Automatically connects to the device upon successful start-up initialization.
             Log.e(TAG, "Connecting to" + mDeviceAddress);
-            mBluetoothLeService.connect(mDeviceAddress);
+            mBluetoothLeService.connect( mDeviceAddress );
         }
 
         @Override
-        public void onServiceDisconnected(ComponentName componentName) {
+        public void onServiceDisconnected( ComponentName componentName ) {
             mBluetoothLeService = null;
         }
     };
 
-    // Handles various events fired by the Service.
-    // ACTION_GATT_CONNECTED: connected to a GATT server.
-    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
-    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
-    // ACTION_DATA_AVAILABLE: received data from the device.
-    // This can be a result of read or notification operations.
-
+   /**
+    * Handles various actions sent by the Service.
+    * ACTION_GATT_CONNECTED: connected to a GATT server.
+    * ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
+    * ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
+    * ACTION_DATA_AVAILABLE: received data from the device.
+    * This can be a result of read or notification operations.
+    */
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -122,18 +128,18 @@ public class  BluetoothControlActivity extends Activity {
             switch ( action )  {
              case ACTION_GATT_CONNECTED:
                 mConnected = true;
-                updateConnectionState(R.string.connected);
+                updateConnectionState( R.string.connected );
                 invalidateOptionsMenu();
                 break;
 
              case ACTION_GATT_DISCONNECTED:
                 mConnected = false;
-                updateConnectionState(R.string.disconnected);
+                updateConnectionState( R.string.disconnected );
                 invalidateOptionsMenu();
                  break;
 
              case ACTION_GATT_SERVICES_DISCOVERED:
-                displayGattServices(mBluetoothLeService.getSupportedGattServices());
+                displayGattServices ( mBluetoothLeService.getSupportedGattServices() );
                 enableAllNotifications();
                 break;
 
@@ -161,30 +167,24 @@ public class  BluetoothControlActivity extends Activity {
              case RESPONSE_MANUFACTURER_AVAILABLE:
                 extraData = intent.getStringExtra ( STRING_DATA );
                 mSticker.make = extraData;
-                Log.d("Manufacturer", extraData);
-                //mMake.setText(extraData);
-                 break;
+                break;
 
              case RESPONSE_MODEL_AVAILABLE:
                 extraData = intent.getStringExtra ( STRING_DATA );
                 mSticker.model = extraData;
-                Log.d("Model", extraData );
                 break;
 
              case RESPONSE_FIRMWARE_AVAILABLE:
                 mSticker.firmware = intent.getStringExtra ( STRING_DATA );
-                Log.d("Firmware", extraData );
                 break;
 
              case RESPONSE_HARDWARE_AVAILABLE:
                 mSticker.hardware = intent.getStringExtra ( STRING_DATA );
-                Log.d("Hardware", extraData );
                 break;
 
              case RESPONSE_SERIAL_AVAILABLE:
                 mSticker.serial = intent.getStringExtra ( STRING_DATA );
                 mSerial.setText(extraData);
-                Log.d("Serial", extraData );
                 break;
 
              case RESPONSE_WRITE_DATA_AVAILABLE:
@@ -192,28 +192,28 @@ public class  BluetoothControlActivity extends Activity {
                 Log.d("ACTION", "WRITE DATA SUCCESS " + extraData);
                 break;
 
-             case ACTION_SENSOR_DATA_AVAILABLE:
-                 extraData = intent.getStringExtra( EXTRA_DATA );
-                 Log.d("SENSOR_DATA", "available " + extraData );
-                 break;
              default:
                  break;
              }
          }
     };
 
+    /**
+     * Navigate to tabbed activity
+     * @param state    sticker state ( NEW, OPENED, CLOSED )
+     */
     public void goToTabbedActivity( int state )
     {
-        Log.d("NOTIFY DONE", "GO TO TABBEDACTIVITY");
-
         Intent i = new Intent(BluetoothControlActivity.this, TabbedActivity.class );
         i.putExtra( EXTRAS_STICKER_STATE, state);
         i.putExtra( EXTRAS_DEVICE_UNIT, mDeviceUnit );
         startActivity( i );
     }
 
-    // Enable all notifications that are in notifyList. Wait for callback to
-    // set next notify
+    /**
+     * Enable all notifications that are in notifyList.
+     * Wait for callback to set next notify
+     */
     public void enableAllNotifications()
     {
         Notification n;
@@ -334,11 +334,10 @@ public class  BluetoothControlActivity extends Activity {
         });
     }
 
-
-
-
-    // Retrieve read fields from sticker. Since this activity is attached to service, these bluetooth
-    // services can be called directly, but can also be called using broadcast messages
+   /**
+    * Retrieve read fields from sticker. Since this activity is attached to service, these bluetooth
+    * services can be called directly, but can also be called using broadcast messages
+    */
     private boolean retrieveStickerProperties() {
 
         if ( mSticker.make == null) {
@@ -361,17 +360,21 @@ public class  BluetoothControlActivity extends Activity {
         final Intent intent = new Intent( action );
         sendBroadcast(intent);
     }
-    // Iterate through the supported GATT Services/Characteristics.
 
+    /**
+     * Iterate through the supported GATT Services/Characteristics
+     * @param gattServices        list of found bluetooth services/characteristics
+     */
     private void displayGattServices( List<BluetoothGattService> gattServices ) {
         if (gattServices == null) return;
 
-        int i = 0;
         String service_uuid = null;
-        String characteristic_uuid = null;
+        String characteristic_uuid  = null;
+
         String unknownServiceString = getResources().getString(R.string.unknown_service);
         String unknownCharaString   = getResources().getString(R.string.unknown_characteristic);
-        ArrayList<HashMap<String, String>> gattServiceData = new ArrayList<HashMap<String, String>>();
+
+        ArrayList< HashMap< String, String >> gattServiceData = new ArrayList<HashMap<String, String>>();
         ArrayList<ArrayList<HashMap<String, String>>> gattCharacteristicData = new ArrayList<ArrayList<HashMap<String, String>>>();
         mGattCharacteristics = new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
 
@@ -380,8 +383,9 @@ public class  BluetoothControlActivity extends Activity {
             HashMap<String, String> currentServiceData = new HashMap<String, String>();
             service_uuid = gattService.getUuid().toString();
             Log.d("SERVICE UUID", service_uuid );
+
             currentServiceData.put(
-                    LIST_NAME, GattAttributes.lookup(service_uuid, unknownServiceString ));
+                    LIST_NAME, GattAttributes.lookup( service_uuid, unknownServiceString ));
             currentServiceData.put( LIST_UUID, service_uuid );
             gattServiceData.add( currentServiceData );
 
@@ -424,7 +428,9 @@ public class  BluetoothControlActivity extends Activity {
 
     }
 
-
+    /**
+     * List of actions allowed through the intent filter
+     */
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction( ACTION_GATT_CONNECTED );
@@ -432,7 +438,6 @@ public class  BluetoothControlActivity extends Activity {
         intentFilter.addAction( ACTION_GATT_SERVICES_DISCOVERED );
         intentFilter.addAction( ACTION_DATA_AVAILABLE );
 
-        intentFilter.addAction( ACTION_SENSOR_DATA_AVAILABLE );
         intentFilter.addAction( RESPONSE_MANUFACTURER_AVAILABLE );
         intentFilter.addAction( RESPONSE_MODEL_AVAILABLE );
         intentFilter.addAction( RESPONSE_FIRMWARE_AVAILABLE );
@@ -449,7 +454,6 @@ public class  BluetoothControlActivity extends Activity {
 
         return intentFilter;
     }
-
 
 }
 

@@ -1,13 +1,13 @@
-//=============================================================================
-// project: ShockVx
-//  module: Stickershock Android App for cold chain tracking.
-//  author: Velvetwire, llc
-//    file: TelemetryFragment.java
-//
-// Read Telemetry from connected sticker
-//
-// (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
-//=============================================================================
+/**
+ * project: ShockVx
+ *  module: Stickershock Android App for cold chain tracking.
+ *  author: Velvetwire, llc
+ *    file: TelemetryFragment.java
+ *
+ * Read Telemetry from Connected Sticker
+ *
+ * (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+ */
 package com.ice.stickershock_shockvx;
 
 import androidx.fragment.app.Fragment;

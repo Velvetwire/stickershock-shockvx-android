@@ -1,3 +1,13 @@
+/**
+ * project: ShockVx
+ *  module: Stickershock Android App for cold chain tracking.
+ *  author: Velvetwire, llc
+ *    file: TrackAssetFragment.java
+ *
+ * Accept Asset - Close Sticker
+ *
+ * (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+ */
 package com.ice.stickershock_shockvx;
 
 import android.app.Activity;
@@ -44,12 +54,12 @@ public class TrackAssetFragment extends Fragment {
         View v = inflater.inflate(R.layout.track_asset, container, false);
         super.onCreate(savedInstanceState);
 
-        mTrackButton = (Button)   v.findViewById(R.id.trackButton );
-        mName        = (EditText) v.findViewById(R.id.assetName );
-        mLocation    = (EditText) v.findViewById(R.id.assetLocation );
-        mStickerId   = (TextView) v.findViewById(R.id.stickerid );
+        mTrackButton = v.findViewById(R.id.trackButton );
+        mName        = v.findViewById(R.id.assetName );
+        mLocation    = v.findViewById(R.id.assetLocation );
+        mStickerId   = v.findViewById(R.id.stickerid );
 
-        setInterval ( );
+        setUtcTime ( );
 
         mBackAssets = v.findViewById( R.id.assetButton );
         mBackAssets.setOnClickListener(new View.OnClickListener() {
@@ -126,36 +136,34 @@ public class TrackAssetFragment extends Fragment {
         return f;
     }
 
-    private void setInterval() {
-        final Intent intent = new Intent( ACTION_SET_INTERVAL );
-        getActivity().sendBroadcast(intent);
-    }
-    private void openSticker() {
-        final Intent intent = new Intent( ACTION_OPEN_STICKER );
-        getActivity().sendBroadcast(intent);
-    }
+
+
 
     private void setUtcTime () {
         final Intent intent = new Intent( ACTION_SET_UTC_TIME );
         getActivity().sendBroadcast(intent);
     }
 
+    private void openSticker() {
+        final Intent intent = new Intent( ACTION_OPEN_STICKER );
+        getActivity().sendBroadcast(intent);
+    }
     private void saveStickerInfo() {
         // send broadcast command to open sticker with id
         return;
     }
-
+    private void setInterval() {
+        final Intent intent = new Intent( ACTION_SET_INTERVAL );
+        getActivity().sendBroadcast(intent);
+    }
     private void disconnectSticker () {
         final Intent intent = new Intent( ACTION_DISCONNECT );
         getActivity().sendBroadcast(intent);
     }
 
-
-
-
-// -----------------------------------------
-    // Broadcast receiver and message passing
-
+    /**
+     * Broadcast receiver GATT update receiver
+     */
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -183,6 +191,9 @@ public class TrackAssetFragment extends Fragment {
         }
     };
 
+    /**
+     * Broadcast receiver GATT Update Intent Filter
+     */
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
 

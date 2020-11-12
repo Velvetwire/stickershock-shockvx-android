@@ -1,19 +1,17 @@
-//=============================================================================
-// project: ShockVx
-//  module: Stickershock Android App for cold chain tracking.
-//  author: Velvetwire, llc
-//    file: TabbedActivity.java
-//
-//   Main routine for newly tagged sticker
-//   TabbedActivity handles the Tab interface and the individual
-//   fragments that each tab navigates to
-//       1. Tracking Fragment
-//       2. Telemetry Fragment
-//       3. SettingsFragment
-//
-// (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
-//=============================================================================
-
+/**
+ * project: ShockVx
+ *  module: Stickershock Android App for cold chain tracking.
+ *  author: Velvetwire, llc
+ *        file: TabbedActivity.java
+ *
+ *   Main routine for newly tagged sticker
+ *    TabbedActivity handles the Tab interface and the individual
+ *    fragments that each tab navigates to
+ *       1. Tracking Fragment
+ *        2. Telemetry Fragment
+ *       3. SettingsFragment
+ * (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+ */
 package com.ice.stickershock_shockvx;
 
 import android.content.BroadcastReceiver;
@@ -21,7 +19,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,7 +48,6 @@ public class TabbedActivity extends AppCompatActivity {
 
     private String[] tabTitles = new String[]{"Tracking", "Telemetry", "Settings"};
     // tab titles
-
 
     private String stickerName           = "test";
     public static Sticker currentSticker = new Sticker();
@@ -188,7 +184,6 @@ public class TabbedActivity extends AppCompatActivity {
         intentFilter.addAction( ACTION_DATA_AVAILABLE);
         intentFilter.addAction( RESPONSE_READ_DATA_AVAILABLE);
         intentFilter.addAction( RESPONSE_WRITE_DATA_AVAILABLE);
-        intentFilter.addAction( ACTION_SENSOR_DATA_AVAILABLE );
         intentFilter.addAction( RESPONSE_MANUFACTURER_AVAILABLE );
         intentFilter.addAction( RESPONSE_MODEL_AVAILABLE );
         intentFilter.addAction( RESPONSE_FIRMWARE_AVAILABLE );

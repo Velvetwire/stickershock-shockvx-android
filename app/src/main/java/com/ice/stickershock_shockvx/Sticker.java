@@ -1,11 +1,6 @@
 package com.ice.stickershock_shockvx;
 
 
-import android.util.Log;
-
-import com.ice.stickershock_shockvx.advertisement.IdentityAD;
-import com.ice.stickershock_shockvx.advertisement.StandardAD;
-
 public class Sticker {
     public String     name;
     public String     address;
@@ -41,6 +36,7 @@ public class Sticker {
     public String model;
     public String firmware;
     public String hardware;
+    public String software;
     public String serial;
 
     public int     sticker_state;           //
@@ -96,12 +92,5 @@ public class Sticker {
         this.firmware = null;
         this.address = null;
     }
-
-   /* isNotifyComplete
-    *
-    *  returns true when all 4 sensors have their characteristic notifys enabled
-    */
-
-
 
 }

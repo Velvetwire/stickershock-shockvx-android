@@ -1,3 +1,15 @@
+/**
+ * project: ShockVx
+ *  module: Stickershock Android App for cold chain tracking.
+ *  author: Velvetwire, llc
+ *    file: BluetoothScanActivity.java
+ *
+ * Activity for bluetooth scanning
+ * Communicates with BluetoothLeService
+ * through broadcast messages
+ *
+ * (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+ */
 package com.ice.stickershock_shockvx.bluetooth;
 
 import android.Manifest;
@@ -40,12 +52,15 @@ import java.util.UUID;
 
 
 import static com.ice.stickershock_shockvx.Constants.*;
+import static com.ice.stickershock_shockvx.appsupport.SensorControl.*;
 import static com.ice.stickershock_shockvx.bluetooth.BluetoothControlActivity.*;
 import static com.ice.stickershock_shockvx.bluetooth.GattAttributes.*;
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 import static com.ice.stickershock_shockvx.Helpers.*;
 /**
- * Activity for scanning and displaying available Bluetooth LE devices.
+ *  Activity for scanning and displaying available Bluetooth LE devices.
+ *  The Activity communicates with {@code BluetoothLeService}, which in turn
+ *  interacts with the Bluetooth LE API.
  */
 public class         BluetoothScanActivity extends ListActivity {
     private LeDeviceListAdapter mLeDeviceListAdapter;
@@ -181,7 +196,10 @@ public class         BluetoothScanActivity extends ListActivity {
         connectDevice( device );
     }
 
-    // Connect to device and pass control to BluetoothControlActivity
+    /**
+     * Connect to device and pass control to BluetoothControlActivity
+     * @param device           BluetoothDevice
+     */
     protected void connectDevice(BluetoothDevice device) {
         final Intent intent = new Intent(this, BluetoothControlActivity.class);
         String deviceName = device.getName();
@@ -199,7 +217,9 @@ public class         BluetoothScanActivity extends ListActivity {
 
     }
 
-    // Adapter for holding devices found through scanning.
+    /**
+     * Adapter for holding devices found through scanning.
+     */
     private class LeDeviceListAdapter extends BaseAdapter {
         private ArrayList<BluetoothDevice> mLeDevices;
         private LayoutInflater mInflator;

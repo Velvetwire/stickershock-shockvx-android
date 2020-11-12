@@ -1,15 +1,16 @@
-//=============================================================================
-// project: ShockVx
-//  module: Stickershock Android App for cold chain tracking.
-//  author: Velvetwire, llc
-//    file: BluetoothLeService.java
-//
-// Service class for bluetooth connections
-// Rest of app communicates with service through broadcast messages
-// Service class is declared in AndroidManifest
-//
-// (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
-//=============================================================================
+/**
+ * project: ShockVx
+ *  module: Stickershock Android App for cold chain tracking.
+ *  author: Velvetwire, llc
+ *    file: BluetoothLeService.java
+ *
+ * Service class for bluetooth connections
+ * Other components of app communicates with this service
+ * through broadcast messages
+ * BluetoothLeService needs to be declared in AndroidManifest
+ *
+ * (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+ */
 
 package com.ice.stickershock_shockvx.bluetooth;
 
@@ -33,10 +34,18 @@ import android.os.IBinder;
 import android.util.Log;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import static com.ice.stickershock_shockvx.appsupport.DeviceBattery.*;
+import static com.ice.stickershock_shockvx.appsupport.DeviceInformation.*;
+import static com.ice.stickershock_shockvx.appsupport.SensorAtmosphere.*;
+import static com.ice.stickershock_shockvx.appsupport.SensorControl.*;
+import static com.ice.stickershock_shockvx.appsupport.SensorHandling.*;
+import static com.ice.stickershock_shockvx.appsupport.SensorSurface.*;
+import static com.ice.stickershock_shockvx.appsupport.SensorTelemetry.*;
 import static com.ice.stickershock_shockvx.bluetooth.GattAttributes.*;
 import static com.ice.stickershock_shockvx.bluetooth.Actions.*;
 import static com.ice.stickershock_shockvx.Constants.*;
@@ -57,11 +66,13 @@ public class BluetoothLeService extends Service {
 
     private int mConnectionState = STATE_DISCONNECTED;
 
-    // -------------------------------------------------------------------------------------
-    // Implements callback methods for GATT events
-    // connection change and services discovered.
-    // characteristic read, write, update
-    // descriptor read, write
+    /**
+     * Callback methods for GATT events
+     * connection state changed
+     * connection change and services discovered.
+     * characteristic read, write, update
+     * descriptor read, write
+     */
     // -------------------------------------------------------------------------------------
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
@@ -102,11 +113,20 @@ public class BluetoothLeService extends Service {
             if ( status == BluetoothGatt.GATT_SUCCESS ) {
                 processReadData( characteristic );
             }
+            else {
+                Log.d(TAG, " CALLBACK READ FAILED");
+            }
         }
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            broadcastCharacteristicWrite ( characteristic, status );
+            Log.d(TAG, " CALLBACK WRITE");
+            if ( status == BluetoothGatt.GATT_SUCCESS ) {
+                broadcastCharacteristicWrite ( characteristic, status );
+            }
+            else {
+                Log.d(TAG, " CALLBACK READ FAILED");
+            }
 
         }
 
@@ -126,8 +146,9 @@ public class BluetoothLeService extends Service {
             Log.d(TAG, "ON DESCRIPTOR WRITE " + descriptor.getUuid().toString() + " " + status);
             broadcastUpdate( RESPONSE_NOTIFY_SUCCESS );
         }
-        /*
-          Callback for RSSI request
+
+        /**
+         * Callback for RSSI request
          */
         public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
             if ( status == BluetoothGatt.GATT_SUCCESS ) {
@@ -138,10 +159,9 @@ public class BluetoothLeService extends Service {
 
 
 
-// -------------------------------------------------------
-// receives broadcast messages and performs selected action
-// -------------------------------------------------------
-
+    /**
+     * receives broadcast messages and performs selected action
+     */
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -205,7 +225,7 @@ public class BluetoothLeService extends Service {
                     break;
 
                 case ACTION_CHECK_STICKER_STATUS:
-                    readOpenSticker();
+                    readSticker();
                     break;
 
                 case ACTION_CHECK_STICKER_CLOSED:
@@ -265,24 +285,42 @@ public class BluetoothLeService extends Service {
         }
     };
 
+    /**
+     * send broadcast message with no extra data
+     * @param action
+     */
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
         sendBroadcast(intent);
     }
 
+    /**
+     * send broadcast message with integer data
+     * @param action         broadcast action
+     * @param value          integer data sent along with broadcast
+     */
     private void broadcastIntUpdate(final String action, int value) {
         Intent intent = new Intent(action);
         intent.putExtra( INT_DATA, value);
         sendBroadcast(intent);
     }
 
+    /**
+     * send broadcast message with string data
+     * @param action         broadcast action
+     * @param value          string data sent along with broadcast
+     */
     private void broadcastStringUpdate(final String action, String value) {
         final Intent intent = new Intent(action);
         intent.putExtra( STRING_DATA, value);
         sendBroadcast(intent);
     }
 
-
+    /**
+     * broadcase response after characteristic write
+     * @param characteristic
+     * @param status
+     */
     private void broadcastCharacteristicWrite ( BluetoothGattCharacteristic characteristic, int status ) {
         Log.d(TAG, " CALLBACK WRITE " + characteristic.getUuid().toString());
         if ( status == BluetoothGatt.GATT_SUCCESS ) {
@@ -301,6 +339,11 @@ public class BluetoothLeService extends Service {
         }
     }
 
+    /**
+     * broadcase response after characteristic update
+     * @param characteristic
+     *
+     */
     private void broadcastCharacteristicUpdate( BluetoothGattCharacteristic characteristic) {
         float outData, outData2, outData3;
         Intent intent = new Intent();
@@ -346,8 +389,13 @@ public class BluetoothLeService extends Service {
         }
         sendBroadcast(intent);
     }
-    // Data comes from sensor in low to high order byte [00 01 02 03]
-    // so we need to reverse array
+
+    /**
+     * process read data from read characteristic
+     * @param characteristic
+     *
+     */
+
     private void processReadData(BluetoothGattCharacteristic characteristic) {
         String uuid = characteristic.getUuid().toString();
         int value = 0;
@@ -359,28 +407,28 @@ public class BluetoothLeService extends Service {
             broadcastIntUpdate( RESPONSE_BATTERY_LEVEL, value);
             break;
         case DEVICE_BATTERY_STATE:
-            value = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
-            broadcastIntUpdate( RESPONSE_BATTERY_STATE,  value);
+            value = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0 );
+            broadcastIntUpdate( RESPONSE_BATTERY_STATE,  value );
             break;
         case MANUFACTURER_NAME:
-            svalue = characteristic.getStringValue(0);
-            broadcastStringUpdate( RESPONSE_MANUFACTURER_AVAILABLE, svalue);
+            svalue = characteristic.getStringValue(0 );
+            broadcastStringUpdate( RESPONSE_MANUFACTURER_AVAILABLE, svalue );
             break;
         case MODEL_NUMBER:
-            svalue = characteristic.getStringValue(0);
-            broadcastStringUpdate( RESPONSE_MODEL_AVAILABLE, svalue);
+            svalue = characteristic.getStringValue(0 );
+            broadcastStringUpdate( RESPONSE_MODEL_AVAILABLE, svalue );
             break;
         case FIRMWARE:
-            svalue = characteristic.getStringValue(0);
-            broadcastStringUpdate( RESPONSE_FIRMWARE_AVAILABLE, svalue);
+            svalue = characteristic.getStringValue(0 );
+            broadcastStringUpdate( RESPONSE_FIRMWARE_AVAILABLE, svalue );
             break;
         case HARDWARE_REV:
-            svalue = characteristic.getStringValue(0);
-            broadcastStringUpdate( RESPONSE_HARDWARE_AVAILABLE, svalue);
+            svalue = characteristic.getStringValue(0 );
+            broadcastStringUpdate( RESPONSE_HARDWARE_AVAILABLE, svalue );
             break;
         case SERIAL_NUMBER:
-            svalue = characteristic.getStringValue(0);
-            broadcastStringUpdate( RESPONSE_SERIAL_AVAILABLE, svalue);
+            svalue = characteristic.getStringValue(0 );
+            broadcastStringUpdate( RESPONSE_SERIAL_AVAILABLE, svalue );
             break;
 
         // to determine state of sticker, read SENSOR_CONTROL_OPEN
@@ -403,26 +451,47 @@ public class BluetoothLeService extends Service {
         case SENSOR_CONTROL_CLOSE:
              svalue = characteristic.getStringValue(0);
                 byte[] cvalue = characteristic.getValue();
-                Log.d("SERVICE", "ACTION_STICKER_CLOSE " + svalue );
-                if ( cvalue[0] > 0)
-                    broadcastStringUpdate( RESPONSE_STICKER_CLOSED, svalue );
-                else
-                    broadcastStringUpdate( RESPONSE_STICKER_OPENED, svalue );
+                Log.d("SERVICE", "ACTION_STICKER_CLOSE " + svalue);
+                broadcastStringUpdate( RESPONSE_STICKER_CLOSED, svalue );
                 break;
 
+            case SENSOR_CONTROL_WINDOW:
+                byte [] timevalue = characteristic.getValue();
+                byte [] opentime = Arrays.copyOfRange(timevalue, 0, 4);
+                byte [] closetime = Arrays.copyOfRange(timevalue, 4, 8);
+                Log.d("SERVICE", "LENGTH " + timevalue.length + " " + opentime.length + " " + closetime.length);
+
+                Log.d("SERVICE", "Valuelo " + opentime[0] + ":" + opentime[1] + ":" + opentime[2] + ":" + opentime[3]);
+                Log.d("SERVICE", "Valuehi " + closetime[0] + ":" + closetime[1] + ":" + closetime[2] + ":" + closetime[3]);
+
+                int openInt = ByteBuffer.wrap(opentime).getInt();
+                int closeInt = ByteBuffer.wrap(closetime).getInt();
+                Log.d("SERVICE", "open " + openInt + " close " + closeInt);
+                if ( openInt == 0 ) {
+                    broadcastIntUpdate(RESPONSE_STICKER_NEW, 0);
+                    Log.d("SERVICE", "ACTION_STICKER_NEW ");
+                }
+                else if (  (openInt != 0 ) && (closeInt == 0 ) ) {
+                    Log.d("SERVICE", "ACTION_STICKER_OPENED ");
+                    broadcastIntUpdate(RESPONSE_STICKER_OPENED, 4);
+                }
+                else if (  (openInt != 0 ) && (closeInt != 0 ) ) {
+                    Log.d("SERVICE", "ACTION_STICKER_CLOSED ");
+                    broadcastIntUpdate( RESPONSE_STICKER_CLOSED, 8 );
+                }
+                break;
          default:
                 break;
         }
  //       else
- //           broadcastUpdate(ACTION_READ_DATA_AVAILABLE, characteristic);
+ //           broadcastUpdate( ACTION_READ_DATA_AVAILABLE, characteristic );
     }
 
 
-
-
-
     // --------------------------------------------------
-    // Binders for service
+    /**
+     * Binders for Bluetooth service
+     */
     public class LocalBinder extends Binder {
         public BluetoothLeService getService() {
             return BluetoothLeService.this;
@@ -436,7 +505,7 @@ public class BluetoothLeService extends Service {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        // After using a given device, you should make sure that BluetoothGatt.close() is called
+        // After using a given device, make sure that BluetoothGatt.close() is called
         // such that resources are cleaned up properly.  In this particular example, close() is
         // invoked when the UI is disconnected from the Service.
         close();
@@ -458,14 +527,14 @@ public class BluetoothLeService extends Service {
         if ( mBluetoothManager == null) {
             mBluetoothManager = (BluetoothManager) getSystemService( Context.BLUETOOTH_SERVICE );
             if ( mBluetoothManager == null) {
-                Log.e(TAG, "Cannot initialize BluetoothManager.");
+                Log.e(TAG, "Cannot initialize BluetoothManager." );
                 return false;
             }
         }
 
         mBluetoothAdapter = mBluetoothManager.getAdapter();
         if ( mBluetoothAdapter == null) {
-            Log.e(TAG, "Cannot obtain a BluetoothAdapter.");
+            Log.e(TAG, "Cannot obtain a BluetoothAdapter." );
             return false;
         }
         registerReceiver( mGattUpdateReceiver, makeGattUpdateIntentFilter());
@@ -483,14 +552,14 @@ public class BluetoothLeService extends Service {
      */
     public boolean connect(final String address) {
         if (mBluetoothAdapter == null || address == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
+            Log.w(TAG, "BluetoothAdapter not initialized or unspecified address." );
             return false;
         }
 
         // Previously connected device.  Try to reconnect.
         if (mBluetoothDeviceAddress != null && address.equals( mBluetoothDeviceAddress )
                 && mBluetoothGatt != null) {
-            Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection.");
+            Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection." );
             if (mBluetoothGatt.connect()) {
                 Log.d(TAG, "Connecting to ..." + address);
                 mConnectionState = STATE_CONNECTING;
@@ -527,7 +596,6 @@ public class BluetoothLeService extends Service {
         Log.w(TAG, "Disconnecting");
         mBluetoothGatt.disconnect();
     }
-
     /**
      * Close connection to BLE device, and release resources
      */
@@ -548,10 +616,10 @@ public class BluetoothLeService extends Service {
      */
     public void readCharacteristic(BluetoothGattCharacteristic characteristic) {
         if ( mBluetoothAdapter == null || mBluetoothGatt == null ) {
-            Log.w(TAG, "BluetoothAdapter not initialized");
+            Log.w(TAG, "BluetoothAdapter not initialized" );
             return;
         }
-        mBluetoothGatt.readCharacteristic(characteristic);
+        mBluetoothGatt.readCharacteristic( characteristic );
     }
 
     /**
@@ -561,7 +629,6 @@ public class BluetoothLeService extends Service {
      *
      * @param characteristic The characteristic to write to
      */
-    // public void writeCharacteristic(BluetoothGattCharacteristic characteristic, String dataArray) {
     public void writeCharacteristic( BluetoothGattCharacteristic characteristic, byte [] dataArray ) {
         boolean status1 = false;
         if ( mBluetoothAdapter == null || mBluetoothGatt == null ) {
@@ -649,27 +716,31 @@ public class BluetoothLeService extends Service {
         return intentFilter;
     }
 
-// -------------------------------------------------------------------------------------
-    /*
+    // -------------------------------------------------------------------------
+
+    /**
      * Bluetooth read and write calls
      * Calls are accessed by using BroadcastReceiver system
      * BluetoothLeService runs all the time, but only way to communicate with service
      * without binding, which can be difficult, is to use the Broadcast Messaging system
-
-
-       Set data scanning interval
-       Responds to messages
-       ACTION_SAMPLE_1SEC
-       ACTION_SAMPLE_5SEC
-       ACTION_SAMPLE_15SEC
      */
 
+    /**
+     *  Get UTC Time from system
+     *  <p>
+     *  @return  the current UTC time
+     */
     public int getUtcTime () {
         int currentTime = (int) System.currentTimeMillis () / 1000;
         return currentTime;
     }
-
-
+    /**
+     *  Set Sticker Internal Time register to current UTC time
+     *  This register must be set first when sticker is opened
+     *  <p>
+     *  Write UTC Time to SENSOR_ACCESS_TIME characteristic
+     *  in the SENSOR_ACCESS_SERVICE
+     */
     public void setStickerTime(  ) {
 
         int utcSeconds = getUtcTime();
@@ -682,8 +753,13 @@ public class BluetoothLeService extends Service {
         writeCharacteristic ( mIntervalChar, utcTime );
     }
 
-    // construct random Uuid for openSticker routine
-    // cloud service will provide Uuid when operational
+    /**
+     * construct random Uuid for openSticker routine
+     * This is temporary routine
+     * cloud service will provide Uuid when operational
+     * <p>
+     * @return  randomized 16 bit UUID
+     */
     String hexchars = "0123456789abcdef";
     public byte [] makeUuid ()  {
         Random random = new Random();
@@ -695,10 +771,13 @@ public class BluetoothLeService extends Service {
         return randUuid;
     }
 
-    // SENSOR_CONTROL_OPENED VALUES
-    // 0 not opened
-    // opened -  set to UTC time opened
-
+    /**
+     *     Open Sticker
+     *     write newUUID to
+     *     SENSOR_CONTROL_OPEN characteristic in the
+     *     SENSOR_CONTROL_SERVICE service
+     *     @return
+     */
     public void openSticker(  ) {
 
         byte [] newUuid = makeUuid();
@@ -709,12 +788,27 @@ public class BluetoothLeService extends Service {
         writeCharacteristic ( mChar, newUuid );
     }
 
-    public void readOpenSticker () {
-        BluetoothGattService mService     = mBluetoothGatt.getService(UUID.fromString( SENSOR_CONTROL_SERVICE));
-        BluetoothGattCharacteristic mChar = mService.getCharacteristic(UUID.fromString( SENSOR_CONTROL_OPEN  ));
+    /**
+     *     Read Sticker
+     *     read value from
+     *     SENSOR_CONTROL_WINDOW characteristic in the
+     *     SENSOR_CONTROL_SERVICE service
+     *     @return
+     */
+    public void readSticker(  ) {
+
+        BluetoothGattService mService     = mBluetoothGatt.getService(UUID.fromString( SENSOR_CONTROL_SERVICE ));
+        BluetoothGattCharacteristic mChar = mService.getCharacteristic(UUID.fromString( SENSOR_CONTROL_WINDOW ));
         readCharacteristic( mChar );
     }
 
+    /**
+     *     Close Sticker
+     *     write UUID to
+     *     SENSOR_CONTROL_CLOSE characteristic in the
+     *     SENSOR_CONTROL_SERVICE service
+     *     @return
+     */
     public void closeSticker(  ) {
         byte[] dataArray = makeUuid();
 
@@ -729,10 +823,12 @@ public class BluetoothLeService extends Service {
         readCharacteristic(mChar);
     }
 
-    /*
-   Set data scanning interval
-   ACTION_SAMPLE_1SEC
-   */
+    /**
+     * Set data scanning interval
+     * @param  service         the UUID of the service to write to
+     * @param  characteristic  the UUID of the characteristic
+     * @param  interval        time interval in seconds (float)
+     */
     public void setInterval ( String service, String characteristic, float interval )   {
         byte[] dataArray = reverseArray(floatToByteArray(interval));
 
@@ -741,6 +837,12 @@ public class BluetoothLeService extends Service {
         writeCharacteristic( mChar, dataArray);
     }
 
+    /**
+     * Set Alarm interval
+     * @param  service         the UUID of the service to write to
+     * @param  characteristic  the UUID of the characteristic
+     * @param  interval        time interval in seconds (float)
+     */
     public void setAlarm ( String service, String characteristic, float interval )   {
         byte[] dataArray = reverseArray(floatToByteArray(interval));
 
@@ -750,7 +852,7 @@ public class BluetoothLeService extends Service {
     }
 
     public void turnOnLed()   {
-        byte[] dataArray = new byte[1];  // byte array of length 4
+        byte[] dataArray = new byte[1];
         String dataString = "0x05";
 
         Log.d("LED", "Value " + dataArray[0]);
@@ -760,19 +862,32 @@ public class BluetoothLeService extends Service {
     }
 
 
-
+    /**
+     * Get Characteristic Read Value
+     * @param  service         the UUID of the service to read
+     * @param  characteristic  the UUID of the characteristic
+     *
+     * @return      found in callback routine
+     */
     public void getCharacteristicReadValue ( String service, String characteristic) {
         BluetoothGattService mService         = mBluetoothGatt.getService(UUID.fromString( service ));
         BluetoothGattCharacteristic mReadChar = mService.getCharacteristic(UUID.fromString( characteristic ));
         readCharacteristic( mReadChar );
     }
 
-    public void setNotification ( String service, String value) {
+    /**
+     * Set notification
+     * @param  service         the UUID of the service to set notification
+     * @param  characteristic  the UUID of the characteristic to set notification
+     *
+     * @return      found in callback routine
+     */
+    public void setNotification ( String service, String characteristic ) {
         BluetoothGattService mService = mBluetoothGatt.getService(UUID.fromString( service ));
-        BluetoothGattCharacteristic mChar = mService.getCharacteristic(UUID.fromString( value ));
+        BluetoothGattCharacteristic mChar = mService.getCharacteristic(UUID.fromString( characteristic ));
         mBluetoothGatt.setCharacteristicNotification(mChar, true);
 
-        Log.w(TAG, "SET NOTIFY " + value);
+        Log.w(TAG, "SET NOTIFY " + characteristic );
         BluetoothGattDescriptor descriptor = mChar.getDescriptor(UUID.fromString( CLIENT_CHARACTERISTIC_CONFIG ));
         descriptor.setValue( BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE );
         mBluetoothGatt.writeDescriptor(descriptor);

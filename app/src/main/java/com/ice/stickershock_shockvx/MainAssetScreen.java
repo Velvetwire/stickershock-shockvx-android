@@ -1,16 +1,16 @@
-//=============================================================================
-// project: ShockVx
-//  module: Stickershock Android App for cold chain tracking.
-//  author: Velvetwire, llc
-//    file: MainAssetScreen.java
-//
-// Start screen for android shockVx app
-// Lists all Stickershock beacons with telemetry
-// Is not connected to any.
-// Also contains a list of previously found beacons
-//
-// (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
-//=============================================================================
+/**
+ * project: ShockVx
+ *  module: Stickershock Android App for cold chain tracking.
+ *  author: Velvetwire, llc
+ *        file: MainAssetScreen.java
+ *
+ *  Start screen for android shockVx app
+ *  Lists all Stickershock beacons with telemetry
+ *  Is not connected to any.
+ *  Also contains a list of previously found beacons
+ *
+ * (c) Copyright 2020 Velvetwire, LLC. All rights reserved.
+ */
 package com.ice.stickershock_shockvx;
 
 import android.app.ListActivity;
@@ -176,9 +176,15 @@ public class MainAssetScreen extends ListActivity {
 
         for ( byte [] byteArray : adverts) {
             byte packetType = byteArray[1];
-  //          Log.d("BYTEARRAY", "TYPE " + packetType);
+
             if ( packetType == BROADCAST_TYPE_IDENTITY ) {
+               // mySticker.horizon = byteArray[14];
                 mySticker.batteryLevel = byteArray[15];
+            }
+
+            if ( packetType == BROADCAST_TYPE_VARIANT) {
+               // mySticker.batteryLevel = byteArray[15];
+                ;
             }
             if ( packetType == BROADCAST_TYPE_TEMPERATURE ) {
                 mySticker.surface        = (((byteArray[3] & 0xff) << 8) | byteArray[2] & 0xff);
